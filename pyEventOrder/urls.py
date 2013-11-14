@@ -24,6 +24,7 @@ urlpatterns = patterns('',
     (r'^accounts/register/$', 'pyEventOrderWeb.views.register'),
     (r'^accounts/logout/$', 'django.contrib.auth.views.logout'),
     (r'^accounts/$', 'django.contrib.auth.views.login',{'template_name': 'login.html'}),
+    (r'^list_events/$', views.list_events),
 )
 
 urlpatterns += staticfiles_urlpatterns()
