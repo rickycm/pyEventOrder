@@ -4,7 +4,7 @@
     <head>
         <meta charset="utf-8">
         <title>
-            分页demo
+            事件列表
         </title>
     </head>
 
@@ -22,11 +22,12 @@
 
         {% block content %}
                 <p>
-                    <table>
+                    <table border="1px" cellspacing="0px" style="border-collapse:collapse">
                         <tr>
                             <td>event_title</td>
                             <td>event_date</td>
                             <td>updated_date</td>
+                            <td>event_type</td>
                             <td>event_detail</td>
                         </tr>
                         {% for event in events %}
@@ -34,6 +35,7 @@
                             <td>{{ event.event_title }}</td>
                             <td>{{ event.event_date }}</td>
                             <td>{{ event.updated_date }}</td>
+                            <td>{{ event.get_event_type_display }}</td>
                             <td>{{ event.event_detail }}</td>
                         </tr>
                         {% endfor %}

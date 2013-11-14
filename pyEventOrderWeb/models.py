@@ -10,7 +10,7 @@ class event(models.Model):
     updated_date = models.DateTimeField(auto_now_add=True)
     event_detail = models.TextField(max_length=100000)
     updated_by = models.ForeignKey(User, blank=True)
-    event_type = models.CharField(max_length=20, blank=True, choices=EVENT_TYPE, default=1)
+    event_type = models.IntegerField(blank=True, choices=EVENT_TYPE, default=1)
     event_registdeadline = models.DateTimeField(blank=True, null=True)
     event_hostfakeID = models.CharField(max_length=200)
     event_hostname = models.CharField(max_length=1000, blank=True)
