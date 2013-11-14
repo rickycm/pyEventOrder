@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+<form method="post" action="">
+{% csrf_token %}
+<table>
+{{form.as_table}}
+</table>
+<input type="submit" value="注册" />
+<input type="hidden" name="next" value="{{ next }}" />
+</form>
+</body>
+</html>

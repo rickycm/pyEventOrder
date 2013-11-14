@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE|default:"en-us" }}" {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}>
+<head>
+    <meta charset="utf-8">
+    <title>欢迎使用Texto</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+</head>
+<body>
+{% if user.is_authenticated or user != "" %}
+    ========={{ user }}
+    +++++++++{{ user.is_authenticated }}
+    <p>Welcome, {{ user.username }}. Thanks for logging in.</p>
+    <li><a href = "/accounts/logout/"> 退出 </a></li>
+    <li><a href = "/admin/"> 管理界面 </a></li>
+{% else %}
+    <p>Welcome, new user. Please log in.</p>
+    <li><a href ="/accounts/login/?next=/"> 登录 </a></li>
+    <li><a href ="/accounts/register/?next=/"> 注册 </a></li>
+{% endif %}
+</body>
+</html>
