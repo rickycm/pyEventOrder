@@ -52,8 +52,6 @@ USE_TZ = True
 # Example: "/var/www/example.com/media/"
 MEDIA_ROOT = ''
 
-# URL that handles the media served from MEDIA_ROOT. Make sure to use a
-# trailing slash.
 # Examples: "http://example.com/media/", "http://media.example.com/"
 MEDIA_URL = ''
 
@@ -61,7 +59,7 @@ MEDIA_URL = ''
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/var/www/example.com/static/"
-STATIC_ROOT = os.path.join( os.path.dirname(__file__), '../admin_bootstrap/static/')
+STATIC_ROOT = os.path.join(os.path.dirname(__file__), '../admin_bootstrap/static/')
 
 # URL prefix for static files.
 # Example: "http://example.com/static/", "http://static.example.com/"
@@ -69,8 +67,8 @@ STATIC_URL = '/static/'
 #STATIC_URL = os.path.join( os.path.dirname(__file__), '../templates/static/')
 
 # Additional locations of static files
-sta = os.path.join( os.path.dirname(__file__), '../templates/static/')
-admin_bootstrap_static = os.path.join( os.path.dirname(__file__), '../admin_bootstrap/static/')
+sta = os.path.join(os.path.dirname(__file__), '../templates/static/')
+admin_bootstrap_static = os.path.join(os.path.dirname(__file__), '../admin_bootstrap/static/')
 STATICFILES_DIRS = (
     #admin_bootstrap_static,
     sta,
@@ -84,7 +82,7 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+    #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
 # Make this unique, and don't share it with anybody.
@@ -94,9 +92,8 @@ SECRET_KEY = 'jq+la0+66bkt)@8)6xt3ds!426u^q)$&9n=%fp-twfskf$i_8$'
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
+    #     'django.template.loaders.eggs.Loader',
 )
-
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
@@ -116,8 +113,8 @@ WSGI_APPLICATION = 'pyEventOrder.wsgi.application'
 
 #TEMPLATE_DIRS = (os.path.join(os.path.dirname(__file__), '..', 'templates').replace('\\','/'),)
 TEMPLATE_DIRS = (
-    os.path.join( os.path.dirname(__file__), '../admin_bootstrap/templates').replace('\\','/'),
-    os.path.join( os.path.dirname(__file__), '../templates').replace('\\','/'),
+    os.path.join(os.path.dirname(__file__), '../admin_bootstrap/templates').replace('\\', '/'),
+    os.path.join(os.path.dirname(__file__), '../templates').replace('\\', '/'),
 )
 
 INSTALLED_APPS = (
