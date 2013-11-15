@@ -124,12 +124,10 @@ INSTALLED_APPS = (
     #'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # Uncomment the next line to enable the admin:
     'crispy_forms',
     'bootstrap_toolkit',
     'admin_bootstrap',
     'django.contrib.admin',
-    # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
     'south',
     'pyEventOrderWeb',
