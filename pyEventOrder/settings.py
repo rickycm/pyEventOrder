@@ -33,7 +33,7 @@ TIME_ZONE = 'Asia/Shanghai'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
-LANGUAGE_CODE = 'zh-cn'
+LANGUAGE_CODE = 'en-us'
 
 SITE_ID = 1
 
@@ -101,6 +101,7 @@ TEMPLATE_LOADERS = (
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -113,7 +114,6 @@ ROOT_URLCONF = 'pyEventOrder.urls'
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'pyEventOrder.wsgi.application'
 
-import os
 #TEMPLATE_DIRS = (os.path.join(os.path.dirname(__file__), '..', 'templates').replace('\\','/'),)
 TEMPLATE_DIRS = (
     os.path.join( os.path.dirname(__file__), '../admin_bootstrap/templates').replace('\\','/'),
