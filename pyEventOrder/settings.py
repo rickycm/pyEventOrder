@@ -14,7 +14,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'pyeventorder',
-        'USER': 'root',
+        'USER': 'djangocms',
         'PASSWORD': '1qazxsw2',
         'HOST': '127.0.0.1',
         'PORT': '',
