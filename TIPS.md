@@ -1,3 +1,5 @@
+本文档用来保存一些有用的信息
+==============================
 django-html5-mobile-boilerplate：支持HTML5以及jQuery Mobile。
 参考：
     https://pypi.python.org/pypi/django-html5-mobile-boilerplate
