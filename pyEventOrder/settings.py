@@ -140,10 +140,8 @@ INSTALLED_APPS = (
 BOOTSTRAP3 = {
     'include_jquery': False,
     'jquery_url': '/static/admin/js/jquery.min.js',
-    'base_url': '/static/',
-    'css_url': '/static/dist/css/bootstrap.min.css',
+    'base_url': '/static/dist/',
     'theme_url': '/static/dist/css/bootstrap-theme.min.css',
-    'javascript_url': '/static/dist/js/bootstrap.min.js',
 }
 
 # A sample logging configuration. The only tangible logging

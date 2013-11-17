@@ -7,7 +7,7 @@ django-bootstrap3：支持bootstrap3
 参考：
   https://github.com/dyve/django-bootstrap3
 
-django-awesome-boostrap：静态
+django-awesome-boostrap：静态资源文件
 
 django-html5-boilerplate：支持HTML5。
 参考：
