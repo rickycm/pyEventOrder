@@ -1,6 +1,8 @@
+# -*- coding: utf-8 -*-
 # Django settings for pyEventOrder project.
 import os
 
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -59,7 +61,7 @@ MEDIA_URL = ''
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/var/www/example.com/static/"
-STATIC_ROOT = os.path.join(os.path.dirname(__file__), '../admin_bootstrap/static/')
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 
 # URL prefix for static files.
 # Example: "http://example.com/static/", "http://static.example.com/"
@@ -67,14 +69,12 @@ STATIC_URL = '/static/'
 #STATIC_URL = os.path.join( os.path.dirname(__file__), '../templates/static/')
 
 # Additional locations of static files
-sta = os.path.join(os.path.dirname(__file__), '../templates/static/')
-admin_bootstrap_static = os.path.join(os.path.dirname(__file__), '../admin_bootstrap/static/')
 STATICFILES_DIRS = (
-    #admin_bootstrap_static,
-    sta,
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    os.path.join(STATIC_ROOT, 'twitter_bootstrap'),
+    os.path.join(STATIC_ROOT, 'font_awesome'),
 )
 
 # List of finder classes that know how to find static files in
@@ -113,8 +113,8 @@ WSGI_APPLICATION = 'pyEventOrder.wsgi.application'
 
 #TEMPLATE_DIRS = (os.path.join(os.path.dirname(__file__), '..', 'templates').replace('\\','/'),)
 TEMPLATE_DIRS = (
-    os.path.join(os.path.dirname(__file__), '../admin_bootstrap/templates').replace('\\', '/'),
-    os.path.join(os.path.dirname(__file__), '../templates').replace('\\', '/'),
+    os.path.join(PROJECT_ROOT, 'admin_bootstrap/templates').replace('\\', '/'),
+    os.path.join(PROJECT_ROOT, 'templates').replace('\\', '/'),
 )
 
 INSTALLED_APPS = (
@@ -125,13 +125,26 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'crispy_forms',
-    'bootstrap_toolkit',
     'admin_bootstrap',
     'django.contrib.admin',
     'django.contrib.admindocs',
     'south',
+    # 引入对bootstrap3的支持，由于admin界面所采用的是2.x版本，因此需要加以区别
+    'bootstrap3',
+    'awesome_bootstrap',
     'pyEventOrderWeb',
 )
+
+# 覆盖bootstrap3中间的缺省值，用来通过awesome_bootstrap载入静态文件
+# dist子目录下的bootstrap为版本3，从而可以避免版本上的混乱
+BOOTSTRAP3 = {
+    'include_jquery': False,
+    'jquery_url': '/static/admin/js/jquery.min.js',
+    'base_url': '/static/',
+    'css_url': '/static/dist/css/bootstrap.min.css',
+    'theme_url': '/static/dist/css/bootstrap-theme.min.css',
+    'javascript_url': '/static/dist/js/bootstrap.min.js',
+}
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
