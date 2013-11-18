@@ -137,7 +137,7 @@ def message(request):
     timestamp = request.GET['timestamp']
     nonce = request.GET['nonce']
 
-    token = 'TOKEN'
+    token = 'WeiXin'
     tmpArr = sorted([token, timestamp, nonce])
     tmpStr = ''.join(tmpArr)
     tmpStr = hashlib.sha1(tmpStr).hexdigest()
