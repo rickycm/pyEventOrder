@@ -125,9 +125,8 @@ def add_event(request):
 # 处理消息机制，应该是公众平台中最核心的处理部分
 import hashlib
 import logging
-
 logger = logging.getLogger('django.dev')
-
+import xml.etree.ElementTree as ET
 
 def message(request):
     # 这里的假定是，即使在POST模式下，依然可以通过GET方式来获得参数。
@@ -149,7 +148,14 @@ def message(request):
             return HttpResponse(echostr)
     elif request.method == 'POST':
         # 这种方式下应该是非验证性的数据
-        output_xml = 'something'
+        msg_in = ET.parse(request.POST)
+        event = msg_in.find('Event')
+        if event: #这是一个事件
+            ET.dump(msg_in)
+        else: #这是一个消息
+            ET.dump(msg_in)
+        msg_out = ET.Element('XML')
+        output_xml = ET.tostring(msg_out)
         return HttpResponse(output_xml, content_type='text/xml')
     else:
         return HttpResponse('Denied')
