@@ -130,6 +130,8 @@ logger = logging.getLogger('django.dev')
 
 
 def message(request):
+    # 这里的假定是，即使在POST模式下，依然可以通过GET方式来获得参数。
+    # 以下代码需要在实际工作环境中检验其正确性
     signature = request.GET['signature']
     logger.debug('signature is ' + signature)
     timestamp = request.GET['timestamp']

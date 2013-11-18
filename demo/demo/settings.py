@@ -65,11 +65,11 @@ STATIC_URL = '/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-    # Put strings here, like "/home/html/static" or "C:/www/django/static".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-    os.path.join(STATIC_ROOT, 'font_awesome'),
-    os.path.join(STATIC_ROOT, 'twitter_bootstrap'),
+# Put strings here, like "/home/html/static" or "C:/www/django/static".
+# Always use forward slashes, even on Windows.
+# Don't forget to use absolute paths, not relative paths.
+#os.path.join(STATIC_ROOT, 'font_awesome'),
+#os.path.join(STATIC_ROOT, 'twitter_bootstrap'),
 )
 
 # List of finder classes that know how to find static files in
@@ -129,9 +129,9 @@ INSTALLED_APPS = (
 
 BOOTSTRAP3 = {
     'include_jquery': False,
-    'base_url': '/static/dist/',
+    'base_url': '/static/twitter_bootstrap/dist/',
     #'css_url': '/static/dist/css/bootstrap.min.css',
-    'theme_url': '/static/dist/css/bootstrap-theme.min.css',
+    'theme_url': '/static/twitter_bootstrap/dist/css/bootstrap-theme.min.css',
     #'javascript_url': '/static/dist/js/bootstrap.min.js',
 }
 

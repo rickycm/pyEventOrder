@@ -70,11 +70,12 @@ STATIC_URL = '/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-    # Put strings here, like "/home/html/static" or "C:/www/django/static".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-    os.path.join(STATIC_ROOT, 'twitter_bootstrap'),
-    os.path.join(STATIC_ROOT, 'font_awesome'),
+# Put strings here, like "/home/html/static" or "C:/www/django/static".
+# Always use forward slashes, even on Windows.
+# Don't forget to use absolute paths, not relative paths.
+#os.path.join(STATIC_ROOT, 'twitter_bootstrap'),
+#os.path.join(STATIC_ROOT, 'font_awesome'),
+#os.path.join(STATIC_ROOT, 'bootstrap3_datetime'),
 )
 
 # List of finder classes that know how to find static files in
@@ -130,8 +131,10 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     'south',
     # 引入对bootstrap3的支持，由于admin界面所采用的是2.x版本，因此需要加以区别
+    'jquery',
     'bootstrap3',
     'awesome_bootstrap',
+    'bootstrap3_datetime',
     'pyEventOrderWeb',
 )
 
@@ -140,8 +143,8 @@ INSTALLED_APPS = (
 BOOTSTRAP3 = {
     'include_jquery': False,
     'jquery_url': '/static/admin/js/jquery.min.js',
-    'base_url': '/static/dist/',
-    'theme_url': '/static/dist/css/bootstrap-theme.min.css',
+    'base_url': '/static/twitter_bootstrap/dist/',
+    'theme_url': '/static/twitter_bootstrap/dist/css/bootstrap-theme.min.css',
 }
 
 # A sample logging configuration. The only tangible logging

@@ -1,0 +1,14 @@
+{% extends 'bootstrap.html' %}
+
+{% block bootstrap3_title %}{{ title }}{% endblock %}
+
+{% block bootstrap3_content %}
+<form method="post" action="">
+    {% csrf_token %}
+    <table>
+        {{form.as_table}}
+    </table>
+    <input type="submit" value="保存"/>
+    <input type="hidden" name="next" value="{{ next }}"/>
+</form>
+{% endblock %}
