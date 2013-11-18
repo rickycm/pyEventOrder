@@ -1,14 +1,16 @@
 #coding=utf-8
+import logging
+
 from django.contrib.auth.forms import *
 from django.shortcuts import render_to_response
-from django.http import HttpResponseRedirect
-from django.http import HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import authenticate, login
 from django.template import RequestContext
 
 from pyEventOrderWeb import forms
 from pyEventOrderWeb.models import *
 
+logger = logging.getLogger('django.dev')
 
 def login_form(request):
     try:
@@ -124,40 +126,43 @@ def add_event(request):
 
 # 处理消息机制，应该是公众平台中最核心的处理部分
 import hashlib
-import logging
-logger = logging.getLogger('django.dev')
 import xml.etree.ElementTree as ET
+from messages import processEvent, processMessage
 
 def message(request):
+    # 对于任何消息，都需要通过下面的代码来确认消息的合法性。
     # 这里的假定是，即使在POST模式下，依然可以通过GET方式来获得参数。
     # 以下代码需要在实际工作环境中检验其正确性
     signature = request.GET['signature']
     logger.debug('signature is ' + signature)
     timestamp = request.GET['timestamp']
     nonce = request.GET['nonce']
-
+    echostr = request.GET['echostr']
     token = 'WeiXin'
+
     tmpArr = sorted([token, timestamp, nonce])
     tmpStr = ''.join(tmpArr)
     tmpStr = hashlib.sha1(tmpStr).hexdigest()
     logger.debug('tmlStr is ' + tmpStr)
 
+    # 当两者相等时，消息合法。
     if tmpStr == signature:
         if request.method == 'GET':
-            echostr = request.GET['echostr']
+            # GET消息表示仅仅是对公众账号后台进行校验。
             return HttpResponse(echostr)
-    elif request.method == 'POST':
-        # 这种方式下应该是非验证性的数据
-        msg_in = ET.parse(request.POST)
-        event = msg_in.find('Event')
-        if event: #这是一个事件
+        elif request.method == 'POST':
+            # 这种方式下应该是实际的消息数据
+            # 消息可分为两种：用户发过来的消息，系统事件。
+            # 使用函数来进行进一步处理。
+            msg_in = ET.parse(request.POST)
             ET.dump(msg_in)
-        else: #这是一个消息
-            ET.dump(msg_in)
-        msg_out = ET.Element('XML')
-        output_xml = ET.tostring(msg_out)
-        return HttpResponse(output_xml, content_type='text/xml')
-    else:
+            event = msg_in.find('Event')
+            if event: #这是一个事件
+                return processEvent(msg_in,event)
+            else: #这是一个消息
+                return processMessage(msg_in)
+
+    else: # 此处仅保留，实际情况是无需进行任何处理。
         return HttpResponse('Denied')
 
 
