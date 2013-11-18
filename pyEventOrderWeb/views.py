@@ -1,16 +1,14 @@
 #coding=utf-8
 from django.contrib.auth.forms import *
 from django.shortcuts import render_to_response
-from django.template import RequestContext
 from django.http import HttpResponseRedirect
-from django.template.loader import get_template
-from django.template import Context
 from django.http import HttpResponse
-import datetime
 from django.contrib.auth import authenticate, login
-from pyEventOrderWeb import forms
 from django.template import RequestContext
+
+from pyEventOrderWeb import forms
 from pyEventOrderWeb.models import *
+
 
 def login_form(request):
     try:
@@ -110,4 +108,49 @@ def list_events(rq):
 
                 return render_to_response("list_event.html", {'user': user, 'events':events, 'allPage':allPage, 'curPage':curPage}, context_instance=RequestContext(rq))
         return HttpResponseRedirect("/accounts/login/")
+
+# 添加一个活动
+def add_event(request):
+    form = forms.EventForm()
+    if request.method == 'GET':
+        form = forms.EventForm()
+        return render_to_response('addEvent.html', {'title': '新建活动', 'form': form},
+                                  context_instance=RequestContext(request))
+    elif request.method == 'POST':
+        form = form.EventForm(request.POST)
+        if form.is_valid():
+            new_event = form.save()
+            return HttpResponseRedirect("/")
+
+# 处理消息机制，应该是公众平台中最核心的处理部分
+import hashlib
+import logging
+
+logger = logging.getLogger('django.dev')
+
+
+def message(request):
+    signature = request.GET['signature']
+    logger.debug('signature is ' + signature)
+    timestamp = request.GET['timestamp']
+    nonce = request.GET['nonce']
+
+    token = 'TOKEN'
+    tmpArr = sorted([token, timestamp, nonce])
+    tmpStr = ''.join(tmpArr)
+    tmpStr = hashlib.sha1(tmpStr).hexdigest()
+    logger.debug('tmlStr is ' + tmpStr)
+
+    if tmpStr == signature:
+        if request.method == 'GET':
+            echostr = request.GET['echostr']
+            return HttpResponse(echostr)
+    elif request.method == 'POST':
+        # 这种方式下应该是非验证性的数据
+        output_xml = 'something'
+        return HttpResponse(output_xml, content_type='text/xml')
+    else:
+        return HttpResponse('Denied')
+
+
 
