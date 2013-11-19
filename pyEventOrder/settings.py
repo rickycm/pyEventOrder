@@ -138,6 +138,8 @@ INSTALLED_APPS = (
     'pyEventOrderWeb',
 )
 
+CRISPY_TEMPLATE_PACK = 'uni_form'
+
 # 覆盖bootstrap3中间的缺省值，用来通过awesome_bootstrap载入静态文件
 # dist子目录下的bootstrap为版本3，从而可以避免版本上的混乱
 BOOTSTRAP3 = {
