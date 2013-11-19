@@ -135,38 +135,41 @@ def message(request):
     # 这里的假定是，即使在POST模式下，依然可以通过GET方式来获得参数。
     # 以下代码需要在实际工作环境中检验其正确性
     logger.debug('get a message: ')
-    signature = request.GET['signature']
-    #logger.debug('signature is ' + signature)
-    timestamp = request.GET['timestamp']
-    nonce = request.GET['nonce']
-    token = 'WeiXin'
+    try:
+        signature = request.GET['signature']
+        timestamp = request.GET['timestamp']
+        nonce = request.GET['nonce']
+        token = 'WeiXin'
 
-    tmpArr = sorted([token, timestamp, nonce])
-    tmpStr = ''.join(tmpArr)
-    tmpStr = hashlib.sha1(tmpStr).hexdigest()
-    #logger.debug('tmlStr is ' + tmpStr)
+        tmpArr = sorted([token, timestamp, nonce])
+        tmpStr = ''.join(tmpArr)
+        tmpStr = hashlib.sha1(tmpStr).hexdigest()
 
-    # 当两者相等时，消息合法。
-    if tmpStr == signature:
-        if request.method == 'GET':
-            # GET消息表示仅仅是对公众账号后台进行校验。
-            echostr = request.GET['echostr']
-            return HttpResponse(echostr)
-        elif request.method == 'POST':
-            # 这种方式下应该是实际的消息数据
-            # 消息可分为两种：用户发过来的消息，系统事件。
-            # 使用函数来进行进一步处理。
-            logger.debug(request.body)
-            msg_in = ET.parse(request)
-            #ET.dump(msg_in)
-            event = msg_in.find('Event')
-            if event: #这是一个事件
-                return processEvent(msg_in,event)
-            else: #这是一个消息
-                return processMessage(msg_in)
+        # 当两者相等时，消息合法。
+        if tmpStr == signature:
+            if request.method == 'GET':
+                # GET消息表示仅仅是对公众账号后台进行校验。
+                echostr = request.GET['echostr']
+                return HttpResponse(echostr)
+            elif request.method == 'POST':
+                # 这种方式下应该是实际的消息数据
+                # 消息可分为两种：用户发过来的消息，系统事件。
+                # 使用函数来进行进一步处理。
+                logger.debug(request.body)
+                msg_in = ET.parse(request)
+                #ET.dump(msg_in)
+                event = msg_in.find('Event')
+                if event: #这是一个事件
+                    return processEvent(msg_in,event)
+                else: #这是一个消息
+                    return processMessage(msg_in)
+        else:
+            logger.info('Illedge message received')
+            return
+    except: # 此处仅保留，实际情况是无需进行任何处理。
+        logger.info('Invalid message received')
+        return
 
-    else: # 此处仅保留，实际情况是无需进行任何处理。
-        return HttpResponse('Denied')
 
 
 
