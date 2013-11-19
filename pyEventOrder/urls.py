@@ -29,7 +29,6 @@ urlpatterns = patterns('',
     (r'^add_event/$', views.add_event),
     (r'^message/$', views.message),
 )
-urlpatterns += patterns('',
-                        url(r'^media\/(?P<path>.*)$', 'django.views.static.serve',
-                            {'document_root': settings.MEDIA_ROOT, 'show_indexes': True}))
+urlpatterns += patterns('', url(r'^media\/(?P<path>.*)$', 'django.views.static.serve',
+                                {'document_root': settings.MEDIA_ROOT, 'show_indexes': True}))
 urlpatterns += staticfiles_urlpatterns()
