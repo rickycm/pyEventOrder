@@ -4,10 +4,7 @@
 
 {% block bootstrap3_content %}
 <form method="post" action="">
-    {% csrf_token %}
-    <table>
-        {{form.as_table}}
-    </table>
+    {{form.as_p}}
     <input type="submit" value="保存"/>
     <input type="hidden" name="next" value="{{ next }}"/>
 </form>
