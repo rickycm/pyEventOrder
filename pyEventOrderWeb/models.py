@@ -1,4 +1,5 @@
 from django.db import models
+from django.forms import ModelForm
 from django.contrib.auth.models import User
 
 # Create your models here.
@@ -9,7 +10,7 @@ class event(models.Model):
     event_date = models.DateTimeField(blank=True, null=True)
     updated_date = models.DateTimeField(auto_now_add=True)
     event_detail = models.TextField(max_length=100000)
-    updated_by = models.ForeignKey(User, blank=True)
+    updated_by = models.CharField(max_length=100, blank=True, null=True)
     event_type = models.IntegerField(blank=True, choices=EVENT_TYPE, default=1)
     event_registdeadline = models.DateTimeField(blank=True, null=True)
     event_hostfakeID = models.CharField(max_length=200)
@@ -52,3 +53,9 @@ class wechat_user(models.Model):
         verbose_name_plural = 'WechatUsers'
     def __unicode__(self):
         return u'%s' % (self.wechat_username)
+
+'''
+class EventForm(ModelForm):
+    class Meta:
+        model = event
+'''

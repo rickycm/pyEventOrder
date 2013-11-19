@@ -6,9 +6,11 @@ from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import authenticate, login
 from django.template import RequestContext
+from django.contrib.auth.decorators import login_required
 
 from pyEventOrderWeb import forms
 from pyEventOrderWeb.models import *
+import datetime
 
 logger = logging.getLogger('django.dev')
 
@@ -112,63 +114,71 @@ def list_events(rq):
         return HttpResponseRedirect("/accounts/login/")
 
 # 添加一个活动
+@login_required
 def add_event(request):
-    logger.debug('add event request')
-    form = forms.EventForm()
     if request.method == 'GET':
         form = forms.EventForm()
         return render_to_response('addEvent.html', {'title': '新建活动', 'form': form},
                                   context_instance=RequestContext(request))
-    elif request.method == 'POST':
-        form = form.EventForm(request.POST)
+    else:
+        form = forms.EventForm(request.POST)
         if form.is_valid():
-            new_event = form.save()
-            return HttpResponseRedirect("/")
+            username = request.user.username
+            e = event.objects.create(
+                updated_by = form.cleaned_data['updated_by'],
+                event_title = form.cleaned_data['event_title'],
+                event_detail = form.cleaned_data['event_detail'],
+                event_date = form.cleaned_data['event_date'],
+                event_limit = form.cleaned_data['event_limit'],
+                updated_date = datetime.datetime.now(),
+            )
+            e.save()
+            return list_events(request)
+        else:
+            return render_to_response('addEvent.html', {'title': '新建活动', 'form': form},
+                                  context_instance=RequestContext(request))
+
 
 # 处理消息机制，应该是公众平台中最核心的处理部分
 import hashlib
-from lxml import etree
+import xml.etree.ElementTree as ET
 from messages import processEvent, processMessage
 
 def message(request):
     # 对于任何消息，都需要通过下面的代码来确认消息的合法性。
     # 这里的假定是，即使在POST模式下，依然可以通过GET方式来获得参数。
     # 以下代码需要在实际工作环境中检验其正确性
-    logger.debug('get a message: ')
-    try:
-        signature = request.GET['signature']
-        timestamp = request.GET['timestamp']
-        nonce = request.GET['nonce']
-        token = 'WeiXin'
+    signature = request.GET['signature']
+    logger.debug('signature is ' + signature)
+    timestamp = request.GET['timestamp']
+    nonce = request.GET['nonce']
+    echostr = request.GET['echostr']
+    token = 'WeiXin'
 
-        tmpArr = sorted([token, timestamp, nonce])
-        tmpStr = ''.join(tmpArr)
-        tmpStr = hashlib.sha1(tmpStr).hexdigest()
+    tmpArr = sorted([token, timestamp, nonce])
+    tmpStr = ''.join(tmpArr)
+    tmpStr = hashlib.sha1(tmpStr).hexdigest()
+    logger.debug('tmlStr is ' + tmpStr)
 
-        # 当两者相等时，消息合法。
-        if tmpStr == signature:
-            if request.method == 'GET':
-                # GET消息表示仅仅是对公众账号后台进行校验。
-                echostr = request.GET['echostr']
-                return HttpResponse(echostr)
-            elif request.method == 'POST':
-                # 这种方式下应该是实际的消息数据
-                # 消息可分为两种：用户发过来的消息，系统事件。
-                # 使用函数来进行进一步处理。
-                #logger.debug(request.body)
-                msg_in = etree.parse(request)
-                event = msg_in.find('Event')
-                if event==None : #这是一个事件
-                    return processMessage(msg_in)
-                else: #这是一个消息
-                    return processEvent(msg_in,event)
-        else:
-            logger.info('Illedge message received')
-            return
-    except: # 此处仅保留，实际情况是无需进行任何处理。
-        logger.info('Invalid message received')
-        return
+    # 当两者相等时，消息合法。
+    if tmpStr == signature:
+        if request.method == 'GET':
+            # GET消息表示仅仅是对公众账号后台进行校验。
+            return HttpResponse(echostr)
+        elif request.method == 'POST':
+            # 这种方式下应该是实际的消息数据
+            # 消息可分为两种：用户发过来的消息，系统事件。
+            # 使用函数来进行进一步处理。
+            msg_in = ET.parse(request.POST)
+            ET.dump(msg_in)
+            event = msg_in.find('Event')
+            if event: #这是一个事件
+                return processEvent(msg_in,event)
+            else: #这是一个消息
+                return processMessage(msg_in)
 
+    else: # 此处仅保留，实际情况是无需进行任何处理。
+        return HttpResponse('Denied')
 
 
 
