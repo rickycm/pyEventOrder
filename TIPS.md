@@ -3,6 +3,9 @@
 使用如下命令来搜集系统用到的static文件：python manage.py collectstatic
 但是这些文件分散在不同的包中并不影响使用。
 
+lxml: 工作环境下已经存在lxml，在virtualenv中安装lxml需要使用如下命令
+  STATIC_DEPS=true pip install lxml
+
 django-bootstrap3：支持bootstrap3
 参考：
   https://github.com/dyve/django-bootstrap3

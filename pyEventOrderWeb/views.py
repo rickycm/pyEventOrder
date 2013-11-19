@@ -127,7 +127,7 @@ def add_event(request):
 
 # 处理消息机制，应该是公众平台中最核心的处理部分
 import hashlib
-from lxml import etree as ET
+from lxml import etree
 from messages import processEvent, processMessage
 
 def message(request):
@@ -155,14 +155,13 @@ def message(request):
                 # 这种方式下应该是实际的消息数据
                 # 消息可分为两种：用户发过来的消息，系统事件。
                 # 使用函数来进行进一步处理。
-                logger.debug(request.body)
-                msg_in = ET.parse(request)
-                #ET.dump(msg_in)
+                #logger.debug(request.body)
+                msg_in = etree.parse(request)
                 event = msg_in.find('Event')
-                if event: #这是一个事件
-                    return processEvent(msg_in,event)
-                else: #这是一个消息
+                if event==None : #这是一个事件
                     return processMessage(msg_in)
+                else: #这是一个消息
+                    return processEvent(msg_in,event)
         else:
             logger.info('Illedge message received')
             return
