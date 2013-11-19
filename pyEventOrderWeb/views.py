@@ -127,7 +127,7 @@ def add_event(request):
 
 # 处理消息机制，应该是公众平台中最核心的处理部分
 import hashlib
-import xml.etree.ElementTree as ET
+from lxml import etree as ET
 from messages import processEvent, processMessage
 
 def message(request):
