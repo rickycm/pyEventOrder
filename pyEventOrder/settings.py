@@ -15,10 +15,10 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'pyeventorder',
-        'USER': 'djangocms',
+        'NAME': 'whitemay$pyeventorder',
+        'USER': 'whitemay',
         'PASSWORD': '1qazxsw2',
-        'HOST': '127.0.0.1',
+        'HOST': 'mysql.server',
         'PORT': '',
     },
 }
