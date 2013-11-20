@@ -209,24 +209,23 @@ def message(request):
 
 from django.http import Http404
 def setting(request):
-    max_age = 0
-    userid = False
     if request.method=='GET':
-        if request.COOKIES.has_key('wxopenid'):
-            userid = request.COOKIES['wxopenid']
-            logger.info('Cookie has userid ' + userid)
-
         if request.GET.has_key('userid'):
             userid = request.GET['userid']
             logger.debug('Request has userid ' + userid)
             max_age = 365 * 24 * 60 * 60
+            path = request.path
+            logger.debug('Path is ' + path)
+            response = HttpResponseRedirect(path)
+            #response.set_cookie("wxopenid", userid, max_age=max_age)
+            return response
 
-        if not userid:
+        if request.COOKIES.has_key('wxopenid'):
+            userid = request.COOKIES['wxopenid']
+            logger.info('Cookie has userid ' + userid)
+        else:
             raise Http404
 
         form = forms.EventForm()
-        response = render_to_response('addEvent.html', {'title': '新建活动', 'form': form},
+        return render_to_response('addEvent.html', {'title': '新建活动', 'form': form},
             context_instance=RequestContext(request))
-        if max_age>0:
-            response.set_cookie("wxopenid", userid, max_age=max_age)
-        return response
