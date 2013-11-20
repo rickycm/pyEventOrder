@@ -138,6 +138,30 @@ def add_event(request):
             return render_to_response('addEvent.html', {'title': '新建活动', 'form': form},
                                   context_instance=RequestContext(request))
 
+# 添加一个活动
+@login_required
+def add_event2(request):
+    if request.method == 'GET':
+        form = forms.EventForm()
+        return render_to_response('addEvent2.html', {'title': '新建活动', 'form': form},
+                                  context_instance=RequestContext(request))
+    else:
+        form = forms.EventForm(request.POST)
+        if form.is_valid():
+            username = request.user.username
+            e = event.objects.create(
+                updated_by = form.cleaned_data['updated_by'],
+                event_title = form.cleaned_data['event_title'],
+                event_detail = form.cleaned_data['event_detail'],
+                event_date = form.cleaned_data['event_date'],
+                event_limit = form.cleaned_data['event_limit'],
+                updated_date = datetime.datetime.now(),
+            )
+            e.save()
+            return list_events(request)
+        else:
+            return render_to_response('addEvent2.html', {'title': '新建活动', 'form': form},
+                                  context_instance=RequestContext(request))
 
 # 处理消息机制，应该是公众平台中最核心的处理部分
 import hashlib
