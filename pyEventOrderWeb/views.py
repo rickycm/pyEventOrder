@@ -206,3 +206,22 @@ def message(request):
     except: # 此处仅保留，实际情况是无需进行任何处理。
         logger.info('Invalid message received')
         return
+
+from django.http import Http404
+def setting(request):
+    if request.method=='GET':
+        if request.COOKIES.has_key('wxopenid'):
+            userid = request.COOKIES['wxopenid']
+            logger.info('Cookie has userid ' + userid)
+        elif request.GET.has_key('userid'):
+            userid = request.GET['userid']
+            logger.debug('Request has userid ' + userid)
+
+            form = forms.EventForm()
+            response = render_to_response('addEvent.html', {'title': '新建活动', 'form': form},
+                                  context_instance=RequestContext(request))
+            max_age = 365 * 24 * 60 * 60
+            response.set_cookie("wxopenid", userid, max_age=max_age)
+            return response
+        else:
+            raise Http404

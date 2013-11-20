@@ -27,6 +27,7 @@ urlpatterns = patterns('',
     (r'^list_events/$', views.list_events),
     (r'^add_event/$', views.add_event),
     (r'^add_event2/$', views.add_event2),
+    url(r'^setting/$', views.setting),
     (r'^message/$', views.message),
 )
 
