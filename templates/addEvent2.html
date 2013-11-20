@@ -1,0 +1,66 @@
+{% extends 'bootstrap2.html' %}
+{% load crispy_forms_tags %}
+
+{% block bootstrap3_title %}{{ title }}{% endblock %}
+
+{% block usercss %}
+<link type="text/css" href="{{STATIC_URL}}css/bootstrap-formhelpers.min.css" />
+{% endblock %}
+
+{% block bootstrap3_content %}
+<form action="" method="post" class="form-horizontal">{% csrf_token %}
+<fieldset>
+
+<!-- Text input-->
+<div class="control-group">
+  <label class="control-label" for="event_title">活动名称</label>
+  <div class="controls">
+    <input id="event_title" name="event_title" type="text" placeholder="请输入活动名称" class="input-large" required="">
+
+  </div>
+</div>
+<!-- Textarea -->
+<div class="control-group">
+  <label class="control-label" for="event_detail">活动详情</label>
+  <div class="controls">
+    <textarea id="event_detail" name="event_detail">请输入活动详情</textarea>
+  </div>
+</div>
+<div data-role="fieldcontain">
+    <label for="slider">人数限制：</label>
+    <input type="range" name="slider" id="slider" value="10" min="0" max="200" data-highlight="true"  />
+</div>
+<!-- Button (Double) -->
+<div class="control-group">
+  <label class="control-label" for="submit"></label>
+  <div class="controls">
+    <button id="submit" name="submit" class="btn btn-success">发布</button>
+    <button id="cancel" name="cancel" class="btn btn-info">取消</button>
+  </div>
+</div>
+
+<div class="bfh-datepicker" id='datetimepicker' data-format="y-m-d" data-date="today">
+    <input type='text' class="form-control" />
+</div>
+<div class="bfh-timepicker" id="timepicker">
+    <input type='text' class="form-control" />
+</div>
+
+
+
+
+</fieldset>
+</form>
+{% endblock %}
+
+{% block js_post %}
+{{ block.super }}
+<script type="text/javascript" src="{{STATIC_URL}}js/bootstrap-formhelpers.min.js"></script>
+        <script type="text/javascript">
+            $(function ()
+                $('#datetimepicke').bfhdatepicker('toggle');
+                $('#timepicker').bfhtimepicker('toggle');
+            });
+        </script>
+{% endblock %}
+

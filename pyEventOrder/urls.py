@@ -26,6 +26,7 @@ urlpatterns = patterns('',
     (r'^accounts/$', 'django.contrib.auth.views.login',{'template_name': 'login.html'}),
     (r'^list_events/$', views.list_events),
     (r'^add_event/$', views.add_event),
+    (r'^add_event2/$', views.add_event2),
     (r'^message/$', views.message),
 )
 
