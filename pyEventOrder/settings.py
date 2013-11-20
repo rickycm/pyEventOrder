@@ -51,10 +51,10 @@ USE_L10N = True
 USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
-# Example: "/var/www/example.com/media/"
+# Example: "/var/www/example.com/resources/"
 MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'media')
 
-# Examples: "http://example.com/media/", "http://media.example.com/"
+# Examples: "http://example.com/resources/", "http://resources.example.com/"
 MEDIA_URL = '/media/'
 
 # Absolute path to the directory static files should be collected to.
@@ -75,7 +75,7 @@ STATICFILES_DIRS = (
 # Don't forget to use absolute paths, not relative paths.
 #os.path.join(STATIC_ROOT, 'twitter_bootstrap'),
 #os.path.join(STATIC_ROOT, 'font_awesome'),
-#os.path.join(STATIC_ROOT, 'bootstrap3_datetime'),
+    os.path.join(PROJECT_ROOT, 'resources'),
 )
 
 # List of finder classes that know how to find static files in
@@ -117,8 +117,6 @@ TEMPLATE_DIRS = (
     os.path.join(PROJECT_ROOT, 'admin_bootstrap/templates').replace('\\', '/'),
     os.path.join(PROJECT_ROOT, 'templates').replace('\\', '/'),
 )
-
-CRISPY_TEMPLATE_PACK = 'bootstrap'
 
 INSTALLED_APPS = (
     'django.contrib.auth',
