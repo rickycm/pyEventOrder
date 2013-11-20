@@ -4,7 +4,6 @@
 {% block bootstrap3_title %}{{ title }}{% endblock %}
 
 {% block usercss %}
-<link type="text/css" href="{{STATIC_URL}}css/bootstrap-formhelpers.min.css" />
 {% endblock %}
 
 {% block bootstrap3_content %}
@@ -46,6 +45,30 @@
     <input type='text' class="form-control" />
 </div>
 
+<div>
+    <input name="mydate" id="mydate" type="date" data-role="datebox"
+   data-options='{"mode": "flipbox"}'>
+</div>
+
+
+            <label for="id_date" class="requiredField">
+                活动时间<span class="asteriskField">*</span>
+            </label>
+
+
+
+
+                <div class="input-group date" id="id_date_picker">
+                    <input class="form-control datetimepicker" id="id_date" name="date" type="text"/>
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+                <script>
+                    $(function() {
+                        $("#id_date_picker").datetimepicker({"pickSeconds": false, "language": "en-us", "format": "YYYY-MM-DD HH:mm"});
+                    });
+                </script>
 
 
 
@@ -55,7 +78,6 @@
 
 {% block js_post %}
 {{ block.super }}
-<script type="text/javascript" src="{{STATIC_URL}}js/bootstrap-formhelpers.min.js"></script>
         <script type="text/javascript">
             $(function ()
                 $('#datetimepicke').bfhdatepicker('toggle');
