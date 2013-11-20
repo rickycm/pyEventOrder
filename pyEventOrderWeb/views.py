@@ -166,7 +166,8 @@ def add_event2(request):
 # 处理消息机制，应该是公众平台中最核心的处理部分
 import hashlib
 from lxml import etree
-from messages import processEvent, processMessage
+from messages import processMessage
+from events import processEvent
 
 def message(request):
     # 对于任何消息，都需要通过下面的代码来确认消息的合法性。

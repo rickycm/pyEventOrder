@@ -3,21 +3,12 @@ __author__ = 'Aston'
 import time
 import logging
 
-from lxml import etree
-from django.http import HttpResponse
 #from django.template.loader import get_template
 #from django.template import Context
 from django.shortcuts import render_to_response
 
 logger = logging.getLogger('django.dev')
 URLBASE = 'http://whitemay.pythonanywhere.com'
-
-
-def processEvent(msg,event):
-    logger.debug('It is a event.')
-    msg_out = etree.Element('XML')
-    output_xml = etree.tostring(msg_out)
-    return HttpResponse(output_xml, content_type='text/xml')
 
 def processMessage(msg):
     logger.debug('It is a message.')
