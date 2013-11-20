@@ -75,10 +75,7 @@ STATICFILES_DIRS = (
 # Don't forget to use absolute paths, not relative paths.
 #os.path.join(STATIC_ROOT, 'twitter_bootstrap'),
 #os.path.join(STATIC_ROOT, 'font_awesome'),
-#os.path.join(STATIC_ROOT, 'bootstrap3_datetime'),
-    ("css", os.path.join(STATIC_ROOT,'css')),
-    ("js", os.path.join(STATIC_ROOT,'js')),
-    ("images", os.path.join(STATIC_ROOT,'images')),
+    os.path.join(PROJECT_ROOT, 'resources'),
 )
 
 # List of finder classes that know how to find static files in
@@ -121,7 +118,6 @@ TEMPLATE_DIRS = (
     os.path.join(PROJECT_ROOT, 'templates').replace('\\', '/'),
 )
 
-
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -151,7 +147,6 @@ BOOTSTRAP3 = {
     'jquery_url': '/static/admin/js/jquery.min.js',
     'base_url': '/static/twitter_bootstrap/dist/',
     'theme_url': '/static/twitter_bootstrap/dist/css/bootstrap-theme.min.css',
-
 }
 
 # A sample logging configuration. The only tangible logging

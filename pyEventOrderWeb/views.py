@@ -1,5 +1,6 @@
 #coding=utf-8
 import logging
+import datetime
 
 from django.contrib.auth.forms import *
 from django.shortcuts import render_to_response
@@ -10,7 +11,6 @@ from django.contrib.auth.decorators import login_required
 
 from pyEventOrderWeb import forms
 from pyEventOrderWeb.models import *
-import datetime
 
 logger = logging.getLogger('django.dev')
 
@@ -165,44 +165,44 @@ def add_event2(request):
 
 # 处理消息机制，应该是公众平台中最核心的处理部分
 import hashlib
-import xml.etree.ElementTree as ET
+from lxml import etree
 from messages import processEvent, processMessage
 
 def message(request):
     # 对于任何消息，都需要通过下面的代码来确认消息的合法性。
     # 这里的假定是，即使在POST模式下，依然可以通过GET方式来获得参数。
     # 以下代码需要在实际工作环境中检验其正确性
-    signature = request.GET['signature']
-    logger.debug('signature is ' + signature)
-    timestamp = request.GET['timestamp']
-    nonce = request.GET['nonce']
-    echostr = request.GET['echostr']
-    token = 'WeiXin'
+    logger.debug('get a message: ')
+    try:
+        signature = request.GET['signature']
+        timestamp = request.GET['timestamp']
+        nonce = request.GET['nonce']
+        token = 'WeiXin'
 
-    tmpArr = sorted([token, timestamp, nonce])
-    tmpStr = ''.join(tmpArr)
-    tmpStr = hashlib.sha1(tmpStr).hexdigest()
-    logger.debug('tmlStr is ' + tmpStr)
+        tmpArr = sorted([token, timestamp, nonce])
+        tmpStr = ''.join(tmpArr)
+        tmpStr = hashlib.sha1(tmpStr).hexdigest()
 
-    # 当两者相等时，消息合法。
-    if tmpStr == signature:
-        if request.method == 'GET':
-            # GET消息表示仅仅是对公众账号后台进行校验。
-            return HttpResponse(echostr)
-        elif request.method == 'POST':
-            # 这种方式下应该是实际的消息数据
-            # 消息可分为两种：用户发过来的消息，系统事件。
-            # 使用函数来进行进一步处理。
-            msg_in = ET.parse(request.POST)
-            ET.dump(msg_in)
-            event = msg_in.find('Event')
-            if event: #这是一个事件
-                return processEvent(msg_in,event)
-            else: #这是一个消息
-                return processMessage(msg_in)
-
-    else: # 此处仅保留，实际情况是无需进行任何处理。
-        return HttpResponse('Denied')
-
-
-
+        # 当两者相等时，消息合法。
+        if tmpStr == signature:
+            if request.method == 'GET':
+                # GET消息表示仅仅是对公众账号后台进行校验。
+                echostr = request.GET['echostr']
+                return HttpResponse(echostr)
+            elif request.method == 'POST':
+                # 这种方式下应该是实际的消息数据
+                # 消息可分为两种：用户发过来的消息，系统事件。
+                # 使用函数来进行进一步处理。
+                #logger.debug(request.body)
+                msg_in = etree.parse(request)
+                event = msg_in.find('Event')
+                if event==None : #这是一个事件
+                    return processMessage(msg_in)
+                else: #这是一个消息
+                    return processEvent(msg_in,event)
+        else:
+            logger.info('Illedge message received')
+            return
+    except: # 此处仅保留，实际情况是无需进行任何处理。
+        logger.info('Invalid message received')
+        return
