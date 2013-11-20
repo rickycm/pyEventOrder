@@ -217,7 +217,7 @@ def setting(request):
             path = request.path
             logger.debug('Path is ' + path)
             response = HttpResponseRedirect(path)
-            #response.set_cookie("wxopenid", userid, max_age=max_age)
+            response.set_cookie("wxopenid", userid, max_age=max_age)
             return response
 
         if request.COOKIES.has_key('wxopenid'):
