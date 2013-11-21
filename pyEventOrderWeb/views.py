@@ -142,11 +142,11 @@ def add_event(request):
 @login_required
 def add_event2(request):
     if request.method == 'GET':
-        form = forms.EventForm2()
+        form = forms.EventForm3()
         return render_to_response('addEvent2.html', {'title': '新建活动', 'form': form},
                                   context_instance=RequestContext(request))
     else:
-        form = forms.EventForm2(request.POST)
+        form = forms.EventForm3(request.POST)
         s = datetime.datetime.strptime(form.data['mydate'] + ' ' + form.data['mydate2'], "%Y-%m-%d %H:%M")
         print("++++++++++++++++++++++++", s)
         print("++++++++++++++++++++++++", form.data)
@@ -205,10 +205,10 @@ def message(request):
                     return processEvent(msg_in,event)
         else:
             logger.info('Illedge message received')
-            return
-    except: # 此处仅保留，实际情况是无需进行任何处理。
-        logger.info('Invalid message received')
-        return
+            raise Http404
+    except Exception as e: # 此处仅保留，实际情况是无需进行任何处理。
+        logger.info('Exception received: ' + e.message)
+        raise e
 
 from django.http import Http404
 def setting(request):
