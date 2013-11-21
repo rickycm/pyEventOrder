@@ -82,6 +82,11 @@
                     maxlength: 1000,
                     required: true
                 },
+                event_limit: {
+                  required: true,
+                  min: 0,
+                  max: 200
+                },
                 eventdate: "required",
                 eventtime: "required"
             },
@@ -95,6 +100,10 @@
                     required: "<li>请输入活动详情</li>",
                     minlength: "<li>请输入3个字以上</li>",
                     maxlength: "<li>最多为500字</li>",
+                },
+                event_limit: {
+                    min: "<li>最小人数为0</li>",
+                    max: "<li>最大为数为200</li>",
                 },
                 eventdate: "请选择活动日期",
                 eventtime: "请选择活动时间",
