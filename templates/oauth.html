@@ -1,0 +1,18 @@
+{% extends 'bootstrap.html' %}
+
+{% block bootstrap3_title %}{{ title }}{% endblock %}
+
+{% block usercss %}
+{% endblock %}
+
+{% block bootstrap3_content %}
+{% endblock %}
+
+{% block js_post %}
+{{ block.super }}
+<script>
+    var hash = window.location.hash;
+    console.log(hash);
+</script>
+{% endblock %}
+

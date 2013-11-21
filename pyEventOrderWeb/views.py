@@ -217,7 +217,7 @@ def setting(request):
         logger.debug(url)
         request.session['url'] = url
         auth_url = 'https://graph.qq.com/oauth2.0/authorize?' + \
-                   urlencode({'response_type':'code',
+                   urlencode({'response_type':'token',
                         'client_id':'100561618',
                         'redirect_uri':'http://whitemay.pythonanywhere.com/oauth',
                         'state':'Foperate'})
@@ -263,13 +263,19 @@ def setting(request):
                 context_instance=RequestContext(request))
 
 def oauth(request):
-    if request.GET['state']=='Foperate':
-        request.session['code'] = request.GET['code']
-        logger.debug('Received a code: ' + request.session['code'])
+    if request.GET.has_key('token'):
+        request.session['token'] = request.GET['token']
+        logger.debug('Received a token: ' + request.session['token'])
         user = authenticate(username='user', password='something')
         login(request, user)
         url = request.session['url']
         del request.session['url']
         return HttpResponseRedirect(url)
     else:
-        raise Http404
+        auth_url = 'https://graph.qq.com/oauth2.0/authorize?' + \
+            urlencode({'response_type':'token',
+                        'client_id':'100561618',
+                        'redirect_uri':'http://whitemay.pythonanywhere.com/oauth',
+                        'state':'Foperate'})
+
+        return render_to_response('oauth.html', {'title':'认证成功'})
