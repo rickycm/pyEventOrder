@@ -107,6 +107,11 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
+AUTHEMTICATION_BACKEND = (
+    'pyEventOrderWeb.auth.OAuthBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
