@@ -3,8 +3,7 @@ __author__ = 'Aston'
 import time
 import logging
 
-from lxml import etree
-from django.http import HttpResponse
+from django.http import Http404
 from django.shortcuts import render_to_response
 from models import wechat_user
 
@@ -41,7 +40,5 @@ def processEvent(msg,event):
         msg_out['articles'] = [article]
         return render_to_response('multimsg.xml', msg_out, content_type='text/xml')
 
-    msg_out = etree.Element('XML')
-    output_xml = etree.tostring(msg_out)
-    return HttpResponse(output_xml, content_type='text/xml')
+    raise Http404
 
