@@ -147,9 +147,7 @@ def add_event2(request):
                                   context_instance=RequestContext(request))
     else:
         form = forms.EventForm3(request.POST)
-        s = datetime.datetime.strptime(form.data['mydate'] + ' ' + form.data['mydate2'], "%Y-%m-%d %H:%M")
-        print("++++++++++++++++++++++++", s)
-        print("++++++++++++++++++++++++", form.data)
+        s = datetime.datetime.strptime(form.data['eventdate'] + ' ' + form.data['eventtime'], "%Y-%m-%d %H:%M")
         if form.is_valid():
             username = request.user.username
             e = event.objects.create(

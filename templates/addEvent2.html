@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block bootstrap3_content %}
-<form action="/add_event2/" method="post" class="form-horizontal">
+<form action="/add_event2/" id="addeventForm" method="post" class="form-horizontal">
     {% csrf_token %}
     <fieldset>
 
@@ -17,7 +17,7 @@
         <div class="control-group">
           <label class="control-label" for="event_title">活动名称</label>
           <div class="controls">
-            <input id="event_title" name="event_title" type="text" placeholder="请输入活动名称" class="input-large">
+            <input id="event_title" name="event_title" type="text" placeholder="请输入活动名称" required>
 
           </div>
         </div>
@@ -25,7 +25,7 @@
         <div class="control-group">
           <label class="control-label" for="event_detail">活动详情</label>
           <div class="controls">
-            <textarea id="event_detail" name="event_detail" placeholder="请输入活动详情"></textarea>
+            <textarea id="event_detail" name="event_detail" placeholder="请输入活动详情" required></textarea>
           </div>
         </div>
         <div data-role="fieldcontain">
@@ -34,13 +34,13 @@
         </div>
 
         <div>
-        <label for="mydate">Some Date</label>
-        <input name="mydate" id="mydate" type="date" data-role="datebox"
-           data-options='{"mode": "datebox"}'>
+        <label for="eventdate">活动日期：</label>
+        <input name="eventdate" id="eventdate" type="date" data-role="datebox"
+           data-options='{"mode": "datebox"}' required>
 
-        <label for="mydate2">Some Time</label>
-        <input name="mydate2" id="mydate2" type="date" data-role="datebox"
-           data-options='{"mode": "timebox"}'>
+        <label for="eventtime">活动时间：</label>
+        <input name="eventtime" id="eventtime" type="date" data-role="datebox"
+           data-options='{"mode": "timebox"}' required>
         </div>
         <!-- Button (Double) -->
         <div class="control-group">
@@ -58,11 +58,46 @@
 
 {% block js_post %}
 {{ block.super }}
+<script type="text/javascript">
+    $(document).on("pageinit", function () {
 
+        $('#addeventForm').validate({ // initialize the plugin
+            rules: {
+                event_title: {
+                    minlength: 3,
+                    maxlength: 50,
+                    required: true
+                },
+                event_detail: {
+                    minlength: 3,
+                    maxlength: 1000,
+                    required: true
+                },
+                eventdate: "required",
+                eventtime: "required"
+            },
+            messages: {
+                event_title: {
+                    required: "<li>请输入活动名称</li>",
+                    minlength: "<li>请输入3个字以上</li>",
+                    maxlength: "<li>最多为25字</li>",
+                },
+                event_detail: {
+                    required: "<li>请输入活动详情</li>",
+                    minlength: "<li>请输入3个字以上</li>",
+                    maxlength: "<li>最多为500字</li>",
+                },
+                eventdate: "请选择活动日期",
+                eventtime: "请选择活动时间"
+            }
+        });
+    });
+</script>
 <script src='{% static "bootstrap3_datetime/js/moment.min.js" %}'></script>
 <script src='{% static "bootstrap3_datetime/js/bootstrap-datetimepicker.min.js" %}'></script>
 <script src='{% static "uni_form/js/uni-form-validation.jquery.min.js" %}' type="text/javascript"></script>
 
+<script src='{% static "js/jquery.validate.min.js" %}' type="text/javascript"></script>
 <script src='{% static "datetimepicker/js/jqm-datebox.core.js" %}' type="text/javascript"></script>
 <script src='{% static "datetimepicker/js/jqm-datebox.mode.datebox.js" %}' type="text/javascript"></script>
 <script src='{% static "datetimepicker/js/jquery.mobile.datebox.i18n.zh-CN.utf8.js" %}' type="text/javascript"></script>
