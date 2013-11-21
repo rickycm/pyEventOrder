@@ -38,25 +38,26 @@
         </div>
         <div data-role="fieldcontain">
             <label for="event_limit">人数限制：</label>
-            <input type="range" name="event_limit" id="event_limit" value="10" min="0" max="200" data-highlight="true"  />
+            <input type="range" name="event_limit" id="event_limit" value="10" min="0" max="200" data-highlight="true"/>
         </div>
 
         <div>
-        <label for="eventdate">活动日期：</label>
+        <!--<label for="eventdate">活动日期：</label> -->
         <input name="eventdate" id="eventdate" type="date" data-role="datebox"
-           data-options='{"mode": "datebox"}' required>
+           data-options='{"mode": "datebox"}' placeholder="请输入活动日期" required>
 
-        <label for="eventtime">活动时间：</label>
-        <input name="eventtime" id="eventtime" type="date" data-role="datebox"
-           data-options='{"mode": "timebox"}' required>
+        <!--<label for="eventtime">活动时间：</label> -->
+        <input name="eventtime" id="eventtime" type="time" data-role="datebox"
+           data-options='{"mode": "timebox"}' placeholder="请输入活动时间" required>
         </div>
         <!-- Button (Double) -->
         <div class="control-group">
           <label class="control-label" for="submit"></label>
-          <div class="controls" style="text-align: center;">
-			<button type="submit" id="submit" name="submit" class="btn btn-success" style="width:40%">发布</button>
-            <button type="reset" id="reset" name="reset" class="btn btn-info" style="width:40%">取消</button>
-          </div>
+
+            <div class="ui-body ui-body-b">
+                    <button type="submit" id="submit" name="submit"  data-theme="b">发布</button>
+                    <button type="reset" data-theme="d">取消</button>
+            </div>
         </div>
 
 
@@ -109,9 +110,6 @@
         });
     });
 </script>
-<script src='{% static "bootstrap3_datetime/js/moment.min.js" %}'></script>
-<script src='{% static "bootstrap3_datetime/js/bootstrap-datetimepicker.min.js" %}'></script>
-<script src='{% static "uni_form/js/uni-form-validation.jquery.min.js" %}' type="text/javascript"></script>
 
 <script src='{% static "js/jquery.validate.min.js" %}' type="text/javascript"></script>
 <script src='{% static "datetimepicker/js/jqm-datebox.core.js" %}' type="text/javascript"></script>
