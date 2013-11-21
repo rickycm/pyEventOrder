@@ -19,7 +19,7 @@ def processEvent(msg,event):
             user = wechat_user.objects.get(openid=userid)
             user.subscribe = True
             user.initialized = False
-        except wechat_user.DoseNotExist:
+        except wechat_user.DoesNotExist:
             user = wechat_user.objects.create(openid=userid, subscribe=True, initialized=False)
         user.save()
 
