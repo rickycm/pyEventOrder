@@ -7,6 +7,13 @@
 {% block dh5mbp_css %}
     {{block.super}}
     <link rel="stylesheet" type="text/css" href='{% static "datetimepicker/css/jqm-datebox.css" %}' />
+    <style>
+        label.error {
+            color: red;
+            width: 100%;
+            float: none;
+        }
+    </style>
 {% endblock %}
 
 {% block content %}
@@ -90,6 +97,14 @@
                 },
                 eventdate: "请选择活动日期",
                 eventtime: "请选择活动时间"
+            },
+            errorPlacement: function(error, element) {
+                if (element.attr("name") == "event_title" || element.attr("name") == "eventdate"
+                    || element.attr("name") == "eventtime") {
+                    error.insertAfter($(element).parent());
+                } else {
+                    error.insertAfter(element);
+                }
             }
         });
     });
