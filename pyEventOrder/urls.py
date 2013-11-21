@@ -15,14 +15,14 @@ urlpatterns = patterns('',
     # url(r'^pyEventOrder/', include('pyEventOrder.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
-    url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
+    (r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
     # Uncomment the next line to enable the admin:
-    url(r'^admin/', include(admin.site.urls)),
+    (r'^admin/', include(admin.site.urls)),
 
     (r'^$', 'pyEventOrderWeb.views.index'),
     (r'^accounts/login/$', 'django.contrib.auth.views.login',{'template_name': 'login.html'}),
-    url(r'^login/$', views.check_auth),
+    (r'^login/$', views.check_auth),
     (r'^login-form/$', views.login_form),
     (r'^accounts/register/$', 'pyEventOrderWeb.views.register'),
     (r'^accounts/logout/$', 'django.contrib.auth.views.logout'),
@@ -30,9 +30,9 @@ urlpatterns = patterns('',
     (r'^list_events/$', views.list_events),
     (r'^add_event/$', views.add_event),
     (r'^add_event2/$', views.add_event2),
-    url(r'^setting/$', views.setting),
+    (r'^setting/$', views.setting),
     (r'^message/$', views.message),
-    url(r'^oauth/$', views.oauth),
+    (r'^oauth/$', views.oauth),
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += staticfiles_urlpatterns()
