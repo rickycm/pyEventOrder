@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 
 class OAuthBackend(object):
 
-    def authentication(self):
+    def authenticate(self):
         user = User.objects.get(username='user')
         return user
 
