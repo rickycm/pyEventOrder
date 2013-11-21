@@ -34,8 +34,8 @@ def processEvent(msg,event):
         msg_out['fromUser'] = msg.find('ToUserName').text
         msg_out['time'] = int(time.time())
 
-        article={'title':'欢迎', 'description':'请点这里设置您的其它信息。'}
-        article['picurl'] = URLBASE + '/media/test.png'
+        article={'title':'欢迎', 'description':'使用之前，请点这里设置您的个人信息。'}
+        article['picurl'] = URLBASE + '/media/mask.png'
         article['url'] = URLBASE + '/setting/?userid=' + userid
 
         msg_out['articles'] = [article]

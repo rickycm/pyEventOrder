@@ -1,6 +1,8 @@
 # coding=utf-8
 from django.conf.urls import patterns, include, url
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django.conf import settings
+from django.conf.urls.static import static
 from pyEventOrderWeb import views
 
 # Uncomment the next two lines to enable the admin:
@@ -29,7 +31,7 @@ urlpatterns = patterns('',
     (r'^add_event2/$', views.add_event2),
     url(r'^setting/$', views.setting),
     (r'^message/$', views.message),
-)
+) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += staticfiles_urlpatterns()
 
