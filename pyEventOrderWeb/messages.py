@@ -27,7 +27,7 @@ def processMessage(msg):
 
     article={'title':'发布活动', 'description':'点此链接发布一个活动'}
     article['picurl'] = URLBASE + '/media/test.png'
-    article['url'] = URLBASE + '/add_event/?user=' + msg_out['toUser']
+    article['url'] = URLBASE + '/add_event/'
 
     msg_out['articles'] = [article]
     return render_to_response('multimsg.xml', msg_out, content_type='text/xml')
