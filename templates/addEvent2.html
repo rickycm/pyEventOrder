@@ -17,7 +17,7 @@
         <div class="control-group">
           <label class="control-label" for="event_title">活动名称</label>
           <div class="controls">
-            <input id="event_title" name="event_title" type="text" placeholder="请输入活动名称" class="input-large" required="">
+            <input id="event_title" name="event_title" type="text" placeholder="请输入活动名称" class="input-large">
 
           </div>
         </div>
@@ -58,6 +58,7 @@
 
 {% block js_post %}
 {{ block.super }}
+
 <script src='{% static "bootstrap3_datetime/js/moment.min.js" %}'></script>
 <script src='{% static "bootstrap3_datetime/js/bootstrap-datetimepicker.min.js" %}'></script>
 <script src='{% static "uni_form/js/uni-form-validation.jquery.min.js" %}' type="text/javascript"></script>

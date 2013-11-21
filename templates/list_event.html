@@ -13,6 +13,8 @@
         {% if user.is_authenticated and user != "" %}
         <p>Welcome, {{ user.username }}. Thanks for logging in.</p>
         <li><a href = "/accounts/logout/"> 退出 </a></li>
+        <li><a href = "/add_event/"> add_event </a></li>
+        <li><a href = "/add_event2/"> add_event2 </a></li>
         <li><a href = "/admin/"> 管理界面 </a></li>
         {% else %}
         <p>Welcome, new user. Please log in.</p>
