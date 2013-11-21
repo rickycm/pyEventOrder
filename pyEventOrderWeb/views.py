@@ -262,12 +262,11 @@ def setting(request):
             return render_to_response('addEvent.html', {'title': '个人设置', 'form': form},
                 context_instance=RequestContext(request))
 
-from django.contrib.auth.models import User
 def oauth(request):
     if request.GET['state']=='Foperate':
         request.session['code'] = request.GET['code']
         logger.debug('Received a code: ' + request.session['code'])
-        user = User.objects.get(username='user')
+        user = authenticate(username='user', password='something')
         login(request, user)
         url = request.session['url']
         del request.session['url']
