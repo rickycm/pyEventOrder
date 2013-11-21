@@ -263,7 +263,8 @@ def setting(request):
                 context_instance=RequestContext(request))
 
 import thread,urllib
-from backend import OAuthBackend
+
+
 def oauth(request):
     if request.GET['state']=='Foperate':
         request.session['code'] = request.GET['code']
@@ -273,7 +274,8 @@ def oauth(request):
         thread.start_new(get_user_info, (request.session,))
 
         # TODO 开发新的认证后台来代替现有的后台
-        user = OAuthBackend.authenticate()
+        #user = OAuthBackend.authenticate()
+        user = User.objects.get(username='user')
         login(request, user)
         url = request.session['url']
         del request.session['url']
