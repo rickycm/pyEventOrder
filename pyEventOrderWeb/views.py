@@ -266,7 +266,9 @@ def oauth(request):
     if request.GET['state']=='Foperate':
         request.session['code'] = request.GET['code']
         logger.debug('Received a code: ' + request.session['code'])
+        login(request,'user')
         url = request.session['url']
+        del request.session['url']
         return HttpResponseRedirect(url)
     else:
         raise Http404
