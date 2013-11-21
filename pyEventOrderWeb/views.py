@@ -207,18 +207,17 @@ def message(request):
         logger.info('Exception received: ' + e.message)
         raise e
 
-#APP ID：100561618
-#APP KEY：dbbea5729ffd5182deff63f90131bc3b
+APP_ID='100561618'
+APP_KEY='dbbea5729ffd5182deff63f90131bc3b'
 from django.http import Http404
-from urllib import urlencode
 def setting(request):
     if not request.user.is_authenticated():
         url = request.build_absolute_uri()
         logger.debug(url)
         request.session['url'] = url
         auth_url = 'https://graph.qq.com/oauth2.0/authorize?' + \
-                   urlencode({'response_type':'token',
-                        'client_id':'100561618',
+                   urllib.urlencode({'response_type':'code',
+                        'client_id':APP_ID,
                         'redirect_uri':'http://whitemay.pythonanywhere.com/oauth',
                         'state':'Foperate'})
         logger.debug(auth_url)
@@ -262,17 +261,45 @@ def setting(request):
             return render_to_response('addEvent.html', {'title': '个人设置', 'form': form},
                 context_instance=RequestContext(request))
 
+import thread,urllib
 def oauth(request):
-    if request.GET.has_key('access_token'):
-        token = request.GET['access_token']
-        if token=='none':
-            raise Http404
-        request.session['token'] = token
-        logger.debug('Received a token: ' + request.session['token'])
+    if request.GET['state']=='Foperate':
+        request.session['code'] = request.GET['code']
+        logger.debug('Received a code: ' + request.session['code'])
+
+        # 利用code从服务器获取用户信息，并将这个用户信息保存到session中去。
+        thread.start_new(get_user_info, (request.session,))
+
+        # TODO 开发新的认证后台来代替现有的后台
         user = authenticate(username='user', password='something')
         login(request, user)
         url = request.session['url']
         del request.session['url']
         return HttpResponseRedirect(url)
     else:
-        return render_to_response('oauth.html', {'title':'认证成功'})
+        raise Http404
+
+from urlparse import parse_qs
+def get_user_info(session):
+    url = 'http://https://graph.qq.com/oauth2.0/token?' + urllib.urlencode({
+        'grant_type':'authorization_code',
+        'client_id':APP_ID,
+        'client_secret':APP_KEY,
+        'code':session['code'],
+        'redirect_uri':'http://whitemay.pythonanywhere.com/oauth',
+    })
+    f = urllib.urlopen(url)
+    text = f.read()
+    f.close()
+    logger.debug('Thread return: ' + text)
+    q = parse_qs(text)
+    if q.has_key('access_token'):
+        token = q['access_token'][0]
+        logger.debug('Get token: ' + token)
+        session['token'] = token
+        url = 'https://graph.qq.com/oauth2.0/me?access_token=' + token
+        f = urllib.urlopen(url)
+        text = f.read()
+        f.close()
+        logger.debug('Thread return 2: ' + text)
+
