@@ -207,13 +207,20 @@ def message(request):
         logger.info('Exception received: ' + e.message)
         raise e
 
+#APP ID：100561618
+#APP KEY：dbbea5729ffd5182deff63f90131bc3b
 from django.http import Http404
+from urllib import urlencode
 def setting(request):
     if not request.user.is_authenticated():
         url = request.build_absolute_uri()
         logger.debug(url)
         request.session['url'] = url
-        raise Http404
+        auth_url = 'https://graph.qq.com/oauth2.0/authorize?' + urlencode({'response_type':'code',
+            'client_id':'100561618',
+            'redirect_url':'http://whitemay.pythonanywhere.com/oauth/'})
+        logger.debug(auth_url)
+        return HttpResponseRedirect(auth_url)
     if request.method=='GET':
         if request.GET.has_key('userid'):
             userid = request.GET['userid']
