@@ -1,5 +1,4 @@
 {% extends 'bootstrap2.html' %}
-{% load crispy_forms_tags %}
 {% load staticfiles %}
 
 {% block bootstrap3_title %}{{ title }}{% endblock %}
@@ -15,7 +14,7 @@
 
         <!-- Text input-->
         <div class="control-group">
-          <label class="control-label" for="event_title">活动名称</label>
+          <!--<label class="control-label" for="event_title">活动名称</label> -->
           <div class="controls">
             <input id="event_title" name="event_title" type="text" placeholder="请输入活动名称" required>
 
@@ -23,7 +22,7 @@
         </div>
         <!-- Textarea -->
         <div class="control-group">
-          <label class="control-label" for="event_detail">活动详情</label>
+          <!--<label class="control-label" for="event_detail">活动详情</label>-->
           <div class="controls">
             <textarea id="event_detail" name="event_detail" placeholder="请输入活动详情" required></textarea>
           </div>

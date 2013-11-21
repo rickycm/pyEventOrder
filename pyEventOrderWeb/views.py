@@ -142,14 +142,13 @@ def add_event(request):
 @login_required
 def add_event2(request):
     if request.method == 'GET':
-        form = forms.EventForm3()
+        form = forms.EventForm2()
         return render_to_response('addEvent2.html', {'title': '新建活动', 'form': form},
                                   context_instance=RequestContext(request))
     else:
-        form = forms.EventForm3(request.POST)
+        form = forms.EventForm2(request.POST)
         s = datetime.datetime.strptime(form.data['eventdate'] + ' ' + form.data['eventtime'], "%Y-%m-%d %H:%M")
         if form.is_valid():
-            username = request.user.username
             e = event.objects.create(
                 event_title = form.data['event_title'],
                 event_detail = form.data['event_detail'],

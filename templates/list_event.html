@@ -31,6 +31,8 @@
                             <td>updated_date</td>
                             <td>event_type</td>
                             <td>event_detail</td>
+                            <td>updated_by</td>
+                            <td>event_limit</td>
                         </tr>
                         {% for event in events %}
                         <tr>
@@ -39,6 +41,8 @@
                             <td>{{ event.updated_date }}</td>
                             <td>{{ event.get_event_type_display }}</td>
                             <td>{{ event.event_detail }}</td>
+                            <td>{{ event.updated_by }}</td>
+                            <td>{{ event.event_limit }}</td>
                         </tr>
                         {% endfor %}
                     </table>
