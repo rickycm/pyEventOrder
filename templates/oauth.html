@@ -26,18 +26,11 @@
       return urlParams;
    }
 
-    var h = window.location.hash;
-    h = h.substring(1);
-    var atoken = parseQueryString(h);
-    var token = atoken["access_token"];
-    console.log(token);
-
-    var url = 'https://graph.qq.com/oauth2.0/me?callback=callback&access_token="+token;
-    $.ajax({
-      url:url
-    }).done(function(data) {
-      console.log(data);
-    });
+    var hash = window.location.hash;
+    hash = hash.substring(1);
+    var path = window.location.pathname + "?" + hash;
+    console.log(path);
+    window.location = path;
 </script>
 {% endblock %}
 
