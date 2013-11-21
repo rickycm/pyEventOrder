@@ -11,7 +11,7 @@ logger = logging.getLogger('django.dev')
 URLBASE = 'http://whitemay.pythonanywhere.com'
 
 def processEvent(msg,event):
-    logger.debug('It is a event.')
+    logger.debug('It is a event: ' + event.text)
     if event.text=='subscribe':
         # 这是一个订阅消息。
         userid = msg.find('FromUserName').text
