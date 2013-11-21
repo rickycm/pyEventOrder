@@ -1,13 +1,15 @@
-{% extends 'bootstrap2.html' %}
+{% extends 'dh5mbp/base.html' %}
+{% load url from future %}
 {% load staticfiles %}
 
-{% block bootstrap3_title %}{{ title }}{% endblock %}
+{% block title %}{{ title }}{% endblock %}
 
-{% block usercss %}
+{% block dh5mbp_css %}
+    {{block.super}}
     <link rel="stylesheet" type="text/css" href='{% static "datetimepicker/css/jqm-datebox.css" %}' />
 {% endblock %}
 
-{% block bootstrap3_content %}
+{% block content %}
 <form action="/add_event2/" id="addeventForm" method="post" class="form-horizontal">
     {% csrf_token %}
     <fieldset>
@@ -55,7 +57,7 @@
 </form>
 {% endblock %}
 
-{% block js_post %}
+{% block post_main_script %}
 {{ block.super }}
 <script type="text/javascript">
     $(document).on("pageinit", function () {

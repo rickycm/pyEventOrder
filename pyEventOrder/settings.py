@@ -153,6 +153,8 @@ INSTALLED_APPS = (
     'jquery',
     'bootstrap3',
     'awesome_bootstrap',
+    'dh5bp',
+    'dh5mbp',
     'bootstrap3_datetime',
     'pyEventOrderWeb',
 )
