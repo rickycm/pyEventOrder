@@ -6,33 +6,26 @@
 {% endblock %}
 
 {% block bootstrap3_content %}
-   成功通过认证，获取用户信息中。。。
+   自动转向OAuth认证界面
    <div id="log">log</div>
 {% endblock %}
 
 {% block js_post %}
 {{ block.super }}
 <script>
-   var parseQueryString = function (qs) {
-      var e,
-         a = /\+/g,  // Regex for replacing addition symbol with a space
-         r = /([^&;=]+)=?([^&;]*)/g,
-         d = function (s) { return decodeURIComponent(s.replace(a, " ")); },
-         q = qs,
-         urlParams = {};
-
-      while (e = r.exec(q))
-         urlParams[d(e[1])] = d(e[2]);
-
-      return urlParams;
+   var url;
+   if (window.WeixinJSBridge) { // 检查是否微信客户端环境
+      url = 'https://open.weixin.qq.com/connect/oauth2/authorize?' +
+         'appid=wxf0e81c3bee622d60&' +
+         'redirect_uri=http%3A%2F%2Fwhitemay.pythonanywhere.com%2Foauth%2&' +
+         'response_type=code&scope=snsapi_userinfo&state=Foperate#wechat_redirect';
+   } else {
+      url = 'https://graph.qq.com/oauth2.0/authorize?' +
+         'appid=100561618&' +
+         'redirect_uri=http%3A%2F%2Fwhitemay.pythonanywhere.com%2Foauth%2&' +
+         'response_type=code&state=Foperate';
    }
-
-    var hash = window.location.hash;
-    if (hash.indexOf("access_token") === -1) hash="access_token=none";
-    else hash = hash.substring(1);
-    var path = window.location.pathname + "?" + hash;
-    $('log').text(path);
-    //window.location = path;
+   $('#log').text(url);
 </script>
 {% endblock %}
 

@@ -22,6 +22,7 @@ urlpatterns = patterns('',
 
     (r'^$', 'pyEventOrderWeb.views.index'),
     (r'^accounts/login/$', 'django.contrib.auth.views.login',{'template_name': 'login.html'}),
+    url(r'^login/$', views.check_auth),
     (r'^login-form/$', views.login_form),
     (r'^accounts/register/$', 'pyEventOrderWeb.views.register'),
     (r'^accounts/logout/$', 'django.contrib.auth.views.logout'),

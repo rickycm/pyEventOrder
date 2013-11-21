@@ -207,8 +207,6 @@ def message(request):
         logger.info('Exception received: ' + e.message)
         raise e
 
-APP_ID='100561618'
-APP_KEY='dbbea5729ffd5182deff63f90131bc3b'
 from django.http import Http404
 def setting(request):
     if not request.user.is_authenticated():
@@ -264,14 +262,14 @@ def setting(request):
 
 import thread,urllib
 def oauth(request):
-    if request.GET['state']=='Foperate':
+    if request.GET.get('state','state')=='Foperate':
         request.session['code'] = request.GET['code']
         logger.debug('Received a code: ' + request.session['code'])
 
         # 利用code从服务器获取用户信息，并将这个用户信息保存到session中去。
         thread.start_new(get_user_info, (request.session,))
 
-        # TODO 开发新的认证后台来代替现有的后台
+        # 使用新的认证后台来代替现有的后台
         user = authenticate(code=request.session['code'])
         login(request, user)
         if request.session.has_key('url'):
@@ -281,7 +279,56 @@ def oauth(request):
             url = '/'
         return HttpResponseRedirect(url)
     else:
-        raise Http404
+        return render_to_response('oauth.html',{'title','自动认证'})
+
+APP_ID='100561618'
+WX_APP_ID='wxf0e81c3bee622d60'
+APP_KEY='dbbea5729ffd5182deff63f90131bc3b'
+def check_auth(request):
+    ''' 用法，在所有需要检查权限的调用前。
+    url = check_auth(request)
+    if url:
+        return HttpResponseRedirect(url)
+    '''
+
+    next = request.GET['next']
+    if request.user.is_authenticated():
+        return HttpResponseRedirect(next)
+
+    # 首先检查COOKIES里面是否已经存在用户信息
+    if request.COOKIES.has_key('wxopenid'):
+        userid = request.COOKIES['wxopenid']
+        logger.info('Cookie has userid ' + userid)
+        user = authenticate(code=userid)
+        login(request, user)
+        return HttpResponseRedirect(next)
+
+    # 然后启动OAuth2过程，在这里需要判断启动谁
+    #url = request.build_absolute_uri()
+    #logger.debug(url)
+    request.session['url'] = next
+
+    useragent = request.META['HTTP_USER_AGENT']
+    logger.debug(useragent)
+    if 'MicroMessenger' in useragent:
+        auth_url = 'https://open.weixin.qq.com/connect/oauth2/authorize?' + \
+            urllib.urlencode({
+                'response_type':'code',
+                'client_id':WX_APP_ID,
+                'redirect_uri':'http://whitemay.pythonanywhere.com/oauth',
+                'scope':'snsapi_userinfo',
+                #'state':'Foperate',
+            }) + '&state=Forpeate#wechat_redirect'
+    else:
+        auth_url = 'https://graph.qq.com/oauth2.0/authorize?' + \
+            urllib.urlencode({
+                'response_type':'code',
+                'client_id':APP_ID,
+                'redirect_uri':'http://whitemay.pythonanywhere.com/oauth',
+                'state':'Foperate',
+            })
+    logger.debug(auth_url)
+    return HttpResponseRedirect(auth_url)
 
 from urlparse import parse_qs
 def get_user_info(session):
