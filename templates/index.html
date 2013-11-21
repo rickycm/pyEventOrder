@@ -2,6 +2,11 @@
 
 {% block bootstrap3_title %}欢迎使用{% endblock %}
 
+{% block meta %}
+    {{ block.super }}
+    <meta property="qc:admins" content="3123217701455116014076161705256375" />
+{% endblock %}
+
 {% block bootstrap3_content %}
 {% if user.is_authenticated and user != "" %}
     ========={{ user }}

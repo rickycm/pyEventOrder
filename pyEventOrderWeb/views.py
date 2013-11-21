@@ -45,10 +45,10 @@ def register(request):
                         return HttpResponseRedirect("/")
 
 def index(request):
-        if request.user.is_authenticated():
-            user = request.user
-            return render_to_response("index.html", {'user': user}, context_instance=RequestContext(request))
-        return HttpResponseRedirect("/accounts/login/")
+    #if request.user.is_authenticated():
+        user = request.user
+        return render_to_response("index.html", {'user': user}, context_instance=RequestContext(request))
+    #return HttpResponseRedirect("/accounts/login/")
 
 def list_events(rq):
         ONE_PAGE_OF_DATA = 10
@@ -209,6 +209,11 @@ def message(request):
 
 from django.http import Http404
 def setting(request):
+    if not request.user.is_authenticated():
+        url = request.build_absolute_uri()
+        logger.debug(url)
+        request.session['url'] = url
+        raise Http404
     if request.method=='GET':
         if request.GET.has_key('userid'):
             userid = request.GET['userid']
