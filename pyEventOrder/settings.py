@@ -107,7 +107,7 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-AUTHEMTICATION_BACKEND = (
+AUTHENTICATION_BACKENDS = (
     'pyEventOrderWeb.auth.OAuthBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
