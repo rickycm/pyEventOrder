@@ -6,13 +6,31 @@
 {% endblock %}
 
 {% block bootstrap3_content %}
+   成功通过认证，获取用户信息中。。。
 {% endblock %}
 
 {% block js_post %}
 {{ block.super }}
 <script>
-    var hash = window.location.hash;
-    console.log(hash);
+   var parseQueryString = function (qs) {
+      var e,
+         a = /\+/g,  // Regex for replacing addition symbol with a space
+         r = /([^&;=]+)=?([^&;]*)/g,
+         d = function (s) { return decodeURIComponent(s.replace(a, " ")); },
+         q = qs,
+         urlParams = {};
+
+      while (e = r.exec(q))
+         urlParams[d(e[1])] = d(e[2]);
+
+      return urlParams;
+   }
+
+    var h = window.location.hash;
+    h = h.substring(1);
+    var atoken = parseQueryString(h);
+    var token = atoken["access_token"];
+    console.log(token);
 </script>
 {% endblock %}
 
