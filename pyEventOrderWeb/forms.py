@@ -84,5 +84,19 @@ class EventForm2(forms.ModelForm):
         if not self.is_valid():
             raise forms.ValidationError(u"以下标记部分为必选项")
         else:
-            cleaned_data = super(EventForm, self).clean()
+            cleaned_data = super(EventForm2, self).clean()
         return cleaned_data
+
+class SettingForm(forms.Form):
+    data_id = forms.CharField(widget=forms.HiddenInput)
+    inputname = forms.CharField(max_length=50, label='',
+                               widget=forms.TextInput(attrs={'placeholder':'您在订活动时使用的名字',}))
+    def __init__(self, *args, **kwargs):
+        super(SettingForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_id = 'id-settingForm'
+        self.helper.form_class = 'blueForms'
+        self.helper.form_method = 'post'
+        self.helper.form_action = '#'
+        self.helper.add_input(Submit('submit', '保存'))
+

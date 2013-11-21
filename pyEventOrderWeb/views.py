@@ -227,6 +227,24 @@ def setting(request):
         else:
             raise Http404
 
-        form = forms.EventForm()
-        return render_to_response('addEvent.html', {'title': '新建活动', 'form': form},
+        user = wechat_user.objects.get(openid=userid)
+        form = forms.SettingForm({'inputname':user.wechat_inputname,'data_id':user.id,})
+        return render_to_response('addEvent.html', {'title': '个人设置', 'form': form},
             context_instance=RequestContext(request))
+    else: #POST
+        if request.COOKIES.has_key('wxopenid'):
+            userid = request.COOKIES['wxopenid']
+            logger.info('Cookie has userid ' + userid)
+        else:
+            raise Http404
+
+        form = forms.SettingForm(request.POST)
+        if form.is_valid():
+            user = wechat_user.objects.get(id=form.cleaned_data['data_id'])
+            assert user.openid==userid
+            user.wechat_inputname = form.cleaned_data['inputname']
+            user.save()
+            return list_events(request)
+        else:
+            return render_to_response('addEvent.html', {'title': '个人设置', 'form': form},
+                context_instance=RequestContext(request))
