@@ -5,6 +5,7 @@ from django import forms
 from bootstrap3_datetime.widgets import DateTimePicker
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout, Div, Fieldset
+from django.forms import ModelForm
 from pyEventOrderWeb.models import *
 
 
@@ -33,7 +34,7 @@ class EventForm(forms.Form):
         self.helper.add_input(Submit('submit', '保存'))
 
 
-class EventForm2(forms.ModelForm):
+class EventForm3(forms.Form):
     event_title = forms.CharField(label=u"主题", required=True, error_messages={'required': u'必选项'})
     event_detail = forms.CharField(
         label=u'详细信息',
@@ -53,32 +54,13 @@ class EventForm2(forms.ModelForm):
         required=True,
         error_messages={'required': u'必选项'}
     )
-    event_limit = forms.IntegerField(label=u'人数限制', error_messages={'required': u'必选项'})
+    event_limit = forms.IntegerField()
     updated_by = forms.CharField(required=False, widget=forms.HiddenInput())
     event_type = forms.TypedChoiceField(
         label = u'活动类型',
         choices = ((1, "event"), (0, "order")),
-        coerce = lambda x: bool(int(x)),
-        #widget = forms.RadioSelect,
-        widget=forms.HiddenInput(),
-        initial = '1',
-        required = True,
     )
 
-    helper = FormHelper()
-    helper.form_class = 'form-horizontal'
-    helper.label_class = 'col-lg-2'
-    helper.field_class = 'col-lg-8'
-    helper.layout = Layout(
-        Div(
-            Div(Fieldset('event_title', 'event_detail', 'event_date', css_class='col-md-6')),
-            Div(Fieldset('event_limit','event_type', css_class='col-md-6'))
-        )
-    )
-
-    class Meta:
-        fields = ('event_title', 'event_date', 'event_detail', 'event_limit')
-        model = event
 
     def clean(self):
         if not self.is_valid():
