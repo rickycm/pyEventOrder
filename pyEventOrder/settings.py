@@ -143,7 +143,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.flatpages',
+    #'django.contrib.flatpages',
     'crispy_forms',
     'admin_bootstrap',
     'django.contrib.admin',

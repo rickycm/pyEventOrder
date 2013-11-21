@@ -354,3 +354,5 @@ def get_user_info(session):
         f.close()
         logger.debug('Thread return 2: ' + text)
 
+def welcome(request):
+    return render_to_response('welcome.html')

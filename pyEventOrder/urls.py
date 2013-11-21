@@ -1,5 +1,5 @@
 # coding=utf-8
-from django.conf.urls import patterns, include, url
+from django.conf.urls import patterns, include
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.conf import settings
 from django.conf.urls.static import static
@@ -33,11 +33,12 @@ urlpatterns = patterns('',
     (r'^setting/$', views.setting),
     (r'^message/$', views.message),
     (r'^oauth/$', views.oauth),
+    (r'^welcome/$', views.welcome),
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += staticfiles_urlpatterns()
 
-urlpatterns += patterns('django.contrib.flatpages.views',
-    url(r'^(?P<url>.*)/$', 'flatpage'),
-)
+#urlpatterns += patterns('django.contrib.flatpages.views',
+#    (r'^pages/', include('django.contrib.flatpages.urls')),
+#)
 
