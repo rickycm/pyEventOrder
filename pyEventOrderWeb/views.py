@@ -274,9 +274,11 @@ def oauth(request):
         # TODO 开发新的认证后台来代替现有的后台
         user = authenticate(code=request.session['code'])
         login(request, user)
-        url = request.session.get('url','/')
-        #url = request.session['url']
-        del request.session['url']
+        if request.session.has_key('url'):
+            url = request.session['url']
+            del request.session['url']
+        else:
+            url = '/'
         return HttpResponseRedirect(url)
     else:
         raise Http404
