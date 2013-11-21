@@ -4,9 +4,7 @@ __author__ = 'ricky'
 from django import forms
 from bootstrap3_datetime.widgets import DateTimePicker
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit, Layout, Div, Fieldset
-from django.forms import ModelForm
-from pyEventOrderWeb.models import *
+from crispy_forms.layout import Submit
 
 
 class LoginForm(forms.Form):
@@ -61,12 +59,11 @@ class EventForm3(forms.Form):
         choices = ((1, "event"), (0, "order")),
     )
 
-
     def clean(self):
         if not self.is_valid():
             raise forms.ValidationError(u"以下标记部分为必选项")
         else:
-            cleaned_data = super(EventForm2, self).clean()
+            cleaned_data = super(EventForm3, self).clean()
         return cleaned_data
 
 class SettingForm(forms.Form):
