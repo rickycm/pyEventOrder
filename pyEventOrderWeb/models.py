@@ -15,6 +15,7 @@ class event(models.Model):
     event_hostfakeID = models.CharField(max_length=200)
     event_hostname = models.CharField(max_length=1000, blank=True)
     event_limit = models.IntegerField()
+    event_innum = models.IntegerField()
     event_sn = models.CharField(max_length=20, blank=True)
 
     class Meta:
