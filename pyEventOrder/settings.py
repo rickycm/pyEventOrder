@@ -4,7 +4,7 @@ import os
 
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 DEBUG = True
-TEMPLATE_DEBUG = DEBUG
+TEMPLATE_DEBUG = True
 
 ADMINS = (
     ('Ricky Chi', 'rickycm@gmail.com'),
@@ -106,6 +106,8 @@ MIDDLEWARE_CLASSES = (
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
+
+APPEND_SLASH = True
 
 AUTHENTICATION_BACKENDS = (
     'pyEventOrderWeb.auth.OAuthBackend',
