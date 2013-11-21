@@ -31,6 +31,7 @@ urlpatterns = patterns('',
     (r'^add_event2/$', views.add_event2),
     url(r'^setting/$', views.setting),
     (r'^message/$', views.message),
+    url(r'^oauth/$', views.oauth),
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += staticfiles_urlpatterns()

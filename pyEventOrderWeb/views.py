@@ -216,9 +216,11 @@ def setting(request):
         url = request.build_absolute_uri()
         logger.debug(url)
         request.session['url'] = url
-        auth_url = 'https://graph.qq.com/oauth2.0/authorize?' + urlencode({'response_type':'code',
-            'client_id':'100561618',
-            'redirect_url':'http://whitemay.pythonanywhere.com/oauth/'})
+        auth_url = 'https://graph.qq.com/oauth2.0/authorize?' + \
+                   urlencode({'response_type':'code',
+                        'client_id':'100561618',
+                        'redirect_uri':'http://whitemay.pythonanywhere.com/oauth',
+                        'state':'Foperate'})
         logger.debug(auth_url)
         return HttpResponseRedirect(auth_url)
     if request.method=='GET':
@@ -259,3 +261,12 @@ def setting(request):
         else:
             return render_to_response('addEvent.html', {'title': '个人设置', 'form': form},
                 context_instance=RequestContext(request))
+
+def oauth(request):
+    if request.GET['state']=='Foperate':
+        request.session['code'] = request.GET['code']
+        logger.debug('Received a code: ' + request.session['code'])
+        url = request.session['url']
+        return HttpResponseRedirect(url)
+    else:
+        raise Http404
