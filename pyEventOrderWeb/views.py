@@ -142,26 +142,28 @@ def add_event(request):
 @login_required
 def add_event2(request):
     if request.method == 'GET':
-        form = forms.EventForm()
+        form = forms.EventForm2()
         return render_to_response('addEvent2.html', {'title': '新建活动', 'form': form},
                                   context_instance=RequestContext(request))
     else:
-        form = forms.EventForm(request.POST)
+        form = forms.EventForm2(request.POST)
+        s = datetime.datetime.strptime(form.data['mydate'] + ' ' + form.data['mydate2'], "%Y-%m-%d %H:%M")
+        print("++++++++++++++++++++++++", s)
+        print("++++++++++++++++++++++++", form.data)
         if form.is_valid():
             username = request.user.username
             e = event.objects.create(
-                updated_by = form.cleaned_data['updated_by'],
-                event_title = form.cleaned_data['event_title'],
-                event_detail = form.cleaned_data['event_detail'],
-                event_date = form.cleaned_data['event_date'],
-                event_limit = form.cleaned_data['event_limit'],
-                updated_date = datetime.datetime.now(),
+                event_title = form.data['event_title'],
+                event_detail = form.data['event_detail'],
+                event_date = s,
+                event_limit = form.data['event_limit'],
+                updated_by = "11111111111",
+                event_type = 1,
             )
             e.save()
             return list_events(request)
         else:
-            return render_to_response('addEvent2.html', {'title': '新建活动', 'form': form},
-                                  context_instance=RequestContext(request))
+            return render_to_response('addEvent2.html', {'title': '新建活动', 'form': form}, context_instance=RequestContext(request))
 
 # 处理消息机制，应该是公众平台中最核心的处理部分
 import hashlib
