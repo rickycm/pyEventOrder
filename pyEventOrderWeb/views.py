@@ -114,40 +114,15 @@ def list_events(rq):
                 return render_to_response("list_event.html", {'user': user, 'events':events, 'allPage':allPage, 'curPage':curPage}, context_instance=RequestContext(rq))
         return HttpResponseRedirect("/accounts/login/")
 
-# 添加一个活动
+# 添加活动
 @login_required
 def add_event(request):
     if request.method == 'GET':
         form = forms.EventForm()
         return render_to_response('addEvent.html', {'title': '新建活动', 'form': form},
-                                  context_instance=RequestContext(request))
+                              context_instance=RequestContext(request))
     else:
         form = forms.EventForm(request.POST)
-        if form.is_valid():
-            username = request.user.username
-            e = event.objects.create(
-                updated_by = form.cleaned_data['updated_by'],
-                event_title = form.cleaned_data['event_title'],
-                event_detail = form.cleaned_data['event_detail'],
-                event_date = form.cleaned_data['event_date'],
-                event_limit = form.cleaned_data['event_limit'],
-                updated_date = datetime.datetime.now(),
-            )
-            e.save()
-            return list_events(request)
-        else:
-            return render_to_response('addEvent.html', {'title': '新建活动', 'form': form},
-                                  context_instance=RequestContext(request))
-
-# 添加一个活动
-@login_required
-def add_event2(request):
-    if request.method == 'GET':
-        form = forms.EventForm2()
-        return render_to_response('addEvent2.html', {'title': '新建活动', 'form': form},
-                                  context_instance=RequestContext(request))
-    else:
-        form = forms.EventForm2(request.POST)
         s = datetime.datetime.strptime(form.data['eventdate'] + ' ' + form.data['eventtime'], "%Y-%m-%d %H:%M")
         userId = request.session["userid"]
         if form.is_valid():
@@ -160,15 +135,101 @@ def add_event2(request):
                 event_type = 1,
             )
             e.save()
-            return list_events(request)
+
+            reMsg = u'发布成功。'
+            rqdata = request.GET.copy()
+            rqdata['eventid'] = e.id
+            rqdata['remsg'] = reMsg
+            request.GET = rqdata
+            return showEvent(request)
+            #return list_events(request)
         else:
-            return render_to_response('addEvent2.html', {'title': '新建活动', 'form': form}, context_instance=RequestContext(request))
+            return render_to_response('addEvent.html', {'title': '新建活动', 'form': form}, context_instance=RequestContext(request))
+
+# 修改活动
+@login_required
+def updateEvent(request):
+    try:
+        eventId = request.GET.get('eventid')
+        thisEvent = event.objects.get(pk=eventId)
+    except event.DoesNotExist:
+        errorMessage = u'您查询的活动不存在。'
+        return render_to_response("errorMessage.html", {'errorMessage': errorMessage},
+                              context_instance=RequestContext(request))
+    if request.method=="POST":
+        eventId = request.GET.get('eventid')
+        form = forms.EventForm(request.POST, instance=thisEvent)
+        if form.is_valid():
+            userId = request.session["userid"]
+            s = datetime.datetime.strptime(form.data['eventdate'] + ' ' + form.data['eventtime'], "%Y-%m-%d %H:%M")
+            thisEvent.event_title = form.data['event_title']
+            thisEvent.event_detail = form.data['event_detail']
+            thisEvent.event_date = s
+            thisEvent.event_limit = form.data['event_limit']
+            thisEvent.updated_by = userId
+            thisEvent.save()
+
+            reMsg = u'更新成功。'
+            rqdata = request.GET.copy()
+            rqdata['eventid'] = eventId
+            rqdata['remsg'] = reMsg
+            request.GET = rqdata
+            return showEvent(request)
+
+    return render_to_response('updateEvent.html', {'title': '修改活动', 'form': forms.EventForm(instance=thisEvent), 'eventid': eventId},
+                              context_instance=RequestContext(request))
 
 # 活动页面，并展现用户参与情况
 @login_required
 def showEvent(request):
     if request.user.is_authenticated():
+        if request.GET.get('remsg'):
+            remsg = request.GET['remsg']
+        else:
+            remsg = ''
+        try:
+            userId = request.session["userid"]
+            wechatUser = wechat_user.objects.get(pk=userId)
+        except wechat_user.DoesNotExist:
+            #TODO: 跳转到注册页面
+            return HttpResponseRedirect("/accounts/login/")
+
+        try:
+            eventId = request.GET.get('eventid')
+            thisEvent = event.objects.get(pk=eventId)
+        except event.DoesNotExist:
+            errorMessage = u'您查询的活动不存在。'
+            return render_to_response("errorMessage.html", {'errorMessage': errorMessage},
+                                  context_instance=RequestContext(request))
+
+        participantlist = participant.objects.filter(event_ID=eventId)
+        eventin = sum(p.partici_type == 1 for p in participantlist)
+        eventout = sum(p.partici_type == 0 for p in participantlist)
+        eventmaybe = sum(p.partici_type == 2 for p in participantlist)
+        numbers = {'eventin': eventin, 'eventout': eventout, 'eventmaybe': eventmaybe}
+        userStatus = 5 # 0-不参加，1-参加，2-可能参加，5-未报名，10-活动发起人
+        try:
+            thisparticipant = participant.objects.get(event_ID=thisEvent, partici_user=wechatUser)
+            userStatus = int(thisparticipant.partici_type)
+        except participant.DoesNotExist:
+            userStatus = 5
+        if wechatUser.id == int(thisEvent.updated_by):
+            userStatus = 10
+        return render_to_response("showEvent.html", {'thisEvent': thisEvent, 'userStatus': userStatus,
+                                                     'participantlist': participantlist, "numbers": numbers, 'remsg': remsg},
+                                  context_instance=RequestContext(request))
+
+    else:
+        return HttpResponseRedirect("/accounts/login/")
+
+
+# 响应按钮事件：报名、修改事件状态
+@login_required
+def joinEvent(request):
+    if request.user.is_authenticated():
+        reMsg = ''
         eventId = request.GET.get('eventid')
+        jointype = request.GET.get('jointype')
         try:
             userId = request.session["userid"]
             wechatUser = wechat_user.objects.get(pk=userId)
@@ -183,18 +244,52 @@ def showEvent(request):
             return render_to_response("errorMessage.html", {'errorMessage': errorMessage},
                                   context_instance=RequestContext(request))
 
+        #partici_type: 0-不参加，1-参加，2-可能参加，5-未报名，10-活动发起人
         participantlist = participant.objects.filter(event_ID=eventId)
-        eventin = sum(p.partici_type == "1" for p in participantlist)
-        eventout = sum(p.partici_type == "0" for p in participantlist)
-        eventmaybe = sum(p.partici_type == "2" for p in participantlist)
-        numbers = {'eventin': eventin, 'eventout': eventout, 'eventmaybe': eventmaybe}
-        userStatus = False
-        if wechatUser in participantlist:
-            userStatus = True
+        eventin = sum(p.partici_type == 1 for p in participantlist)
+        eventout = sum(p.partici_type == 0 for p in participantlist)
+        eventmaybe = sum(p.partici_type == 2 for p in participantlist)
+        try:
+            thisparticipant = participant.objects.get(event_ID=thisEvent, partici_user=wechatUser)
+        except:
+            thisparticipant = participant()
 
-        return render_to_response("showEvent.html", {'thisEvent': thisEvent, 'userStatus': userStatus,
-                                                     'participantlist': participantlist, "numbers": numbers},
-                                  context_instance=RequestContext(request))
+        if jointype == 'stop':
+            thisEvent.event_status = 3
+            thisEvent.save()
+        elif jointype == 'cancel':
+            thisEvent.event_status = 2
+            thisEvent.save()
+        elif jointype == 'join':
+            if thisEvent.event_limit > eventin:
+                thisparticipant = participant(pk=thisparticipant.id, partici_fakeID='', event_ID=thisEvent, event_sn=thisEvent.event_sn,
+                                              partici_name=wechatUser.wechat_username, partici_type=1,
+                                              register_time=datetime.datetime.now(), partici_user=wechatUser, partici_openid=wechatUser.openid)
+                thisparticipant.save()
+                if thisEvent.event_limit <= ++eventin:
+                    thisEvent.event_status = 1
+                    thisEvent.save()
+                reMsg = u'报名成功。'
+            else:
+                reMsg = u'此活动已报名人满。'
+        elif jointype == 'maybe':
+            thisparticipant = participant(pk=thisparticipant.id, partici_fakeID='', event_ID=thisEvent, event_sn=thisEvent.event_sn,
+                                          partici_name=wechatUser.wechat_username, partici_type=2,
+                                          register_time=datetime.datetime.now(), partici_user=wechatUser, partici_openid=wechatUser.openid)
+            thisparticipant.save()
+            reMsg = u'报名成功。'
+        elif jointype == 'notjoin':
+            thisparticipant = participant(pk=thisparticipant.id, partici_fakeID='', event_ID=thisEvent, event_sn=thisEvent.event_sn,
+                                          partici_name=wechatUser.wechat_username, partici_type=0,
+                                          register_time=datetime.datetime.now(), partici_user=wechatUser, partici_openid=wechatUser.openid)
+            thisparticipant.save()
+            reMsg = u'报名成功。'
+
+        rqdata = request.GET.copy()
+        rqdata['eventid'] = eventId
+        rqdata['remsg'] = reMsg
+        request.GET = rqdata
+        return showEvent(request)
 
     else:
         return HttpResponseRedirect("/accounts/login/")

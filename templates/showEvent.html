@@ -40,32 +40,106 @@
 {% block content %}
     <div data-role="page">
         <div data-role="header" data-theme="d">
-            <h1>{{ thisEvent.event_title }}</h1>
+            <!-- event_status: 0-可报名，1-人满，2-已取消 3-已停止报名 -->
+            <h1>{{ thisEvent.event_title }}  -
+                {% if thisEvent.event_status == 0 %}
+                    <em style="color: #008AE6">
+                    {{ thisEvent.get_event_status_display }} </em>
+                {% elif thisEvent.event_status == 1 %}
+                    <em style="color: #FFCC66">
+                    {{ thisEvent.get_event_status_display }} </em>
+                {% else %}
+                    <em style="color: #FF3300">
+                    {{ thisEvent.get_event_status_display }} </em>
+                {% endif %}
+            </h1>
         </div>
         <div data-role="content">
+            <div id="ajaxMessage"><h4 style="color: #4682B4; text-align: center">{{remsg}}</h4></div>
             <table>
                    <tr><td style="width: 20%">活动详情：</td><td>{{ thisEvent.event_detail }}</td></tr>
-                   <tr><td>活动时间：</td><td>{{ thisEvent.event_date|date:"Y-M-d, H:m" }}</td></tr>
+                   <tr><td>活动时间：</td><td>{{ thisEvent.event_date|date:"Y-m-d, H:i" }}</td></tr>
                    <tr><td>发起人：</td><td>{{ thisEvent.event_hostname }}</td></tr>
-                   <tr><td>发起时间：</td><td>{{ thisEvent.updated_date|date:"Y-M-d, H:m" }}</td></tr>
+                   <tr><td>发起时间：</td><td>{{ thisEvent.updated_date|date:"Y-m-d, H:i" }}</td></tr>
                    <tr><td>报名截止时间：</td><td>{{ thisEvent.event_registdeadline }}</td></tr>
                    <tr><td>人数限制：</td><td>{{ thisEvent.event_limit }}</td></tr>
                    <tr>
                        <td>已报名人数：</td>
                        <td>
                            <li>确定参加：{{ numbers.eventin }}</li>
-                           <li>可能参加：{{ numbers.eventmaybe }}</li>
                            <li>不能参加：{{ numbers.eventout }}</li>
+                           <li>可能参加：{{ numbers.eventmaybe }}</li>
                        </td>
                    </tr>
             </table>
-            <a href="#rightpanel" data-role="button" data-inline="false" data-icon="arrow-r" data-iconpos="right">查看已报名用户</a>
+            <!-- userStatus: 0-不参加，1-参加，2-可能参加，5-未报名，10-活动发起人 -->
+            {% if userStatus == 10 %}
+                <div data-role="controlgroup">
+                    <a href="/updateevent/?eventid={{thisEvent.id}}" data-role="button" data-theme="b" data-icon="gear" data-ajax="false">修改活动</a>
+                    {% if thisEvent.event_status != 3 %}
+                    <a href="/joinevent/?eventid={{thisEvent.id}}&jointype=stop" data-role="button" data-theme="e" data-icon="check">停止报名</a>
+                    {% endif %}
+                    {% if thisEvent.event_status != 2 %}
+                    <a href="/joinevent/?eventid={{thisEvent.id}}&jointype=cancel" data-role="button" data-theme="a" data-icon="delete">取消活动</a>
+                    {% endif %}
+                </div>
+            {% else %}
+                {% if thisEvent.event_status == 0 %}
+                     <div data-role="controlgroup">
+                         <p data-icon="info" data-highlight="true">您当前的状态为：
+                            {% if userStatus == 0 %}
+                                <span style="color: #FF3300"> 不参加此活动 </span>
+                            {% elif userStatus == 1 %}
+                                <span style="color: #008AE6"> 已报名参加 </span>
+                            {% elif userStatus == 2 %}
+                                <span style="color: #FFCC66"> 可能参加此活动 </span>
+                            {% elif userStatus == 5 %}
+                                <span style="color: #FF3300"> 未报名 </span>
+                            {% endif %}
+                         </p>
+                        <a href="/joinevent/?eventid={{thisEvent.id}}&jointype=join" data-role="button" data-theme="b" data-icon="check">我参加！</a>
+                        <a href="/joinevent/?eventid={{thisEvent.id}}&jointype=notjoin" data-role="button" data-theme="e" data-icon="delete">不能参加</a>
+                        <a href="/joinevent/?eventid={{thisEvent.id}}&jointype=maybe" data-role="button" data-theme="d" data-icon="info">可能吧...</a>
+                    </div>
+                {% elif thisEvent.event_status == 1 %}
+                     <div data-role="controlgroup">
+                         <p data-icon="info" data-highlight="true">您当前的状态为：
+                            {% if userStatus == 0 %}
+                                <span style="color: #FF3300"> 不参加此活动 </span>
+                            {% elif userStatus == 1 %}
+                                <span style="color: #008AE6"> 已报名参加 </span>
+                                <a href="#" data-role="button" data-theme="e" data-icon="delete">不能参加</a>
+                                <a href="#" data-role="button" data-theme="d" data-icon="info">可能吧...</a>
+                            {% elif userStatus == 2 %}
+                                <span style="color: #FFCC66"> 可能参加此活动 </span>
+                                <a href="#" data-role="button" data-theme="b" data-icon="check">我参加！</a>
+                                <a href="#" data-role="button" data-theme="e" data-icon="delete">不能参加</a>
+                            {% elif userStatus == 5 %}
+                                <span style="color: #FF3300"> 未报名 </span>
+                                <h4 style="color: #4682B4">此活动已经报名人满。</h4>
+                            {% endif %}
+                         </p>
+                    </div>
+                {% elif thisEvent.event_status == 2 %}
+                     <div data-role="controlgroup">
+                         <p data-icon="info" data-highlight="true">您当前的状态为：
+                            {% if userStatus == 0 %}
+                                <span style="color: #FF3300"> 不参加此活动 </span>
+                            {% elif userStatus == 1 %}
+                                <span style="color: #008AE6"> 已报名参加 </span>
+                            {% elif userStatus == 2 %}
+                                <span style="color: #FFCC66"> 可能参加此活动 </span>
+                            {% elif userStatus == 5 %}
+                                <span style="color: #FF3300"> 未报名 </span>
+                            {% endif %}
+                         </p>
+                         <h4 style="color: #4682B4">此活动已经取消。</h4>
+                    </div>
+                {% endif%}
+            {% endif %}
 
-            <div data-role="controlgroup">
-                <a href="#" data-role="button" data-theme="b">Yes</a>
-                <a href="#" data-role="button" data-theme="e">No</a>
-                <a href="#" data-role="button" data-theme="d">Maybe</a>
-            </div>
+            <a href="#rightpanel" data-role="button" data-inline="false" data-icon="arrow-r" data-iconpos="right">查看已报名用户</a>
+            <h4 style="color: #4682B4">请点击右上角箭头邀请更多好友。</h4>
         </div>
 
         <!-- rightpanel  -->
@@ -76,13 +150,35 @@
                     <li>{{ participant.partici_name}} : {{ participant.get_partici_type_display }}</li>
                 {% endfor %}
             </p>
-            <a href="#" data-rel="close" data-role="button" data-theme="c" data-icon="delete" data-inline="false">关闭</a>
+            <a href="#" data-rel="close" data-role="button" data-theme="c" data-icon="delete" data-inline="false" data-mini="true">关闭</a>
         </div><!-- /rightpanel -->
     </div>
 {% endblock %}
 
 {% block post_main_script %}
 {{ block.super }}
+<script type="text/javascript">
+function joinThisEvent(url, eventid) {
+    var remsg;
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: eventid,
+        async: false, //如果要在$.ajax外面获取ajax获取到的值，则ajax必须获得同步
+        success: function (msg) {
+            $.ajax({
+                type: "POST",
+                url: "/showevent/?eventid=" + eventid,
+                data: eventid,
+                async: false, //如果要在$.ajax外面获取ajax获取到的值，则ajax必须获得同步
+                success: function (msg) {
+                    json = msg;
 
+        }
+    });
+    return remsg;
+}
+
+</script>
 {% endblock %}
 

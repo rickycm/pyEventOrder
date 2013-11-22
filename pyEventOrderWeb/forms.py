@@ -14,7 +14,7 @@ class LoginForm(forms.Form):
     message = forms.CharField()
 
 
-class EventForm(forms.Form):
+class EventForm_backup(forms.Form):
     title = forms.CharField(label='主题')
     detail = forms.CharField(label='详细信息', widget=forms.Textarea)
     date = forms.DateTimeField(
@@ -24,7 +24,7 @@ class EventForm(forms.Form):
     limit = forms.IntegerField(label='人数限制')
 
     def __init__(self, *args, **kwargs):
-        super(EventForm, self).__init__(*args, **kwargs)
+        super(EventForm_backup, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_id = 'id-eventForm'
         self.helper.form_class = 'blueForms'
@@ -33,7 +33,7 @@ class EventForm(forms.Form):
         self.helper.add_input(Submit('submit', '保存'))
 
 
-class EventForm2(forms.ModelForm):
+class EventForm(forms.ModelForm):
     class Meta:
         model = event
         fields = ['event_title', 'event_detail', 'event_date', 'event_limit', 'updated_by', 'event_type']
@@ -42,7 +42,7 @@ class EventForm2(forms.ModelForm):
         if not self.is_valid():
             raise forms.ValidationError(u"标记部分为必选项")
         else:
-            cleaned_data = super(EventForm2, self).clean()
+            cleaned_data = super(EventForm, self).clean()
         return cleaned_data
 
 

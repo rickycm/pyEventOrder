@@ -3,7 +3,8 @@ from django.db import models
 
 # Create your models here.
 EVENT_TYPE = [(1, 'event'), (2, 'order')]
-PARTICI_TYPE = [(0, u'不参加'), (1, u'参加'), (2, u'可能参加')]
+PARTICI_TYPE = [(0, u'不参加'), (1, u'参加'), (2, u'可能参加'), (5, u'未报名'), (10, u'活动发起人')]
+EVENT_STATUS = [(0, u'可报名'), (1, u'报名人满'), (2, u'已取消'), (3, u'已停止报名')]
 
 class event(models.Model):
     event_title = models.CharField(max_length=200)
@@ -17,6 +18,7 @@ class event(models.Model):
     event_hostname = models.CharField(max_length=1000, blank=True)
     event_limit = models.IntegerField()
     event_sn = models.CharField(max_length=20, blank=True)
+    event_status = models.IntegerField(default=0, choices=EVENT_STATUS)
 
     class Meta:
         verbose_name = 'Event'
@@ -59,7 +61,7 @@ class participant(models.Model):
     event_ID = models.ForeignKey(event)
     event_sn = models.CharField(max_length=200, blank=True)
     partici_name = models.CharField(max_length=200)
-    partici_type = models.CharField(max_length=20, choices=PARTICI_TYPE, default=0)
+    partici_type = models.IntegerField(choices=PARTICI_TYPE, default=5)
     register_time = models.DateTimeField(auto_now_add=True)
 
     partici_user = models.ForeignKey(wechat_user)
@@ -68,5 +70,6 @@ class participant(models.Model):
         verbose_name = 'Participant'
         verbose_name_plural = 'Participants'
         ordering = ["event_ID", "partici_type", "register_time"]
+        unique_together = (('event_ID', 'partici_user'),)
     def __unicode__(self):
         return u'%s' % (self.partici_name)

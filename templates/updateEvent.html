@@ -17,15 +17,14 @@
 {% endblock %}
 
 {% block content %}
-<form action="/add_event2/" id="addeventForm" method="post" class="form-horizontal">
+<form action="/updateevent/?eventid={{eventid}}" id="addeventForm" method="post" class="form-horizontal">
     {% csrf_token %}
     <fieldset>
-
         <!-- Text input-->
         <div class="control-group">
           <!--<label class="control-label" for="event_title">活动名称</label> -->
           <div class="controls">
-            <input id="event_title" name="event_title" type="text" placeholder="请输入活动名称" required>
+            <input id="event_title" name="event_title" type="text" placeholder="请输入活动名称" value="{{form.event_title.value}}" required>
 
           </div>
         </div>
@@ -33,22 +32,22 @@
         <div class="control-group">
           <!--<label class="control-label" for="event_detail">活动详情</label>-->
           <div class="controls">
-            <textarea id="event_detail" name="event_detail" placeholder="请输入活动详情" required></textarea>
+            <textarea id="event_detail" name="event_detail" placeholder="请输入活动详情" required>{{form.event_detail.value}}</textarea>
           </div>
         </div>
         <div data-role="fieldcontain">
             <label for="event_limit">人数限制：</label>
-            <input type="range" name="event_limit" id="event_limit" value="10" min="0" max="200" data-highlight="true"/>
+            <input type="range" name="event_limit" id="event_limit" value="{{form.event_limit.value}}" min="0" max="200" data-highlight="true" />
         </div>
 
         <div>
         <!--<label for="eventdate">活动日期：</label> -->
         <input name="eventdate" id="eventdate" type="date" data-role="datebox"
-           data-options='{"mode": "datebox"}' placeholder="请输入活动日期" required>
+           data-options='{"mode": "datebox"}' placeholder="请输入活动日期" value="{{form.event_date.value|date:'Y-m-d' }}" required>
 
         <!--<label for="eventtime">活动时间：</label> -->
         <input name="eventtime" id="eventtime" type="time" data-role="datebox"
-           data-options='{"mode": "timebox"}' placeholder="请输入活动时间" required>
+           data-options='{"mode": "timebox"}' placeholder="请输入活动时间" value="{{form.event_date.value|date:'H:i' }}" required>
         </div>
         <!-- Button (Double) -->
         <div class="control-group">
