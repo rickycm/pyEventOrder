@@ -2,9 +2,8 @@
 import logging
 
 from django.contrib.auth import get_user_model
-
+from django.contrib.auth.models import User
 from models import wechat_user
-
 
 logger = logging.getLogger('django.dev')
 
@@ -12,7 +11,12 @@ class OAuthBackend(object):
 
     def authenticate(self, openid=None, userinfo=None, **kwargs):
         UserModel = get_user_model()
-        user = UserModel._default_manager.get_by_natural_key('user')
+        try:
+            user = UserModel._default_manager.get_by_natural_key('user')
+        except User.DoesNotExist:
+            user = User.objects.create(username='user', is_active=True)
+            user.save()
+
         if openid is not None:
             try:
                 _user = wechat_user.objects.get(openid=openid)

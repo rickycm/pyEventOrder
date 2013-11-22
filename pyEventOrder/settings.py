@@ -110,8 +110,8 @@ MIDDLEWARE_CLASSES = (
 APPEND_SLASH = True
 
 AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',
     'pyEventOrderWeb.auth.OAuthBackend',
+    'django.contrib.auth.backends.ModelBackend',
 )
 
 #LOGIN_URL = "/login/"
