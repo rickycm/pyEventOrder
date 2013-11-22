@@ -21,7 +21,7 @@ def login_form(request):
         user = authenticate(username=username, password=password)
         if user is not None:
             form = forms.LoginForm(request.POST)
-            request.session["userId"] = user.id
+            request.session["userid"] = user.id
             login(request, user)
             # Redirect to a success page.
             return render_to_response("index.html", {'user': user})
@@ -149,7 +149,7 @@ def add_event2(request):
     else:
         form = forms.EventForm2(request.POST)
         s = datetime.datetime.strptime(form.data['eventdate'] + ' ' + form.data['eventtime'], "%Y-%m-%d %H:%M")
-        userId = request.session["userId"]
+        userId = request.session["userd"]
         if form.is_valid():
             e = event.objects.create(
                 event_title = form.data['event_title'],
@@ -279,6 +279,7 @@ def oauth(request):
         # 使用新的认证后台来代替现有的后台
         if userinfo is not None:
             user = authenticate(userinfo = userinfo)
+            request.session['userid'] = user.real_user.id
             login(request, user)
             if request.session.has_key('url'):
                 url = request.session['url']
