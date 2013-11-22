@@ -21,6 +21,7 @@ def login_form(request):
         user = authenticate(username=username, password=password)
         if user is not None:
             form = forms.LoginForm(request.POST)
+            request.session["userId"] = user.id
             login(request, user)
             # Redirect to a success page.
             return render_to_response("index.html", {'user': user})
@@ -148,13 +149,14 @@ def add_event2(request):
     else:
         form = forms.EventForm2(request.POST)
         s = datetime.datetime.strptime(form.data['eventdate'] + ' ' + form.data['eventtime'], "%Y-%m-%d %H:%M")
+        userId = request.session["userId"]
         if form.is_valid():
             e = event.objects.create(
                 event_title = form.data['event_title'],
                 event_detail = form.data['event_detail'],
                 event_date = s,
                 event_limit = form.data['event_limit'],
-                updated_by = "11111111111",
+                updated_by = userId,
                 event_type = 1,
             )
             e.save()

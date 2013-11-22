@@ -72,6 +72,12 @@
 <script src='{% static "datetimepicker/js/jqm-datebox.mode.datebox.js" %}' type="text/javascript"></script>
 <script src='{% static "datetimepicker/js/jquery.mobile.datebox.i18n.zh-CN.utf8.js" %}' type="text/javascript"></script>
 <script type="text/javascript">
+         $(document).ready(function() {
+          // disable ajax nav
+          $.mobile.ajaxEnabled = false;
+         });
+
+
     $(document).on("pageinit", function () {
         $('#addeventForm').validate({ // initialize the plugin
             rules: {
