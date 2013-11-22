@@ -169,8 +169,8 @@ def add_event2(request):
 def showEvent(request):
     if request.user.is_authenticated():
         eventId = request.GET.get('eventid')
-        userId = request.session["userid"]
         try:
+            userId = request.session["userid"]
             wechatUser = wechat_user.objects.get(pk=userId)
         except wechat_user.DoesNotExist:
             #TODO: 跳转到注册页面
