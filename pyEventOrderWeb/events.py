@@ -35,7 +35,7 @@ def processEvent(msg,event):
 
         article={'title':'欢迎', 'description':'使用之前，请点这里设置您的个人信息。'}
         article['picurl'] = URLBASE + '/media/mask.png'
-        article['url'] = URLBASE + '/setting/?userid=' + userid
+        article['url'] = URLBASE + '/setting/?openid=' + userid
 
         msg_out['articles'] = [article]
         return render_to_response('multimsg.xml', msg_out, content_type='text/xml')
