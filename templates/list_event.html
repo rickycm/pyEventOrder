@@ -36,7 +36,7 @@
                         </tr>
                         {% for event in events %}
                         <tr>
-                            <td>{{ event.event_title }}</td>
+                            <td><a href="/showevent/?eventid={{ event.id }}" >{{ event.event_title }} </a></td>
                             <td>{{ event.event_date }}</td>
                             <td>{{ event.updated_date }}</td>
                             <td>{{ event.get_event_type_display }}</td>

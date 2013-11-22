@@ -4,10 +4,11 @@ import datetime
 
 from django.contrib.auth.forms import *
 from django.shortcuts import render_to_response
-from django.http import HttpResponseRedirect, HttpResponse, Http404
+from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import authenticate, login
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
+from collections import Counter
 
 from pyEventOrderWeb import forms
 from pyEventOrderWeb.models import *
@@ -149,7 +150,7 @@ def add_event2(request):
     else:
         form = forms.EventForm2(request.POST)
         s = datetime.datetime.strptime(form.data['eventdate'] + ' ' + form.data['eventtime'], "%Y-%m-%d %H:%M")
-        userId = request.session["userd"]
+        userId = request.session["userid"]
         if form.is_valid():
             e = event.objects.create(
                 event_title = form.data['event_title'],
@@ -163,6 +164,39 @@ def add_event2(request):
             return list_events(request)
         else:
             return render_to_response('addEvent2.html', {'title': '新建活动', 'form': form}, context_instance=RequestContext(request))
+
+# 活动页面，并展现用户参与情况
+@login_required
+def showEvent(request):
+    if request.user.is_authenticated():
+        eventId = request.GET.get('eventid')
+        userId = request.session["userid"]
+        try:
+            wechatUser = wechat_user.objects.get(pk=userId)
+        except wechat_user.DoesNotExist:
+            #TODO: 跳转到注册页面
+            return HttpResponseRedirect("/accounts/login/")
+
+        try:
+            thisEvent = event.objects.get(pk=eventId)
+        except event.DoesNotExist:
+            errorMessage = u'您查询的活动不存在。'
+            return render_to_response("errorMessage.html", {'errorMessage': errorMessage},
+                                  context_instance=RequestContext(request))
+
+        participantlist = participant.objects.filter(event_ID=eventId)
+        eventin = sum(p.partici_type == "1" for p in participantlist)
+        eventout = sum(p.partici_type == "0" for p in participantlist)
+        eventmaybe = sum(p.partici_type == "2" for p in participantlist)
+        userStatus = False
+        if wechatUser in participantlist:
+            userStatus = True
+
+        return render_to_response("showEvent.html", {'thisEvent': thisEvent, 'userStatus': userStatus, 'participantlist': participantlist},
+                                  context_instance=RequestContext(request))
+
+    else:
+        return HttpResponseRedirect("/accounts/login/")
 
 # 处理消息机制，应该是公众平台中最核心的处理部分
 import hashlib
@@ -209,8 +243,8 @@ def message(request):
         logger.info('Exception received: ' + e.message)
         raise e
 
+from django.http import Http404
 def setting(request):
-    '''
     if not request.user.is_authenticated():
         url = request.build_absolute_uri()
         logger.debug(url)
@@ -222,16 +256,15 @@ def setting(request):
                         'state':'Foperate'})
         logger.debug(auth_url)
         return HttpResponseRedirect(auth_url)
-    '''
     if request.method=='GET':
-        if request.GET.has_key('openid'):
-            openid = request.GET['openid']
-            logger.debug('Request has openid ' + openid)
+        if request.GET.has_key('userid'):
+            userid = request.GET['userid']
+            logger.debug('Request has userid ' + userid)
             max_age = 365 * 24 * 60 * 60
             path = request.path
             logger.debug('Path is ' + path)
             response = HttpResponseRedirect(path)
-            response.set_cookie("wxopenid", openid, max_age=max_age)
+            response.set_cookie("wxopenid", userid, max_age=max_age)
             return response
 
         if request.COOKIES.has_key('wxopenid'):
@@ -263,30 +296,24 @@ def setting(request):
             return render_to_response('addEvent.html', {'title': '个人设置', 'form': form},
                 context_instance=RequestContext(request))
 
-import urllib
+import thread,urllib
 def oauth(request):
-    state = request.GET.get('state','state')
-    if state is not 'state':
-        code = request.session['code'] = request.GET['code']
-        logger.debug('Received a code: ' + code)
+    if request.GET.get('state','state')=='Foperate':
+        request.session['code'] = request.GET['code']
+        logger.debug('Received a code: ' + request.session['code'])
 
         # 利用code从服务器获取用户信息，并将这个用户信息保存到session中去。
-        if state is 'FoperateWX':
-            userinfo = get_qq_info(code, request.session)
-        else:
-            userinfo = get_qq_info(code, request.session)
+        thread.start_new(get_user_info, (request.session,))
 
         # 使用新的认证后台来代替现有的后台
-        if userinfo is not None:
-            user = authenticate(userinfo = userinfo)
-            request.session['userid'] = user.real_user.id
-            login(request, user)
-            if request.session.has_key('url'):
-                url = request.session['url']
-                del request.session['url']
-            else:
-                url = '/'
-            return HttpResponseRedirect(url)
+        user = authenticate(code=request.session['code'])
+        login(request, user)
+        if request.session.has_key('url'):
+            url = request.session['url']
+            del request.session['url']
+        else:
+            url = '/'
+        return HttpResponseRedirect(url)
     else:
         return render_to_response('oauth.html',{'title','自动认证'})
 
@@ -294,26 +321,23 @@ APP_ID='100561618'
 WX_APP_ID='wxf0e81c3bee622d60'
 APP_KEY='dbbea5729ffd5182deff63f90131bc3b'
 def check_auth(request):
+    ''' 用法，在所有需要检查权限的调用前。
+    url = check_auth(request)
+    if url:
+        return HttpResponseRedirect(url)
+    '''
 
-    next = request.GET.get('next','/')
+    next = request.GET['next']
     if request.user.is_authenticated():
         return HttpResponseRedirect(next)
 
     # 首先检查COOKIES里面是否已经存在用户信息
     if request.COOKIES.has_key('wxopenid'):
-        # 进到这个分支的人，应该是关注了公众号的人。
-        # 它们的记录在events中已经建立
-        openid = request.COOKIES['wxopenid']
-        logger.info('Cookie has openid ' + openid)
-        user = authenticate(openid=openid)
-        if user is not None:
-            real_user = user.real_user
-            logger.debug(real_user.id)
-            request.session['userid'] = real_user.id
-            login(request, user)
-            return HttpResponseRedirect(next)
-        else:
-            return HttpResponse(status=500)
+        userid = request.COOKIES['wxopenid']
+        logger.info('Cookie has userid ' + userid)
+        user = authenticate(code=userid)
+        login(request, user)
+        return HttpResponseRedirect(next)
 
     # 然后启动OAuth2过程，在这里需要判断启动谁
     #url = request.build_absolute_uri()
@@ -330,26 +354,25 @@ def check_auth(request):
                 'redirect_uri':'http://whitemay.pythonanywhere.com/oauth',
                 'scope':'snsapi_userinfo',
                 #'state':'Foperate',
-            }) + '&state=ForpeateWX#wechat_redirect'
+            }) + '&state=Forpeate#wechat_redirect'
     else:
         auth_url = 'https://graph.qq.com/oauth2.0/authorize?' + \
             urllib.urlencode({
                 'response_type':'code',
                 'client_id':APP_ID,
                 'redirect_uri':'http://whitemay.pythonanywhere.com/oauth',
-                'state':'FoperateQQ',
+                'state':'Foperate',
             })
     logger.debug(auth_url)
     return HttpResponseRedirect(auth_url)
 
 from urlparse import parse_qs
-import json
-def get_qq_info(code, session):
+def get_user_info(session):
     url = 'http://https://graph.qq.com/oauth2.0/token?' + urllib.urlencode({
         'grant_type':'authorization_code',
         'client_id':APP_ID,
         'client_secret':APP_KEY,
-        'code':code,
+        'code':session['code'],
         'redirect_uri':'http://whitemay.pythonanywhere.com/oauth',
     })
     f = urllib.urlopen(url)
@@ -366,34 +389,6 @@ def get_qq_info(code, session):
         text = f.read()
         f.close()
         logger.debug('Thread return 2: ' + text)
-        jobj = None
-        if text.strtwith('callback('):
-            jobj = json.loads(text[9:-1])
-            if jobj.has_key('openid'):
-                session['openid'] = jobj['openid']
-        return jobj
-
-def get_wx_info(code, session):
-    #https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=CODE&grant_type=authorization_code
-    url = 'https://api.weixin.qq.com/sns/oauth2/access_token?' + urllib.urlencode({
-        'grant_type':'authorization_code',
-        'appid':WX_APP_ID,
-        'secret':APP_KEY,
-        'code':code,
-        'redirect_uri':'http://whitemay.pythonanywhere.com/oauth',
-    })
-    f = urllib.urlopen(url)
-    jobj = json.load(f)
-    f.close()
-    logger.debug('Thread return: ' + str(jobj))
-    if jobj.has_key('errmsg'):
-        logger.error('WX get error: ' + jobj['errmsg'])
-        return None
-    session['access_token'] = jobj['access_token']
-    session['refresh_token'] = jobj['refresh_token']
-    session['openid'] = jobj['openid']
-    return jobj
-
 
 def welcome(request):
     return render_to_response('welcome.html')

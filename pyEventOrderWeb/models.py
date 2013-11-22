@@ -3,11 +3,12 @@ from django.db import models
 
 # Create your models here.
 EVENT_TYPE = [(1, 'event'), (2, 'order')]
+PARTICI_TYPE = [(0, u'不参加'), (1, u'参加'), (2, u'可能参加')]
 
 class event(models.Model):
     event_title = models.CharField(max_length=200)
     event_date = models.DateTimeField(blank=True, null=True)
-    updated_date = models.DateTimeField(auto_now_add=True)
+    updated_date = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     event_detail = models.TextField(max_length=100000)
     updated_by = models.CharField(max_length=100, blank=True, null=True)
     event_type = models.IntegerField(blank=True, choices=EVENT_TYPE, default=1)
@@ -15,7 +16,6 @@ class event(models.Model):
     event_hostfakeID = models.CharField(max_length=200)
     event_hostname = models.CharField(max_length=1000, blank=True)
     event_limit = models.IntegerField()
-    event_innum = models.IntegerField()
     event_sn = models.CharField(max_length=20, blank=True)
 
     class Meta:
@@ -45,6 +45,8 @@ class wechat_user(models.Model):
     # 本字段表明用户保存了Cookie，设置了用户名，从而可以完成系统内的主要工作。
     initialized = models.BooleanField(default=False)
 
+    objects = models.Manager()
+
     class Meta:
         verbose_name = 'WechatUser'
         verbose_name_plural = 'WechatUsers'
@@ -57,7 +59,7 @@ class participant(models.Model):
     event_ID = models.ForeignKey(event)
     event_sn = models.CharField(max_length=200, blank=True)
     partici_name = models.CharField(max_length=200)
-    partici_type = models.CharField(max_length=20)
+    partici_type = models.CharField(max_length=20, choices=PARTICI_TYPE, default=0)
     register_time = models.DateTimeField(auto_now_add=True)
 
     partici_user = models.ForeignKey(wechat_user)
@@ -65,12 +67,6 @@ class participant(models.Model):
     class Meta:
         verbose_name = 'Participant'
         verbose_name_plural = 'Participants'
-        ordering = ["event_ID", "register_time"]
+        ordering = ["event_ID", "partici_type", "register_time"]
     def __unicode__(self):
         return u'%s' % (self.partici_name)
-
-#'''
-#class EventForm(ModelForm):
-#    class Meta:
-#        model = event
-#'''
