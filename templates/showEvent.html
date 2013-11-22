@@ -50,7 +50,14 @@
                    <tr><td>发起时间：</td><td>{{ thisEvent.updated_date|date:"Y-M-d, H:m" }}</td></tr>
                    <tr><td>报名截止时间：</td><td>{{ thisEvent.event_registdeadline }}</td></tr>
                    <tr><td>人数限制：</td><td>{{ thisEvent.event_limit }}</td></tr>
-                   <tr><td>已报名人数：</td><td>{{ thisEvent.event_innum }}</td></tr>
+                   <tr>
+                       <td>已报名人数：</td>
+                       <td>
+                           <li>参加：{{ numbers.eventin }}</li>
+                           <li>可能参加：{{ numbers.eventmaybe }}</li>
+                           <li>不参加：{{ numbers.eventout }}</li>
+                       </td>
+                   </tr>
             </table>
             <a href="#rightpanel" data-role="button" data-inline="false" data-icon="arrow-r" data-iconpos="right">查看已报名用户</a>
 

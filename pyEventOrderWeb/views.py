@@ -187,11 +187,13 @@ def showEvent(request):
         eventin = sum(p.partici_type == "1" for p in participantlist)
         eventout = sum(p.partici_type == "0" for p in participantlist)
         eventmaybe = sum(p.partici_type == "2" for p in participantlist)
+        numbers = {'eventin': eventin, 'eventout': eventout, 'eventmaybe': eventmaybe}
         userStatus = False
         if wechatUser in participantlist:
             userStatus = True
 
-        return render_to_response("showEvent.html", {'thisEvent': thisEvent, 'userStatus': userStatus, 'participantlist': participantlist},
+        return render_to_response("showEvent.html", {'thisEvent': thisEvent, 'userStatus': userStatus,
+                                                     'participantlist': participantlist, "numbers": numbers},
                                   context_instance=RequestContext(request))
 
     else:
