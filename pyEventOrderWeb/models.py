@@ -16,9 +16,9 @@ class event(models.Model):
     event_registdeadline = models.DateTimeField(blank=True, null=True)
     event_hostfakeID = models.CharField(max_length=200)
     event_hostname = models.CharField(max_length=1000, blank=True)
-    event_limit = models.IntegerField()
+    event_limit = models.IntegerField(default=0, blank=True)
     event_sn = models.CharField(max_length=20, blank=True)
-    event_status = models.IntegerField(default=0, choices=EVENT_STATUS)
+    event_status = models.IntegerField(default=0, choices=EVENT_STATUS, blank=True)
 
     class Meta:
         verbose_name = 'Event'

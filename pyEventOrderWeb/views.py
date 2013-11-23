@@ -167,7 +167,14 @@ def updateEvent(request):
             thisEvent.event_date = s
             thisEvent.event_limit = form.data['event_limit']
             thisEvent.updated_by = userId
-            thisEvent.save()
+            thisEvent.event_status = 0
+            thisEvent.event_type = 1
+            try:
+                thisEvent.save()
+            except:
+                errorMessage = u'Sorry，出错了。'
+                return render_to_response("errorMessage.html", {'errorMessage': errorMessage},
+                                      context_instance=RequestContext(request))
 
             reMsg = u'更新成功。'
             rqdata = request.GET.copy()
