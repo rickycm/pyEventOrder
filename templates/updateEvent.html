@@ -49,6 +49,9 @@
         <input name="eventtime" id="eventtime" type="time" data-role="datebox"
            data-options='{"mode": "timebox"}' placeholder="请输入活动时间" value="{{form.event_date.value|date:'H:i' }}" required>
         </div>
+        <!-- hidden fields -->
+        <input type="hidden" id="event_hostfakeID" name="event_hostfakeID" value="{{form.event_hostfakeID.value}}"/>
+        <input type="hidden" id="event_hostname" name="event_hostname" value="{{form.event_hostname.value}}"/>
         <!-- Button (Double) -->
         <div class="control-group">
           <label class="control-label" for="submit"></label>
