@@ -43,7 +43,7 @@ def sendSetting(userid, msg):
     msg_out={}
     msg_out['toUser'] =  userid
     msg_out['fromUser'] = msg.find('ToUserName').text
-    logger.debug('My id is ', msg_out['fromUser'])
+    logger.debug('My id is ' + msg_out['fromUser'])
     msg_out['time'] = int(time.time())
 
     article={'title':'欢迎', 'description':'使用之前，请点这里设置您的个人信息。'}
