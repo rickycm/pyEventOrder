@@ -30,6 +30,7 @@ def processEvent(msg,event):
 
     elif event_type=='CLICK':
         # 目前为止，应该只有SETTING这一个点击项
+        logger.debug(msg)
         assert msg.find('EventKey').text is 'SETTING'
         userid = msg.find('FromUserName').text
         return sendSetting(userid, msg)
