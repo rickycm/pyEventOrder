@@ -123,7 +123,7 @@ def add_event(request):
                               context_instance=RequestContext(request))
     else:
         form = forms.EventForm(request.POST)
-        s = datetime.datetime.strptime(form.data['eventdate'] + ' ' + form.data['eventtime'], "%Y-%m-%d %H:%M")
+        s = datetime.strptime(form.data['eventdate'] + ' ' + form.data['eventtime'], "%Y-%m-%d %H:%M")
         userId = request.session["userid"]
         if form.is_valid():
             e = event.objects.create(
@@ -167,7 +167,7 @@ def updateEvent(request):
         form = forms.EventForm(request.POST, instance=thisEvent)
         if form.is_valid():
             userId = request.session["userid"]
-            s = datetime.datetime.strptime(form.data['eventdate'] + ' ' + form.data['eventtime'], "%Y-%m-%d %H:%M")
+            s = datetime.strptime(form.data['eventdate'] + ' ' + form.data['eventtime'], "%Y-%m-%d %H:%M")
             thisEvent.event_title = form.data['event_title']
             thisEvent.event_detail = form.data['event_detail']
             thisEvent.event_date = s
@@ -281,7 +281,7 @@ def joinEvent(request):
             if thisEvent.event_limit > eventin:
                 thisparticipant = participant(pk=thisparticipant.id, partici_fakeID='', event_ID=thisEvent, event_sn=thisEvent.event_sn,
                                               partici_name=wechatUser.wechat_username, partici_type=1,
-                                              register_time=datetime.datetime.now(), partici_user=wechatUser, partici_openid=wechatUser.openid)
+                                              register_time=datetime.now(), partici_user=wechatUser, partici_openid=wechatUser.openid)
                 thisparticipant.save()
                 if thisEvent.event_limit <= ++eventin:
                     thisEvent.event_status = 1
@@ -292,13 +292,13 @@ def joinEvent(request):
         elif jointype == 'maybe':
             thisparticipant = participant(pk=thisparticipant.id, partici_fakeID='', event_ID=thisEvent, event_sn=thisEvent.event_sn,
                                           partici_name=wechatUser.wechat_username, partici_type=2,
-                                          register_time=datetime.datetime.now(), partici_user=wechatUser, partici_openid=wechatUser.openid)
+                                          register_time=datetime.now(), partici_user=wechatUser, partici_openid=wechatUser.openid)
             thisparticipant.save()
             reMsg = u'报名成功。'
         elif jointype == 'notjoin':
             thisparticipant = participant(pk=thisparticipant.id, partici_fakeID='', event_ID=thisEvent, event_sn=thisEvent.event_sn,
                                           partici_name=wechatUser.wechat_username, partici_type=0,
-                                          register_time=datetime.datetime.now(), partici_user=wechatUser, partici_openid=wechatUser.openid)
+                                          register_time=datetime.now(), partici_user=wechatUser, partici_openid=wechatUser.openid)
             thisparticipant.save()
             reMsg = u'报名成功。'
 
