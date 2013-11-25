@@ -55,6 +55,7 @@ def logout_view(request):
     logout(request)
     return HttpResponseRedirect("/")
 
+#活动列表
 @login_required
 def list_events(rq):
         try:
@@ -94,7 +95,7 @@ def list_events(rq):
                     if remainPost > 0:
                         allPage += 1
 
-                return render_to_response("list_event.html", {'user': user, 'events':events, 'allPage':allPage, 'curPage':curPage}, context_instance=RequestContext(rq))
+                return render_to_response("list_event.html", {'title': '活动列表', 'user': user, 'events':events, 'allPage':allPage, 'curPage':curPage}, context_instance=RequestContext(rq))
             else:
                 user = rq.user
                 try:
@@ -140,7 +141,7 @@ def list_events(rq):
 
 
 
-                return render_to_response("list_event.html", {'user': user, 'events':events, 'allPage':allPage, 'curPage':curPage}, context_instance=RequestContext(rq))
+                return render_to_response("list_event.html", {'title': '活动列表', 'user': user, 'events':events, 'allPage':allPage, 'curPage':curPage}, context_instance=RequestContext(rq))
         return HttpResponseRedirect("/accounts/login/")
 
 # 添加活动
@@ -260,7 +261,7 @@ def showEvent(request):
             userStatus = 5
         if wechatUser.id == int(thisEvent.updated_by):
             userStatus = 10
-        return render_to_response("showEvent.html", {'thisEvent': thisEvent, 'userStatus': userStatus,
+        return render_to_response("showEvent.html", {'title': '查看活动', 'thisEvent': thisEvent, 'userStatus': userStatus,
                                                      'participantlist': participantlist, "numbers": numbers, 'remsg': remsg},
                                   context_instance=RequestContext(request))
 
