@@ -1,28 +1,28 @@
 本文档用来保存一些有用的信息
 ==============================
 {
-    "access_token": "SbWY7_g8Z2hVGyC_N9Dqh6sdqnSCakPpoOojQYyvyD3Xc4mk_KjSUAy8RizBJ5-ievh8e9k9EFL8gdAgedssyY7UY1bwQFt8xwQ042d5Wzpslw4njFSp242_a_WvU42PSINMObbM6rZrtX5umEqCkw",
+    "access_token": "l3QcryY7U2p5ZAN_ddE1eOUJCTLMAPvmw5AVXWRtGUAqFBBI7Fa2k0zVPZ0VKXLjwXEnJHUlVAZNjMsI9WsDAo6Q-j3gLa_fxL4vVi9gIKMKYlXnOPbaglEZUmN-qP1pv47rHv5-4Ipwx_7js0W1dA",
     "expires_in": 7200
 }
 {
      "button":[
      {
-          "type":"click",
+          "type":"view",
           "name":"发布活动",
-          "key":"NEW_EVENT"
+          "url":"http://whitemay.pythonanywhere.com/add_event/"
       },
       {
           "name":"活动管理",
            "sub_button":[
            {
-               "type":"click",
+               "type":"view",
                "name":"我发布的活动",
-               "key":"MY_POST"
+               "url":"http://whitemay.pythonanywhere.com/list_events/?type=mine"
             },
             {
-               "type":"click",
+               "type":"view",
                "name":"我报名的活动",
-               "key":"MY_EVENT"
+               "url":"http://whitemay.pythonanywhere.com/list_events/?type=other"
             }]
       },
       {
