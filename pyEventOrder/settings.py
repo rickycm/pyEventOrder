@@ -114,7 +114,7 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
-#LOGIN_URL = "/login/"
+LOGIN_URL = "/login/"
 
 CACHES = {
     'default': {
