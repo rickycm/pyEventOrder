@@ -76,10 +76,10 @@
                    <tr><td>时间: {{ thisEvent.event_date|date:"Y-m-d, H:i" }}</td></tr>
                    <tr><td>发起人: {{ thisEvent.event_hostname }}</td></tr>
                    <tr><td>发布时间: {{ thisEvent.updated_date|date:"Y-m-d, H:i" }}</td></tr>
-                   <tr><td>报名截止时间: {{ thisEvent.event_registdeadline }}</td></tr>
+                   <tr><td>报名截止: {{ thisEvent.event_registdeadline }}</td></tr>
                    <tr><td>人数限制:{{ thisEvent.event_limit }}</td></tr>
                    <tr>
-                       <td>已报名:</br>
+                       <td>
                            <li>确定参加：{{ numbers.eventin }}</li>
                            <li>不能参加：{{ numbers.eventout }}</li>
                            <li>可能参加：{{ numbers.eventmaybe }}</li>
