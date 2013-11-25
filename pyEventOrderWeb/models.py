@@ -11,7 +11,7 @@ class event(models.Model):
     event_date = models.DateTimeField(blank=True, null=True)
     updated_date = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     event_detail = models.TextField(max_length=100000)
-    updated_by = models.CharField(max_length=100, blank=True, null=True)
+    updated_by = models.CharField(max_length=100, blank=True, null=True) # wechat_user.id
     event_type = models.IntegerField(blank=True, choices=EVENT_TYPE, default=1)
     event_registdeadline = models.DateTimeField(blank=True, null=True)
     event_hostfakeID = models.CharField(max_length=200)

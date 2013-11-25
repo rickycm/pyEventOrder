@@ -55,6 +55,7 @@ def logout_view(request):
     logout(request)
     return HttpResponseRedirect("/")
 
+@login_required
 def list_events(rq):
         try:
             userId = rq.session["userid"]
@@ -62,7 +63,7 @@ def list_events(rq):
         except wechat_user.DoesNotExist:
             #TODO: 跳转到注册页面
             return HttpResponseRedirect("/accounts/login/")
-
+        events =[]
         ONE_PAGE_OF_DATA = 10
         if rq.user.is_authenticated():
             user = rq.user
@@ -115,18 +116,29 @@ def list_events(rq):
 
                 startPos = (curPage - 1) * ONE_PAGE_OF_DATA
                 endPos = startPos + ONE_PAGE_OF_DATA
-
                 if type == 'mine':
-                    events = event.objects.filter(updated_by=user)[startPos:endPos]
-                elif type == 'other':
-                    events = event.objects.filter(updated_by=user)[startPos:endPos]
-
-                if curPage == 1 and allPage == 1:  #标记1
-                    allPostCounts = event.objects.count()
-                    allPage = allPostCounts / ONE_PAGE_OF_DATA
-                    remainPost = allPostCounts % ONE_PAGE_OF_DATA
+                    events = event.objects.filter(updated_by=wechatUser.id)[startPos:endPos]
+                    if curPage == 1 and allPage == 1:  #标记1
+                        allPostCounts = event.objects.filter(updated_by=wechatUser.id).count()
+                        allPage = allPostCounts / ONE_PAGE_OF_DATA
+                        remainPost = allPostCounts % ONE_PAGE_OF_DATA
                     if remainPost > 0:
                         allPage += 1
+                elif type == 'other':
+                    evenidtList = participant.objects.filter(partici_user=wechatUser).values_list('event_ID', flat=True).distinct()
+                    eventsall = []
+                    for i in evenidtList:
+                        eventsall.append(event.objects.get(pk=i))
+                    events = eventsall[startPos:endPos]
+
+                    if curPage == 1 and allPage == 1:  #标记1
+                        allPostCounts = len(eventsall)
+                        allPage = allPostCounts / ONE_PAGE_OF_DATA
+                        remainPost = allPostCounts % ONE_PAGE_OF_DATA
+                    if remainPost > 0:
+                        allPage += 1
+
+
 
                 return render_to_response("list_event.html", {'user': user, 'events':events, 'allPage':allPage, 'curPage':curPage}, context_instance=RequestContext(rq))
         return HttpResponseRedirect("/accounts/login/")
