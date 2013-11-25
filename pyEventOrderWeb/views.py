@@ -118,7 +118,6 @@ def list_events(rq):
                 startPos = (curPage - 1) * ONE_PAGE_OF_DATA
                 endPos = startPos + ONE_PAGE_OF_DATA
                 if type == 'mine':
-                    pageTitle = u'我发布的活动'
                     events = event.objects.filter(updated_by=wechatUser.id)[startPos:endPos]
                     if curPage == 1 and allPage == 1:  #标记1
                         allPostCounts = event.objects.filter(updated_by=wechatUser.id).count()
@@ -127,7 +126,6 @@ def list_events(rq):
                     if remainPost > 0:
                         allPage += 1
                 elif type == 'other':
-                    pageTitle = u'我参与的活动'
                     evenidtList = participant.objects.filter(partici_user=wechatUser).values_list('event_ID', flat=True).distinct()
                     eventsall = []
                     for i in evenidtList:
@@ -143,7 +141,7 @@ def list_events(rq):
 
 
 
-                return render_to_response("list_event.html", {'title': pageTitle, 'user': user, 'events':events, 'allPage':allPage, 'curPage':curPage}, context_instance=RequestContext(rq))
+                return render_to_response("list_event.html", {'title': '活动列表', 'user': user, 'events':events, 'allPage':allPage, 'curPage':curPage}, context_instance=RequestContext(rq))
         return HttpResponseRedirect("/accounts/login/")
 
 # 添加活动
