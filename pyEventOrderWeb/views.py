@@ -398,32 +398,41 @@ def setting(request):
             return response
 
         if request.COOKIES.has_key('wxopenid'):
-            userid = request.COOKIES['wxopenid']
-            logger.info('Cookie has userid ' + userid)
-        else:
-            #raise Http404
-            return HttpResponseRedirect('/')
+            openid = request.COOKIES['wxopenid']
+            logger.info('Cookie has userid ' + openid)
 
-        user = wechat_user.objects.get(openid=userid)
-        form = forms.SettingForm({'inputname':user.wechat_inputname,'data_id':user.id,})
-        return render_to_response('addEvent.html', {'title': '个人设置', 'form': form},
-            context_instance=RequestContext(request))
-    else: #POST
-        if request.COOKIES.has_key('wxopenid'):
-            userid = request.COOKIES['wxopenid']
-            logger.info('Cookie has userid ' + userid)
+            user = authenticate(openid=openid)
+            if user is not None:
+                real_user = user.real_user
+                logger.debug(real_user.id)
+                request.session['userid'] = real_user.id
+                login(request, user)
+            else:
+                logger.error("Can't find user " + openid)
+                raise Http404
+
         else:
             raise Http404
+            #return HttpResponseRedirect('/')
+
+        #user = wechat_user.objects.get(openid=userid)
+        form = forms.SettingForm({'inputname':user.wechat_inputname,})
+        return render_to_response('jqmForm.html', {'title': '个人设置', 'form': form})
+    else: #POST
+        if not request.user.is_authenticated:
+            raise Http404
+        else:
+            userid = request.session['userid']
 
         form = forms.SettingForm(request.POST)
         if form.is_valid():
-            user = wechat_user.objects.get(id=form.cleaned_data['data_id'])
-            assert user.openid==userid
+            user = wechat_user.objects.get(userid)
+            #assert user.openid==userid
             user.wechat_inputname = form.cleaned_data['inputname']
             user.save()
             return list_events(request)
         else:
-            return render_to_response('addEvent.html', {'title': '个人设置', 'form': form},
+            return render_to_response('jqmForm.html', {'title': '个人设置', 'form': form},
                 context_instance=RequestContext(request))
 
 import urllib

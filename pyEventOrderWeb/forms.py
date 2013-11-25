@@ -48,7 +48,6 @@ class EventForm(forms.ModelForm):
 
 
 class SettingForm(forms.Form):
-    data_id = forms.CharField(widget=forms.HiddenInput)
     inputname = forms.CharField(max_length=50, label='',
                                widget=forms.TextInput(attrs={'placeholder':'您在订活动时使用的名字',}))
     def __init__(self, *args, **kwargs):
