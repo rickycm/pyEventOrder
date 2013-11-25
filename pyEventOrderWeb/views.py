@@ -1,6 +1,6 @@
 #coding=utf-8
 import logging
-import datetime
+from datetime import datetime
 
 from django.contrib.auth.forms import *
 from django.shortcuts import render_to_response
@@ -418,8 +418,8 @@ def oauth(request):
         logger.debug('Received a code: ' + code)
 
         # 利用code从服务器获取用户信息，并将这个用户信息保存到session中去。
-        if state is 'FoperateWX':
-            userinfo = get_qq_info(code, request.session)
+        if state=='FoperateWX':
+            userinfo = get_wx_info(code, request.session)
         else:
             userinfo = get_qq_info(code, request.session)
 
