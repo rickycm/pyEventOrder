@@ -32,6 +32,7 @@ def processEvent(msg,event):
         # 目前为止，应该只有SETTING这一个点击项
         assert msg.find('EventKey').text == 'SETTING'
         userid = msg.find('FromUserName').text
+        logger.debug(userid + 'clicked!')
         try:
             wechat_user.objects.get(openid=userid)
         except wechat_user.DoesNotExist:
