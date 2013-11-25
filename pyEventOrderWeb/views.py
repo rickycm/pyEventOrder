@@ -5,7 +5,7 @@ from datetime import datetime
 from django.contrib.auth.forms import *
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect, HttpResponse, Http404
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 
@@ -51,7 +51,18 @@ def index(request):
         return render_to_response("index.html", {'user': user}, context_instance=RequestContext(request))
     #return HttpResponseRedirect("/accounts/login/")
 
+def logout_view(request):
+    logout(request)
+    return HttpResponseRedirect("/")
+
 def list_events(rq):
+        try:
+            userId = rq.session["userid"]
+            wechatUser = wechat_user.objects.get(pk=userId)
+        except wechat_user.DoesNotExist:
+            #TODO: 跳转到注册页面
+            return HttpResponseRedirect("/accounts/login/")
+
         ONE_PAGE_OF_DATA = 10
         if rq.user.is_authenticated():
             user = rq.user
@@ -89,10 +100,12 @@ def list_events(rq):
                     curPage = int(rq.GET.get('curPage', '1'))
                     allPage = int(rq.GET.get('allPage','1'))
                     pageType = str(rq.GET.get('pageType', ''))
+                    type = str(rq.GET.get('type', 'mine'))
                 except ValueError:
                     curPage = 1
                     allPage = 1
                     pageType = ''
+                    type = 'mine'
 
                 #判断点击了【下一页】还是【上一页】
                 if pageType == 'pageDown':
@@ -102,7 +115,11 @@ def list_events(rq):
 
                 startPos = (curPage - 1) * ONE_PAGE_OF_DATA
                 endPos = startPos + ONE_PAGE_OF_DATA
-                events = event.objects.filter(updated_by=user)[startPos:endPos]
+
+                if type == 'mine':
+                    events = event.objects.filter(updated_by=user)[startPos:endPos]
+                elif type == 'other':
+                    events = event.objects.filter(updated_by=user)[startPos:endPos]
 
                 if curPage == 1 and allPage == 1:  #标记1
                     allPostCounts = event.objects.count()
@@ -163,7 +180,6 @@ def updateEvent(request):
         return render_to_response("errorMessage.html", {'errorMessage': errorMessage},
                               context_instance=RequestContext(request))
     if request.method=="POST":
-        eventId = request.GET.get('eventid')
         form = forms.EventForm(request.POST, instance=thisEvent)
         if form.is_valid():
             userId = request.session["userid"]
@@ -245,8 +261,6 @@ def showEvent(request):
 def joinEvent(request):
     if request.user.is_authenticated():
         reMsg = ''
-        eventId = request.GET.get('eventid')
-        jointype = request.GET.get('jointype')
         try:
             userId = request.session["userid"]
             wechatUser = wechat_user.objects.get(pk=userId)
@@ -255,6 +269,8 @@ def joinEvent(request):
             return HttpResponseRedirect("/accounts/login/")
 
         try:
+            eventId = request.GET.get('eventid')
+            jointype = request.GET.get('jointype')
             thisEvent = event.objects.get(pk=eventId)
         except event.DoesNotExist:
             errorMessage = u'您查询的活动不存在。'

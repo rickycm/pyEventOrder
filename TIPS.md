@@ -61,3 +61,13 @@ def api_response(request):
     except:
         print 'nope'
     return HttpResponse('')
+
+
+页面链接：
+1、发布活动：/add_event/
+无参数
+2、活动管理：/list_events/?type=
+参数：type = mine 我发布的活动
+     type = other 我报名的活动
+
+TODO: 定时提醒功能
