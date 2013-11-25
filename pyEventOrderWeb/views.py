@@ -373,19 +373,6 @@ def message(request):
         raise e
 
 def setting(request):
-    '''
-    if not request.user.is_authenticated():
-        url = request.build_absolute_uri()
-        logger.debug(url)
-        request.session['url'] = url
-        auth_url = 'https://graph.qq.com/oauth2.0/authorize?' + \
-                   urllib.urlencode({'response_type':'code',
-                        'client_id':APP_ID,
-                        'redirect_uri':'http://whitemay.pythonanywhere.com/oauth',
-                        'state':'Foperate'})
-        logger.debug(auth_url)
-        return HttpResponseRedirect(auth_url)
-    '''
     if request.method=='GET':
         if request.GET.has_key('openid'):
             openid = request.GET['openid']
@@ -416,7 +403,7 @@ def setting(request):
             #return HttpResponseRedirect('/')
 
         #user = wechat_user.objects.get(openid=userid)
-        form = forms.SettingForm({'inputname':user.wechat_inputname,})
+        form = forms.SettingForm({'inputname':real_user.wechat_inputname,})
         return render_to_response('jqmForm.html', {'title': '个人设置', 'form': form})
     else: #POST
         if not request.user.is_authenticated:
