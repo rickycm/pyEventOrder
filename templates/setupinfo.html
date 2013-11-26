@@ -24,8 +24,12 @@
         <div class="control-group">
           <!--<label class="control-label" for="event_title">活动名称</label> -->
           <div class="controls">
-            <input id="wechat_inputname" name="wechat_inputname" type="text" placeholder="请设置姓名"
+              {% if form.wechat_inputname.value != None %}
+                <input id="wechat_inputname" name="wechat_inputname" type="text" placeholder="请设置姓名"
                    value="{{form.wechat_inputname.value}}"  required>
+              {% else %}
+                <input id="wechat_inputname" name="wechat_inputname" type="text" placeholder="请设置姓名" required>
+              {% endif %}
           </div>
         </div>
 
