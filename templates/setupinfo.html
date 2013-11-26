@@ -17,7 +17,7 @@
 {% endblock %}
 
 {% block content %}
-<form action="/setupinfo/" id="addeventForm" method="post" class="form-horizontal">
+<form action="/setupinfo/" id="setupinfoForm" method="post" class="form-horizontal">
     {% csrf_token %}
     <fieldset>
         <!-- Text input-->
@@ -57,7 +57,7 @@
 
 
     $(document).on("pageinit", function () {
-        $('#addeventForm').validate({ // initialize the plugin
+        $('#setupinfoForm').validate({ // initialize the plugin
             rules: {
                 event_title: {
                     minlength: 3,
