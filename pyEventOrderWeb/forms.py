@@ -47,15 +47,8 @@ class EventForm(forms.ModelForm):
 
 
 
-class SettingForm(forms.Form):
-    inputname = forms.CharField(max_length=50, label='',
-                               widget=forms.TextInput(attrs={'placeholder':'您在订活动时使用的名字',}))
-    def __init__(self, *args, **kwargs):
-        super(SettingForm, self).__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.form_id = 'id-settingForm'
-        self.helper.form_class = 'blueForms'
-        self.helper.form_method = 'post'
-        self.helper.form_action = '#'
-        self.helper.add_input(Submit('submit', '保存'))
+class SetupuserForm(forms.Form):
+    class Meta:
+        model = wechat_user
+
 

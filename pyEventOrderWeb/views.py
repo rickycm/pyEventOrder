@@ -55,6 +55,25 @@ def logout_view(request):
     logout(request)
     return HttpResponseRedirect("/")
 
+# 微信用户关注账号后设置用户名，关更新cookie
+@login_required
+def setup_wechatuser(request):
+    try:
+        userId = request.session["userid"]
+        wechatUser = wechat_user.objects.get(pk=userId)
+    except wechat_user.DoesNotExist:
+        #TODO: 跳转到注册页面
+        return HttpResponseRedirect("/accounts/login/")
+    if request.method=="POST":
+        form = forms.SetupuserForm(request.POST, instance=wechatUser)
+        if form.is_valid():
+            wechatUser.wechat_inputname = form.data['wechat_inputname']
+            wechatUser.save()
+
+        eventform = forms.EventForm()
+        return render_to_response('addEvent.html', {'title': '新建活动', 'form': eventform},
+                              context_instance=RequestContext(request))
+
 #活动列表
 @login_required
 def list_events(rq):
@@ -309,7 +328,7 @@ def joinEvent(request):
         elif jointype == 'join':
             if thisEvent.event_limit > eventin:
                 thisparticipant = participant(pk=thisparticipant.id, partici_fakeID='', event_ID=thisEvent, event_sn=thisEvent.event_sn,
-                                              partici_name=wechatUser.wechat_username, partici_type=1,
+                                              partici_name=wechatUser.wechat_inputname, partici_type=1,
                                               register_time=datetime.now(), partici_user=wechatUser, partici_openid=wechatUser.openid)
                 thisparticipant.save()
                 if thisEvent.event_limit <= ++eventin:
@@ -320,13 +339,13 @@ def joinEvent(request):
                 reMsg = u'此活动已报名人满。'
         elif jointype == 'maybe':
             thisparticipant = participant(pk=thisparticipant.id, partici_fakeID='', event_ID=thisEvent, event_sn=thisEvent.event_sn,
-                                          partici_name=wechatUser.wechat_username, partici_type=2,
+                                          partici_name=wechatUser.wechat_inputname, partici_type=2,
                                           register_time=datetime.now(), partici_user=wechatUser, partici_openid=wechatUser.openid)
             thisparticipant.save()
             reMsg = u'报名成功。'
         elif jointype == 'notjoin':
             thisparticipant = participant(pk=thisparticipant.id, partici_fakeID='', event_ID=thisEvent, event_sn=thisEvent.event_sn,
-                                          partici_name=wechatUser.wechat_username, partici_type=0,
+                                          partici_name=wechatUser.wechat_inputname, partici_type=0,
                                           register_time=datetime.now(), partici_user=wechatUser, partici_openid=wechatUser.openid)
             thisparticipant.save()
             reMsg = u'报名成功。'

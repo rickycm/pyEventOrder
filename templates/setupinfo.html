@@ -1,0 +1,110 @@
+{% extends 'dh5mbp/base.html' %}
+{% load url from future %}
+{% load staticfiles %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block dh5mbp_css %}
+    {{block.super}}
+    <link rel="stylesheet" type="text/css" href='{% static "datetimepicker/css/jqm-datebox.css" %}' />
+    <style>
+        label.error {
+            color: red;
+            width: 100%;
+            float: none;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<form action="/add_event/" id="addeventForm" method="post" class="form-horizontal">
+    {% csrf_token %}
+    <fieldset>
+        <!-- Text input-->
+        <div class="control-group">
+          <!--<label class="control-label" for="event_title">活动名称</label> -->
+          <div class="controls">
+            <input id="wechat_inputname" name="wechat_inputname" type="text" placeholder="请设置姓名" required>
+
+          </div>
+        </div>
+
+        <!-- Button (Double) -->
+        <div class="control-group">
+          <label class="control-label" for="submit"></label>
+            <div class="ui-body ui-body-b">
+                    <button type="submit" id="submit" name="submit"  data-theme="b">发布</button>
+                    <button type="reset" data-theme="d">取消</button>
+            </div>
+        </div>
+
+
+    </fieldset>
+</form>
+{% endblock %}
+
+{% block post_main_script %}
+{{ block.super }}
+<script src='{% static "js/jquery.validate.min.js" %}' type="text/javascript"></script>
+<script src='{% static "datetimepicker/js/jqm-datebox.core.js" %}' type="text/javascript"></script>
+<script src='{% static "datetimepicker/js/jqm-datebox.mode.datebox.js" %}' type="text/javascript"></script>
+<script src='{% static "datetimepicker/js/jquery.mobile.datebox.i18n.zh-CN.utf8.js" %}' type="text/javascript"></script>
+<script type="text/javascript">
+         $(document).ready(function() {
+          // disable ajax nav
+          $.mobile.ajaxEnabled = false;
+         });
+
+
+    $(document).on("pageinit", function () {
+        $('#addeventForm').validate({ // initialize the plugin
+            rules: {
+                event_title: {
+                    minlength: 3,
+                    maxlength: 50,
+                    required: true
+                },
+                event_detail: {
+                    minlength: 3,
+                    maxlength: 1000,
+                    required: true
+                },
+                event_limit: {
+                  required: true,
+                  min: 0,
+                  max: 200
+                },
+                eventdate: "required",
+                eventtime: "required"
+            },
+            messages: {
+                event_title: {
+                    required: "<li>请输入活动名称</li>",
+                    minlength: "<li>请输入3个字以上</li>",
+                    maxlength: "<li>最多为25字</li>",
+                },
+                event_detail: {
+                    required: "<li>请输入活动详情</li>",
+                    minlength: "<li>请输入3个字以上</li>",
+                    maxlength: "<li>最多为500字</li>",
+                },
+                event_limit: {
+                    min: "<li>最小人数为0</li>",
+                    max: "<li>最大为数为200</li>",
+                },
+                eventdate: "请选择活动日期",
+                eventtime: "请选择活动时间",
+            },
+            errorPlacement: function(error, element) {
+                if (element.attr("name") == "event_title" || element.attr("name") == "eventdate"
+                    || element.attr("name") == "eventtime") {
+                    error.insertAfter($(element).parent());
+                } else {
+                    error.insertAfter(element);
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}
+
