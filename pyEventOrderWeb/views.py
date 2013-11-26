@@ -391,15 +391,7 @@ def setting(request):
             openid = request.GET['openid']
             logger.debug('Request has openid ' + openid)
             max_age = 365 * 24 * 60 * 60
-            path = request.path
-            logger.debug('Path is ' + path)
-            response = HttpResponseRedirect(path)
-            response.set_cookie("wxopenid", openid, max_age=max_age)
-            return response
-
-        if request.COOKIES.has_key('wxopenid'):
-            openid = request.COOKIES['wxopenid']
-            logger.info('Cookie has userid ' + openid)
+            #response.set_cookie("wxopenid", openid, max_age=max_age)
 
             user = authenticate(openid=openid)
             if user is not None:
@@ -407,17 +399,20 @@ def setting(request):
                 logger.debug(real_user.id)
                 request.session['userid'] = real_user.id
                 login(request, user)
+
+                form = forms.SettingForm({'inputname':real_user.wechat_inputname,})
+                response = render_to_response('jqmForm.html', {'title': '个人设置', 'form': form})
+                response.set_cookie("wxopenid", openid, max_age=max_age)
+                return response
+
             else:
                 logger.error("Can't find user " + openid)
-                raise Http404
+                return render_to_response('welcome.html')
 
         else:
-            raise Http404
+            return render_to_response('welcome.html')
             #return HttpResponseRedirect('/')
 
-        #user = wechat_user.objects.get(openid=userid)
-        form = forms.SettingForm({'inputname':real_user.wechat_inputname,})
-        return render_to_response('jqmForm.html', {'title': '个人设置', 'form': form})
     else: #POST
         if not request.user.is_authenticated:
             raise Http404
