@@ -419,8 +419,10 @@ def setting(request):
                 request.session['userid'] = real_user.id
                 login(request, user)
 
-                form = forms.SettingForm({'inputname':real_user.wechat_inputname,})
-                response = render_to_response('jqmForm.html', {'title': '个人设置', 'form': form})
+                form = forms.SetupuserForm(instance=real_user)
+
+                #form = forms.SettingForm({'inputname':real_user.wechat_inputname,})
+                response = render_to_response('setupinfo.html', {'title': '个人设置', 'form': form})
                 response.set_cookie("wxopenid", openid, max_age=max_age)
                 return response
 
@@ -434,19 +436,23 @@ def setting(request):
 
     else: #POST
         if not request.user.is_authenticated:
-            raise Http404
+            return render_to_response('welcome.html')
         else:
             userid = request.session['userid']
 
-        form = forms.SettingForm(request.POST)
+        form = forms.SetupuserForm(request.POST)
         if form.is_valid():
-            user = wechat_user.objects.get(userid)
+            try:
+                wechatUser = wechat_user.objects.get(pk=userid)
+            except wechat_user.DoesNotExist:
+                return HttpResponseRedirect('welcome.html')
+
             #assert user.openid==userid
-            user.wechat_inputname = form.cleaned_data['inputname']
-            user.save()
+            wechatUser.wechat_inputname = form.data['wechat_inputname']
+            wechatUser.save()
             return list_events(request)
         else:
-            return render_to_response('jqmForm.html', {'title': '个人设置', 'form': form},
+            return render_to_response('setupinfo.html', {'title': '个人设置', 'form': form},
                 context_instance=RequestContext(request))
 
 import urllib
