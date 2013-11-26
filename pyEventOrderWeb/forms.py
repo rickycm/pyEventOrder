@@ -47,8 +47,10 @@ class EventForm(forms.ModelForm):
 
 
 class SetupuserForm(forms.ModelForm):
+
     class Meta:
         model = wechat_user
+        fields = ['wechat_inputname']
 
     def clean(self):
         if not self.is_valid():

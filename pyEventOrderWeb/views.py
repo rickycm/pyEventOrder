@@ -451,6 +451,7 @@ def setting(request):
 
             #assert user.openid==userid
             wechatUser.wechat_inputname = form.data['wechat_inputname']
+            wechatUser.initialized = True
             wechatUser.save()
 
             title = u'设置成功'
