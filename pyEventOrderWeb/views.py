@@ -423,7 +423,6 @@ def setting(request):
                 login(request, user)
 
                 form = forms.SetupuserForm(instance=real_user)
-
                 response = render_to_response('setupinfo.html', {'title': '个人设置', 'form': form})
                 response.set_cookie("wxopenid", openid, max_age=max_age)
                 return response
