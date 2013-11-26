@@ -50,4 +50,11 @@ class SetupuserForm(forms.ModelForm):
     class Meta:
         model = wechat_user
 
+    def clean(self):
+        if not self.is_valid():
+            raise forms.ValidationError(u"标记部分为必选项")
+        else:
+            cleaned_data = super(SetupuserForm, self).clean()
+        return cleaned_data
+
 
