@@ -55,25 +55,6 @@ def logout_view(request):
     logout(request)
     return HttpResponseRedirect("/")
 
-# 微信用户关注账号后设置用户名，关更新cookie
-@login_required
-def setup_wechatuser(request):
-    try:
-        userId = request.session["userid"]
-        wechatUser = wechat_user.objects.get(pk=userId)
-    except wechat_user.DoesNotExist:
-        #TODO: 跳转到注册页面
-        return HttpResponseRedirect("/accounts/login/")
-    if request.method=="POST":
-        form = forms.SetupuserForm(request.POST, instance=wechatUser)
-        if form.is_valid():
-            wechatUser.wechat_inputname = form.data['wechat_inputname']
-            wechatUser.save()
-
-        eventform = forms.EventForm()
-        return render_to_response('addEvent.html', {'title': '新建活动', 'form': eventform},
-                              context_instance=RequestContext(request))
-
 #活动列表
 @login_required
 def list_events(rq):
