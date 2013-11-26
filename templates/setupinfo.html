@@ -59,45 +59,13 @@ alert("{{form}}" + "=============" + "{{form.wechat_inputname.value}}")
     $(document).on("pageinit", function () {
         $('#setupinfoForm').validate({ // initialize the plugin
             rules: {
-                event_title: {
-                    minlength: 3,
-                    maxlength: 50,
-                    required: true
-                },
-                event_detail: {
-                    minlength: 3,
-                    maxlength: 1000,
-                    required: true
-                },
-                event_limit: {
-                  required: true,
-                  min: 0,
-                  max: 200
-                },
-                eventdate: "required",
-                eventtime: "required"
+                wechat_inputname: "required"
             },
             messages: {
-                event_title: {
-                    required: "<li>请输入活动名称</li>",
-                    minlength: "<li>请输入3个字以上</li>",
-                    maxlength: "<li>最多为25字</li>",
-                },
-                event_detail: {
-                    required: "<li>请输入活动详情</li>",
-                    minlength: "<li>请输入3个字以上</li>",
-                    maxlength: "<li>最多为500字</li>",
-                },
-                event_limit: {
-                    min: "<li>最小人数为0</li>",
-                    max: "<li>最大为数为200</li>",
-                },
-                eventdate: "请选择活动日期",
-                eventtime: "请选择活动时间",
+                wechat_inputname: "请设置您的姓名",
             },
             errorPlacement: function(error, element) {
-                if (element.attr("name") == "event_title" || element.attr("name") == "eventdate"
-                    || element.attr("name") == "eventtime") {
+                if (element.attr("name") == "wechat_inputname") {
                     error.insertAfter($(element).parent());
                 } else {
                     error.insertAfter(element);
