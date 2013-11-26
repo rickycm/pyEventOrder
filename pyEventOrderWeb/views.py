@@ -159,8 +159,6 @@ def list_events(rq):
                             allPage += 1
 
 
-                print("================", allPage)
-                print("================", curPage)
                 return render_to_response("list_event.html", {'title': '活动列表', 'user': user, 'events':events, 'allPage':allPage, 'curPage':curPage, 'type': type}, context_instance=RequestContext(rq))
         return HttpResponseRedirect("/accounts/login/")
 
