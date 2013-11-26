@@ -17,6 +17,7 @@
 {% endblock %}
 
 {% block content %}
+          <h3 style="text-align:center">设置人个信息</h3>
 <form action="/setting/" id="setupinfoForm" method="post" class="form-horizontal">
     {% csrf_token %}
     <fieldset>
@@ -24,12 +25,8 @@
         <div class="control-group">
           <!--<label class="control-label" for="event_title">活动名称</label> -->
           <div class="controls">
-              {% if form.wechat_inputname.value != None %}
                 <input id="wechat_inputname" name="wechat_inputname" type="text" placeholder="请设置姓名"
-                   value="{{form.wechat_inputname.value}}"  required>
-              {% else %}
-                <input id="wechat_inputname" name="wechat_inputname" type="text" placeholder="请设置姓名" required>
-              {% endif %}
+                   value="{{form.wechat_inputname.value|default_if_none:''}}" required>
           </div>
         </div>
 

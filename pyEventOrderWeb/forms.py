@@ -2,6 +2,7 @@
 __author__ = 'ricky'
 
 from django import forms
+from django.core.validators import *
 from bootstrap3_datetime.widgets import DateTimePicker
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
@@ -47,10 +48,9 @@ class EventForm(forms.ModelForm):
 
 
 class SetupuserForm(forms.ModelForm):
-
     class Meta:
         model = wechat_user
-        fields = ['wechat_inputname']
+        fields = ['wechat_inputname', ]
 
     def clean(self):
         if not self.is_valid():

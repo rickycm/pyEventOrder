@@ -142,8 +142,8 @@ def list_events(rq):
                         allPostCounts = event.objects.filter(updated_by=wechatUser.id).count()
                         allPage = allPostCounts / ONE_PAGE_OF_DATA
                         remainPost = allPostCounts % ONE_PAGE_OF_DATA
-                    if remainPost > 0:
-                        allPage += 1
+                        if remainPost > 0:
+                            allPage += 1
                 elif type == 'other':
                     evenidtList = participant.objects.filter(partici_user=wechatUser).values_list('event_ID', flat=True).distinct()
                     eventsall = []
@@ -155,12 +155,13 @@ def list_events(rq):
                         allPostCounts = len(eventsall)
                         allPage = allPostCounts / ONE_PAGE_OF_DATA
                         remainPost = allPostCounts % ONE_PAGE_OF_DATA
-                    if remainPost > 0:
-                        allPage += 1
+                        if remainPost > 0:
+                            allPage += 1
 
 
-
-                return render_to_response("list_event.html", {'title': '活动列表', 'user': user, 'events':events, 'allPage':allPage, 'curPage':curPage}, context_instance=RequestContext(rq))
+                print("================", allPage)
+                print("================", curPage)
+                return render_to_response("list_event.html", {'title': '活动列表', 'user': user, 'events':events, 'allPage':allPage, 'curPage':curPage, 'type': type}, context_instance=RequestContext(rq))
         return HttpResponseRedirect("/accounts/login/")
 
 # 添加活动
@@ -174,6 +175,10 @@ def add_event(request):
         form = forms.EventForm(request.POST)
         s = datetime.strptime(form.data['eventdate'] + ' ' + form.data['eventtime'], "%Y-%m-%d %H:%M")
         userId = request.session["userid"]
+        try:
+            wechatUser = wechat_user.objects.get(pk=userId)
+        except wechat_user.DoesNotExist:
+            return HttpResponseRedirect('welcome.html')
         if form.is_valid():
             e = event.objects.create(
                 event_title = form.data['event_title'],
@@ -184,9 +189,9 @@ def add_event(request):
                 event_type = 1,
                 updated_date = datetime.now(),
                 #TODO: get fakeID/openID from wechat
-                event_hostfakeID = '12345678',
+                event_hostfakeID = wechatUser.openid,
                 #TODO: get hostname from wechat_user according to fakeID
-                event_hostname = '12345678',
+                event_hostname = wechatUser.wechat_inputname,
                 event_status = 0,
             )
             e.save()
@@ -212,7 +217,7 @@ def updateEvent(request):
         errorMessage = u'您查询的活动不存在。'
         return render_to_response("errorMessage.html", {'errorMessage': errorMessage, 'title': title},
                               context_instance=RequestContext(request))
-    if request.method=="POST":
+    if request.method == "POST":
         form = forms.EventForm(request.POST, instance=thisEvent)
         if form.is_valid():
             userId = request.session["userid"]

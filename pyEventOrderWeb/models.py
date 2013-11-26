@@ -37,7 +37,7 @@ class wechat_user(models.Model):
     subscribe = models.BooleanField()
     openid = models.CharField(max_length=30, unique=True)
     nickname = models.CharField(max_length=50, blank=True, null=True)
-    sex = models.NullBooleanField(default=None)
+    sex = models.NullBooleanField(default=None, blank=True)
     language = models.CharField(max_length=10, default='zh-CN', blank=True, null=True)
     city = models.CharField(max_length=20, blank=True, null=True)
     province = models.CharField(max_length=20, blank=True, null=True)
@@ -45,7 +45,7 @@ class wechat_user(models.Model):
     headimageurl = models.URLField(max_length=200, blank=True, null=True)
 
     # 本字段表明用户保存了Cookie，设置了用户名，从而可以完成系统内的主要工作。
-    initialized = models.BooleanField(default=False)
+    initialized = models.BooleanField(default=False, blank=True)
 
     objects = models.Manager()
 
