@@ -62,9 +62,9 @@ def list_events(rq):
         try:
             userId = rq.session["userid"]
             wechatUser = wechat_user.objects.get(pk=userId)
-        except wechat_user.DoesNotExist:
+        except:
             #TODO: 跳转到注册页面
-            return HttpResponseRedirect("/accounts/login/")
+            return HttpResponseRedirect('welcome.html')
         events =[]
         ONE_PAGE_OF_DATA = 10
         if rq.user.is_authenticated():
@@ -141,7 +141,7 @@ def list_events(rq):
                             allPage += 1
 
                 return render_to_response("list_event.html", {'title': '活动列表', 'user': user, 'events':events, 'allPage':allPage, 'curPage':curPage, 'type': type}, context_instance=RequestContext(rq))
-        return HttpResponseRedirect("/accounts/login/")
+        return HttpResponseRedirect('welcome.html')
 
 # 添加活动
 @login_required
@@ -153,10 +153,10 @@ def add_event(request):
     else:
         form = forms.EventForm(request.POST)
         s = datetime.strptime(form.data['eventdate'] + ' ' + form.data['eventtime'], "%Y-%m-%d %H:%M")
-        userId = request.session["userid"]
         try:
+            userId = request.session["userid"]
             wechatUser = wechat_user.objects.get(pk=userId)
-        except wechat_user.DoesNotExist:
+        except:
             return HttpResponseRedirect('welcome.html')
         if form.is_valid():
             e = event.objects.create(
@@ -242,9 +242,9 @@ def showEvent(request):
         try:
             userId = request.session["userid"]
             wechatUser = wechat_user.objects.get(pk=userId)
-        except wechat_user.DoesNotExist:
+        except:
             #TODO: 跳转到注册页面
-            return HttpResponseRedirect("/accounts/login/")
+            return HttpResponseRedirect('welcome.html')
 
         try:
             eventId = request.GET.get('eventid')
@@ -273,7 +273,7 @@ def showEvent(request):
                                   context_instance=RequestContext(request))
 
     else:
-        return HttpResponseRedirect("/accounts/login/")
+        return HttpResponseRedirect('welcome.html')
 
 
 # 响应按钮事件：报名、修改事件状态
@@ -284,9 +284,9 @@ def joinEvent(request):
         try:
             userId = request.session["userid"]
             wechatUser = wechat_user.objects.get(pk=userId)
-        except wechat_user.DoesNotExist:
+        except:
             #TODO: 跳转到注册页面
-            return HttpResponseRedirect("/accounts/login/")
+            return HttpResponseRedirect('welcome.html')
 
         try:
             eventId = request.GET.get('eventid')
