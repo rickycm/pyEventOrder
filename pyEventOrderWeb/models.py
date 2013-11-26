@@ -29,20 +29,20 @@ class event(models.Model):
 
 
 class wechat_user(models.Model):
-    wechat_fakeID = models.CharField(max_length=200)
-    wechat_username = models.CharField(max_length=200)
-    wechat_inputname = models.CharField(max_length=200, blank=True)
-    wechat_usertype = models.CharField(max_length=20)
+    wechat_fakeID = models.CharField(max_length=200, blank=True, null=True)
+    wechat_username = models.CharField(max_length=200, blank=True, null=True)
+    wechat_inputname = models.CharField(max_length=200, blank=True, null=True)
+    wechat_usertype = models.CharField(max_length=20, blank=True, null=True)
 
     subscribe = models.BooleanField()
     openid = models.CharField(max_length=30, unique=True)
-    nickname = models.CharField(max_length=50)
+    nickname = models.CharField(max_length=50, blank=True, null=True)
     sex = models.NullBooleanField(default=None)
-    language = models.CharField(max_length=10, default='zh-CN')
-    city = models.CharField(max_length=20)
-    province = models.CharField(max_length=20)
-    country = models.CharField(max_length=20, default='中国')
-    headimageurl = models.URLField(max_length=200)
+    language = models.CharField(max_length=10, default='zh-CN', blank=True, null=True)
+    city = models.CharField(max_length=20, blank=True, null=True)
+    province = models.CharField(max_length=20, blank=True, null=True)
+    country = models.CharField(max_length=20, default='中国', blank=True, null=True)
+    headimageurl = models.URLField(max_length=200, blank=True, null=True)
 
     # 本字段表明用户保存了Cookie，设置了用户名，从而可以完成系统内的主要工作。
     initialized = models.BooleanField(default=False)
