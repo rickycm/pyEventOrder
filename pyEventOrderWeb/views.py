@@ -410,7 +410,6 @@ def setting(request):
             openid = request.GET['openid']
             logger.debug('Request has openid ' + openid)
             max_age = 365 * 24 * 60 * 60
-            #response.set_cookie("wxopenid", openid, max_age=max_age)
 
             user = authenticate(openid=openid)
             if user is not None:
@@ -421,7 +420,6 @@ def setting(request):
 
                 form = forms.SetupuserForm(instance=real_user)
 
-                #form = forms.SettingForm({'inputname':real_user.wechat_inputname,})
                 response = render_to_response('setupinfo.html', {'title': '个人设置', 'form': form})
                 response.set_cookie("wxopenid", openid, max_age=max_age)
                 return response

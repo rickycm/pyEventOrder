@@ -46,7 +46,6 @@ class EventForm(forms.ModelForm):
         return cleaned_data
 
 
-
 class SetupuserForm(forms.ModelForm):
     class Meta:
         model = wechat_user
