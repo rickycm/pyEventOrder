@@ -448,7 +448,10 @@ def setting(request):
             #assert user.openid==userid
             wechatUser.wechat_inputname = form.data['wechat_inputname']
             wechatUser.save()
-            return list_events(request)
+
+            errorMessage = u'个人信息设置成功，现在您可以返回并发布或参与活动了！'
+            return render_to_response("errorMessage.html", {'errorMessage': errorMessage},
+                              context_instance=RequestContext(request))
         else:
             logger.debug('Setting form is invalid.')
             return render_to_response('setupinfo.html', {'title': '个人设置', 'form': form},
