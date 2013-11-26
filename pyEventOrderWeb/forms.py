@@ -47,7 +47,7 @@ class EventForm(forms.ModelForm):
 
 
 
-class SetupuserForm(forms.Form):
+class SetupuserForm(forms.ModelForm):
     class Meta:
         model = wechat_user
 
