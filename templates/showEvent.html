@@ -123,12 +123,12 @@
                                 <span style="color: #FF3300"> 不参加此活动 </span>
                             {% elif userStatus == 1 %}
                                 <span style="color: #008AE6"> 已报名参加 </span>
-                                <a href="#" data-role="button" data-theme="e" data-icon="delete">不能参加</a>
-                                <a href="#" data-role="button" data-theme="d" data-icon="info">可能吧...</a>
+                                <a href="/joinevent/?eventid={{thisEvent.id}}&jointype=notjoin" data-role="button" data-theme="e" data-icon="delete">不能参加</a>
+                                <a href="/joinevent/?eventid={{thisEvent.id}}&jointype=maybe" data-role="button" data-theme="d" data-icon="info">可能吧...</a>
                             {% elif userStatus == 2 %}
                                 <span style="color: #FFCC66"> 可能参加此活动 </span>
-                                <a href="#" data-role="button" data-theme="b" data-icon="check">我参加！</a>
-                                <a href="#" data-role="button" data-theme="e" data-icon="delete">不能参加</a>
+                                <a href="/joinevent/?eventid={{thisEvent.id}}&jointype=join" data-role="button" data-theme="b" data-icon="check">我参加！</a>
+                                <a href="/joinevent/?eventid={{thisEvent.id}}&jointype=notjoin" data-role="button" data-theme="e" data-icon="delete">不能参加</a>
                             {% elif userStatus == 5 %}
                                 <span style="color: #FF3300"> 未报名 </span>
                                 <h4 style="color: #4682B4">此活动已经报名人满。</h4>
@@ -142,12 +142,12 @@
                                 <span style="color: #FF3300"> 不参加此活动 </span>
                             {% elif userStatus == 1 %}
                                 <span style="color: #008AE6"> 已报名参加 </span>
-                                <a href="#" data-role="button" data-theme="e" data-icon="delete">不能参加</a>
-                                <a href="#" data-role="button" data-theme="d" data-icon="info">可能吧...</a>
+                                <a href="/joinevent/?eventid={{thisEvent.id}}&jointype=notjoin" data-role="button" data-theme="e" data-icon="delete">不能参加</a>
+                                <a href="/joinevent/?eventid={{thisEvent.id}}&jointype=maybe" data-role="button" data-theme="d" data-icon="info">可能吧...</a>
                             {% elif userStatus == 2 %}
                                 <span style="color: #FFCC66"> 可能参加此活动 </span>
-                                <a href="#" data-role="button" data-theme="b" data-icon="check">我参加！</a>
-                                <a href="#" data-role="button" data-theme="e" data-icon="delete">不能参加</a>
+                                <a href="/joinevent/?eventid={{thisEvent.id}}&jointype=join" data-role="button" data-theme="b" data-icon="check">我参加！</a>
+                                <a href="/joinevent/?eventid={{thisEvent.id}}&jointype=notjoin" data-role="button" data-theme="e" data-icon="delete">不能参加</a>
                             {% elif userStatus == 5 %}
                                 <span style="color: #FF3300"> 未报名 </span>
                                 <h4 style="color: #4682B4">此活动已经报名人满。</h4>
