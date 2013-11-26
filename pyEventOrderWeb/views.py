@@ -268,7 +268,7 @@ def showEvent(request):
             userStatus = 5
         if wechatUser.id == int(thisEvent.updated_by):
             userStatus = 10
-        return render_to_response("showEvent.html", {'title': '查看活动', 'thisEvent': thisEvent, 'userStatus': userStatus,
+        return render_to_response("showEvent.html", {'title': thisEvent.event_title, 'thisEvent': thisEvent, 'userStatus': userStatus,
                                                      'participantlist': participantlist, "numbers": numbers, 'remsg': remsg},
                                   context_instance=RequestContext(request))
 
