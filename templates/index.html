@@ -1,13 +1,21 @@
-{% extends 'bootstrap.html' %}
+{% extends 'dh5mbp/base.html' %}
+{% load url from future %}
+{% load staticfiles %}
 
-{% block bootstrap3_title %}欢迎使用{% endblock %}
+{% block title %} 欢迎使用 {% endblock %}
+
+{% block dh5mbp_css %}
+    {{block.super}}
+
+{% endblock %}
 
 {% block meta %}
     {{ block.super }}
     <meta property="qc:admins" content="3123217701455116014076161705256375" />
 {% endblock %}
 
-{% block bootstrap3_content %}
+{% block content %}
+<div id="adminlinks">
 {% if user.is_authenticated and user != "" %}
     ========={{ user }}
     +++++++++{{ user.is_authenticated }}
@@ -22,4 +30,22 @@
     <li><a href ="/accounts/login/?next=/"> 登录 </a></li>
     <li><a href ="/accounts/register/?next=/"> 注册 </a></li>
 {% endif %}
+</div>
+{% endblock %}
+
+{% block post_main_script %}
+{{ block.super }}
+<script type="text/javascript">
+         $(document).ready(function() {
+          // disable ajax nav
+          $.mobile.ajaxEnabled = false;
+
+          if (!navigator.userAgent.match(/mobile/i)) {
+            $("#adminlinks").show();
+          }else{
+            $("#adminlinks").show();
+          }
+         });
+
+</script>
 {% endblock %}

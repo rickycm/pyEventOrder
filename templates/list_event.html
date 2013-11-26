@@ -78,18 +78,22 @@
         {% endif %}
     </div>
 
-
-        {% if user.is_authenticated and user != "" %}
-        <p>Welcome, {{ user.username }}. Thanks for logging in.</p>
-        <li><a href = "/accounts/logout/"> 退出 </a></li>
+<div id="adminlinks">
+{% if user.is_authenticated and user != "" %}
+    ========={{ user }}
+    +++++++++{{ user.is_authenticated }}
+    <p>Welcome, {{ user.username }}. Thanks for logging in.</p>
+    <li><a href = "/list_events/?type=mine"> 我发布的活动 </a></li>
+    <li><a href = "/list_events/?type=other"> 我参与的活动 </a></li>
         <li><a href = "/add_event/"> add_event </a></li>
-        <li><a href = "/add_event2/"> add_event2 </a></li>
-        <li><a href = "/admin/"> 管理界面 </a></li>
-        {% else %}
-        <p>Welcome, new user. Please log in.</p>
-        <li><a href ="/accounts/login/?next=/"> 登录 </a></li>
-        <li><a href ="/accounts/register/?next=/"> 注册 </a></li>
-        {% endif %}
+    <li><a href = "/accounts/logout/"> 退出 </a></li>
+    <li><a href = "/admin/"> 管理界面 </a></li>
+{% else %}
+    <p>Welcome, new user. Please log in.</p>
+    <li><a href ="/accounts/login/?next=/"> 登录 </a></li>
+    <li><a href ="/accounts/register/?next=/"> 注册 </a></li>
+{% endif %}
+</div>
     </body>
 
 {% endblock %}
@@ -100,6 +104,12 @@
          $(document).ready(function() {
           // disable ajax nav
           $.mobile.ajaxEnabled = false;
+
+          if (!navigator.userAgent.match(/mobile/i)) {
+            $("#adminlinks").show();
+          }else{
+            $("#adminlinks").hide();
+          }
          });
 
 </script>

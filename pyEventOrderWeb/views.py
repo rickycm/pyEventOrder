@@ -584,3 +584,4 @@ def get_wx_info(code, session):
 
 def welcome(request):
     return render_to_response('welcome.html')
+
