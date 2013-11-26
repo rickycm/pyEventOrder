@@ -450,6 +450,7 @@ def setting(request):
             wechatUser.save()
             return list_events(request)
         else:
+            logger.debug('Setting form is invalid.')
             return render_to_response('setupinfo.html', {'title': '个人设置', 'form': form},
                 context_instance=RequestContext(request))
 
