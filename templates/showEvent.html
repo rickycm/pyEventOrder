@@ -121,6 +121,8 @@
                          <p data-icon="info" data-highlight="true">您当前的状态为：
                             {% if userStatus == 0 %}
                                 <span style="color: #FF3300"> 不参加此活动 </span>
+                                <a href="/joinevent/?eventid={{thisEvent.id}}&jointype=join" data-role="button" data-theme="b" data-icon="check">我参加！</a>
+                                <a href="/joinevent/?eventid={{thisEvent.id}}&jointype=maybe" data-role="button" data-theme="d" data-icon="info">可能吧...</a>
                             {% elif userStatus == 1 %}
                                 <span style="color: #008AE6"> 已报名参加 </span>
                                 <a href="/joinevent/?eventid={{thisEvent.id}}&jointype=notjoin" data-role="button" data-theme="e" data-icon="delete">不能参加</a>
