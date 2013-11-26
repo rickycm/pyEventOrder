@@ -3,7 +3,7 @@ import logging
 from datetime import datetime
 
 from django.contrib.auth.forms import *
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, render
 from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.contrib.auth import authenticate, login, logout
 from django.template import RequestContext
@@ -54,6 +54,7 @@ def index(request):
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect("/")
+
 
 #活动列表
 @login_required
@@ -139,7 +140,6 @@ def list_events(rq):
                         if remainPost > 0:
                             allPage += 1
 
-
                 return render_to_response("list_event.html", {'title': '活动列表', 'user': user, 'events':events, 'allPage':allPage, 'curPage':curPage, 'type': type}, context_instance=RequestContext(rq))
         return HttpResponseRedirect("/accounts/login/")
 
@@ -180,9 +180,10 @@ def add_event(request):
             rqdata['eventid'] = e.id
             rqdata['remsg'] = reMsg
             request.GET = rqdata
-            return showEvent(request)
-            #return list_events(request)
+            #return showEvent(request)
+            return HttpResponseRedirect('/showevent/?eventid='+str(e.id))
         else:
+            logger.debug('Setting form is invalid.')
             return render_to_response('addEvent.html', {'title': '新建活动', 'form': form}, context_instance=RequestContext(request))
 
 # 修改活动
@@ -225,7 +226,7 @@ def updateEvent(request):
             rqdata['eventid'] = eventId
             rqdata['remsg'] = reMsg
             request.GET = rqdata
-            return showEvent(request)
+            return HttpResponseRedirect('/showevent/?eventid='+eventId)
 
     return render_to_response('updateEvent.html', {'title': '修改活动', 'form': forms.EventForm(instance=thisEvent), 'eventid': eventId},
                               context_instance=RequestContext(request))
