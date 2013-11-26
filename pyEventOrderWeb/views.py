@@ -208,8 +208,9 @@ def updateEvent(request):
         eventId = request.GET.get('eventid')
         thisEvent = event.objects.get(pk=eventId)
     except event.DoesNotExist:
+        title = u'出错了'
         errorMessage = u'您查询的活动不存在。'
-        return render_to_response("errorMessage.html", {'errorMessage': errorMessage},
+        return render_to_response("errorMessage.html", {'errorMessage': errorMessage, 'title': title},
                               context_instance=RequestContext(request))
     if request.method=="POST":
         form = forms.EventForm(request.POST, instance=thisEvent)
@@ -230,8 +231,9 @@ def updateEvent(request):
             try:
                 thisEvent.save()
             except:
+                title = u'出错了'
                 errorMessage = u'Sorry，出错了。'
-                return render_to_response("errorMessage.html", {'errorMessage': errorMessage},
+                return render_to_response("errorMessage.html", {'errorMessage': errorMessage, 'title': title},
                                       context_instance=RequestContext(request))
 
             reMsg = u'更新成功。'
@@ -263,8 +265,9 @@ def showEvent(request):
             eventId = request.GET.get('eventid')
             thisEvent = event.objects.get(pk=eventId)
         except event.DoesNotExist:
+            title = u'出错了'
             errorMessage = u'您查询的活动不存在。'
-            return render_to_response("errorMessage.html", {'errorMessage': errorMessage},
+            return render_to_response("errorMessage.html", {'errorMessage': errorMessage, 'title': title},
                                   context_instance=RequestContext(request))
 
         participantlist = participant.objects.filter(event_ID=eventId)
@@ -305,8 +308,9 @@ def joinEvent(request):
             jointype = request.GET.get('jointype')
             thisEvent = event.objects.get(pk=eventId)
         except event.DoesNotExist:
+            title = u'出错了'
             errorMessage = u'您查询的活动不存在。'
-            return render_to_response("errorMessage.html", {'errorMessage': errorMessage},
+            return render_to_response("errorMessage.html", {'errorMessage': errorMessage, 'title': title},
                                   context_instance=RequestContext(request))
 
         #partici_type: 0-不参加，1-参加，2-可能参加，5-未报名，10-活动发起人
@@ -449,8 +453,9 @@ def setting(request):
             wechatUser.wechat_inputname = form.data['wechat_inputname']
             wechatUser.save()
 
+            title = u'设置成功'
             errorMessage = u'个人信息设置成功，现在您可以返回并发布或参与活动了！'
-            return render_to_response("errorMessage.html", {'errorMessage': errorMessage},
+            return render_to_response("errorMessage.html", {'errorMessage': errorMessage, 'title': title},
                               context_instance=RequestContext(request))
         else:
             logger.debug('Setting form is invalid.')

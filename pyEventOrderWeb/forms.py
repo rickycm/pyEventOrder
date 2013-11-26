@@ -52,7 +52,7 @@ class SetupuserForm(forms.ModelForm):
 
     def clean(self):
         if not self.is_valid():
-            raise forms.ValidationError(u"标记部分为必选项")
+            raise forms.ValidationError(u"请完善信息")
         else:
             cleaned_data = super(SetupuserForm, self).clean()
         return cleaned_data

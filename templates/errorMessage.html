@@ -1,15 +1,26 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
+{% extends 'dh5mbp/base.html' %}
+{% load url from future %}
+{% load staticfiles %}
 
-    <head>
-        <meta charset="utf-8">
-        <title>
-            出错了
-        </title>
-    </head>
-<body>
+{% block title %}{{ title }}{% endblock %}
+
+{% block dh5mbp_css %}
+    {{block.super}}
+    <link rel="stylesheet" type="text/css" href='{% static "datetimepicker/css/jqm-datebox.css" %}' />
+    <style>
+        label.error {
+            color: red;
+            width: 100%;
+            float: none;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+
     <p>
         {{ errorMessage }}
     </p>
-</body>
-</html>
+
+
+{% endblock %}
