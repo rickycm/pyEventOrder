@@ -71,3 +71,8 @@ def api_response(request):
      type = other 我报名的活动
 
 TODO: 定时提醒功能
+不使用Celery:
+Install celery by download or pip install -U Celery
+改用：django_cron（原因：更轻量级）
+pip install django_cron
+doc: https://github.com/Tivix/django-cron
