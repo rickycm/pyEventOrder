@@ -245,12 +245,12 @@ def showEvent(request):
         else:
             # 客户端会话不会因为退回微信界面而丢失，但服务端重启会造成会话失效。
             openid = request.COOKIES['wxopenid']
-            logger.info('Cookie has openid ' + openid)
+            #logger.info('Cookie has openid ' + openid)
             user = authenticate(openid=openid)
             if user is None:
                 return HttpResponseRedirect('/welcome/')
             wechatUser = user.real_user
-            logger.debug(wechatUser.id)
+            #logger.debug(wechatUser.id)
             request.session["userid"] = wechatUser.id
             login(request, user)
 
@@ -523,11 +523,11 @@ def check_auth(request):
         # 进到这个分支的人，应该是关注了公众号的人。
         # 它们的记录在events中已经建立
         openid = request.COOKIES['wxopenid']
-        logger.info('Cookie has openid ' + openid)
+        #logger.info('Cookie has openid ' + openid)
         user = authenticate(openid=openid)
         if user is not None:
             real_user = user.real_user
-            logger.debug(real_user.id)
+            #logger.debug(real_user.id)
             request.session['userid'] = real_user.id
             login(request, user)
             return HttpResponseRedirect(next)
