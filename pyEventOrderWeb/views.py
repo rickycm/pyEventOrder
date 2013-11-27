@@ -236,7 +236,7 @@ def showEvent(request):
     if request.COOKIES.has_key('wxopenid'):
         # 进到这个分支的人，应该是关注了公众号的人。
         # 它们的记录在events中已经建立
-        if not request.user.is_authenticated:
+        if not request.user.is_authenticated():
             openid = request.COOKIES['wxopenid']
             logger.info('Cookie has openid ' + openid)
             user = authenticate(openid=openid)
