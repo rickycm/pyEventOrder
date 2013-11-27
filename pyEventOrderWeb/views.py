@@ -235,9 +235,12 @@ def updateEvent(request):
 
 def showEvent(request):
 
-    if request.COOKIES.has_key('openid'):
-        openid = request.COOKIES['openid']
-        logger.debug('Request has openid ' + openid)
+        # 首先检查COOKIES里面是否已经存在用户信息
+    if request.COOKIES.has_key('wxopenid'):
+        # 进到这个分支的人，应该是关注了公众号的人。
+        # 它们的记录在events中已经建立
+        openid = request.COOKIES['wxopenid']
+        logger.info('Cookie has openid ' + openid)
         user = authenticate(openid=openid)
         if user is not None:
             real_user = user.real_user
@@ -245,48 +248,44 @@ def showEvent(request):
             request.session['userid'] = real_user.id
             login(request, user)
 
-            if request.user.is_authenticated():
-                if request.GET.get('remsg'):
-                    remsg = request.GET['remsg']
-                else:
-                    remsg = ''
-                try:
-                    userId = request.session["userid"]
-                    wechatUser = wechat_user.objects.get(pk=userId)
-                except:
-                    #TODO: 跳转到注册页面
-                    return HttpResponseRedirect('welcome.html')
+            if request.GET.get('remsg'):
+                remsg = request.GET['remsg']
+            else:
+                remsg = ''
+            try:
+                userId = real_user.id
+                wechatUser = wechat_user.objects.get(pk=userId)
+            except:
+                return HttpResponseRedirect('welcome.html')
 
-                try:
-                    eventId = request.GET.get('eventid')
-                    thisEvent = event.objects.get(pk=eventId)
-                except event.DoesNotExist:
-                    title = u'出错了'
-                    errorMessage = u'您查询的活动不存在。'
-                    return render_to_response("errorMessage.html", {'errorMessage': errorMessage, 'title': title},
-                                          context_instance=RequestContext(request))
+            try:
+                eventId = request.GET.get('eventid')
+                thisEvent = event.objects.get(pk=eventId)
+            except event.DoesNotExist:
+                title = u'出错了'
+                errorMessage = u'您查询的活动不存在。'
+                return render_to_response("errorMessage.html", {'errorMessage': errorMessage, 'title': title},
+                                      context_instance=RequestContext(request))
 
-                participantlist = participant.objects.filter(event_ID=eventId)
-                eventin = sum(p.partici_type == 1 for p in participantlist)
-                eventout = sum(p.partici_type == 0 for p in participantlist)
-                eventmaybe = sum(p.partici_type == 2 for p in participantlist)
-                numbers = {'eventin': eventin, 'eventout': eventout, 'eventmaybe': eventmaybe}
-                userStatus = 5 # 0-不参加，1-参加，2-可能参加，5-未报名，10-活动发起人，100-未关注账号用户
-                try:
-                    thisparticipant = participant.objects.get(event_ID=thisEvent, partici_user=wechatUser)
-                    userStatus = int(thisparticipant.partici_type)
-                except participant.DoesNotExist:
-                    userStatus = 5
-                if wechatUser.id == int(thisEvent.updated_by):
-                    userStatus = 10
-                return render_to_response("showEvent.html", {'title': thisEvent.event_title, 'thisEvent': thisEvent, 'userStatus': userStatus,
-                                                             'participantlist': participantlist, "numbers": numbers, 'remsg': remsg},
-                                          context_instance=RequestContext(request))
+            participantlist = participant.objects.filter(event_ID=eventId)
+            eventin = sum(p.partici_type == 1 for p in participantlist)
+            eventout = sum(p.partici_type == 0 for p in participantlist)
+            eventmaybe = sum(p.partici_type == 2 for p in participantlist)
+            numbers = {'eventin': eventin, 'eventout': eventout, 'eventmaybe': eventmaybe}
+            userStatus = 5 # 0-不参加，1-参加，2-可能参加，5-未报名，10-活动发起人，100-未关注账号用户
+            try:
+                thisparticipant = participant.objects.get(event_ID=thisEvent, partici_user=wechatUser)
+                userStatus = int(thisparticipant.partici_type)
+            except participant.DoesNotExist:
+                userStatus = 5
+            if wechatUser.id == int(thisEvent.updated_by):
+                userStatus = 10
+            return render_to_response("showEvent.html", {'title': thisEvent.event_title, 'thisEvent': thisEvent, 'userStatus': userStatus,
+                                                         'participantlist': participantlist, "numbers": numbers, 'remsg': remsg},
+                                      context_instance=RequestContext(request))
 
         else:
-            logger.error("Can't find user: " + openid)
-            return render_to_response('welcome.html')
-
+            return HttpResponseRedirect('welcome.html')
     else:
         if request.GET.get('remsg'):
             remsg = request.GET['remsg']
@@ -312,7 +311,6 @@ def showEvent(request):
         return render_to_response("showEvent.html", {'title': thisEvent.event_title, 'thisEvent': thisEvent, 'userStatus': userStatus,
                                                      'participantlist': participantlist, "numbers": numbers, 'remsg': remsg},
                                   context_instance=RequestContext(request))
-
 
 # 响应按钮事件：报名、修改事件状态
 @login_required
