@@ -260,7 +260,7 @@ def showEvent(request):
         eventout = sum(p.partici_type == 0 for p in participantlist)
         eventmaybe = sum(p.partici_type == 2 for p in participantlist)
         numbers = {'eventin': eventin, 'eventout': eventout, 'eventmaybe': eventmaybe}
-        userStatus = 5 # 0-不参加，1-参加，2-可能参加，5-未报名，10-活动发起人
+        userStatus = 5 # 0-不参加，1-参加，2-可能参加，5-未报名，10-活动发起人，100-未关注账号用户
         try:
             thisparticipant = participant.objects.get(event_ID=thisEvent, partici_user=wechatUser)
             userStatus = int(thisparticipant.partici_type)
@@ -273,7 +273,30 @@ def showEvent(request):
                                   context_instance=RequestContext(request))
 
     else:
-        return HttpResponseRedirect('welcome.html')
+        if request.GET.get('remsg'):
+            remsg = request.GET['remsg']
+        else:
+            remsg = ''
+
+        try:
+            eventId = request.GET.get('eventid')
+            thisEvent = event.objects.get(pk=eventId)
+        except event.DoesNotExist:
+            title = u'出错了'
+            errorMessage = u'您查询的活动不存在。'
+            return render_to_response("errorMessage.html", {'errorMessage': errorMessage, 'title': title},
+                                  context_instance=RequestContext(request))
+
+        participantlist = participant.objects.filter(event_ID=eventId)
+        eventin = sum(p.partici_type == 1 for p in participantlist)
+        eventout = sum(p.partici_type == 0 for p in participantlist)
+        eventmaybe = sum(p.partici_type == 2 for p in participantlist)
+        numbers = {'eventin': eventin, 'eventout': eventout, 'eventmaybe': eventmaybe}
+        userStatus = 100  # 0-不参加，1-参加，2-可能参加，5-未报名，10-活动发起人，100-未关注账号用户
+
+        return render_to_response("showEvent.html", {'title': thisEvent.event_title, 'thisEvent': thisEvent, 'userStatus': userStatus,
+                                                     'participantlist': participantlist, "numbers": numbers, 'remsg': remsg},
+                                  context_instance=RequestContext(request))
 
 
 # 响应按钮事件：报名、修改事件状态
