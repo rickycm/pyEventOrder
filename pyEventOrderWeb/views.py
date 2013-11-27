@@ -235,21 +235,15 @@ def updateEvent(request):
 
 def showEvent(request):
 
-    if request.GET.has_key('openid'):
-        openid = request.GET['openid']
+    if request.COOKIES.has_key('openid'):
+        openid = request.COOKIES['openid']
         logger.debug('Request has openid ' + openid)
-        max_age = 365 * 24 * 60 * 60
-
         user = authenticate(openid=openid)
         if user is not None:
             real_user = user.real_user
             logger.debug(real_user.id)
             request.session['userid'] = real_user.id
             login(request, user)
-
-            form = forms.SetupuserForm(instance=real_user)
-            response = render_to_response('setupinfo.html', {'title': '个人设置', 'form': form})
-            response.set_cookie("wxopenid", openid, max_age=max_age)
 
             if request.user.is_authenticated():
                 if request.GET.get('remsg'):
@@ -290,7 +284,7 @@ def showEvent(request):
                                           context_instance=RequestContext(request))
 
         else:
-            logger.error("Can't find user " + openid)
+            logger.error("Can't find user: " + openid)
             return render_to_response('welcome.html')
 
     else:
