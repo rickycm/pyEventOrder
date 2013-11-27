@@ -105,14 +105,14 @@
             </table>
             -->
             <!-- userStatus: 0-不参加，1-参加，2-可能参加，5-未报名，10-活动发起人，100-未关注账号用户 -->
-            {% if userStatus != 100 %}
+            {% if userStatus == 100 %}
 
                 <a href="/joinevent/?eventid={{thisEvent.id}}&jointype=join" data-role="button" data-theme="b" data-icon="check" class="ui-disabled">我参加！</a>
                 <a href="/joinevent/?eventid={{thisEvent.id}}&jointype=notjoin" data-role="button" data-theme="e" data-icon="delete" class="ui-disabled">不能参加</a>
                 <a href="/joinevent/?eventid={{thisEvent.id}}&jointype=maybe" data-role="button" data-theme="d" data-icon="info" class="ui-disabled">可能吧...</a>
                 <a href="#rightpanel" data-role="button" data-inline="false" data-icon="arrow-r" data-iconpos="right">查看已报名用户</a>
 
-                <p style="text-align:center">请长按并复制我们的账号，并关注后回来报名：</p>
+                <p style="text-align:center">请长按复制我们的账号，关注后回来报名：</p>
                 <h3 style="text-align:center">yuntongzhonghe</h3>
             {% else %}
                 {% if userStatus == 10 %}

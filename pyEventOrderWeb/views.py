@@ -59,89 +59,88 @@ def logout_view(request):
 #活动列表
 @login_required
 def list_events(rq):
-        try:
-            userId = rq.session["userid"]
-            wechatUser = wechat_user.objects.get(pk=userId)
-        except:
-            #TODO: 跳转到注册页面
-            return HttpResponseRedirect('welcome.html')
-        events =[]
-        ONE_PAGE_OF_DATA = 10
-        if rq.user.is_authenticated():
+    try:
+        userId = rq.session["userid"]
+        wechatUser = wechat_user.objects.get(pk=userId)
+    except:
+        return HttpResponseRedirect('/welcome/')
+    events =[]
+    ONE_PAGE_OF_DATA = 10
+    if rq.user.is_authenticated():
+        user = rq.user
+        if user.is_superuser == 1:
+            try:
+                curPage = int(rq.GET.get('curPage', '1'))
+                allPage = int(rq.GET.get('allPage','1'))
+                pageType = str(rq.GET.get('pageType', ''))
+            except ValueError:
+                curPage = 1
+                allPage = 1
+                pageType = ''
+
+            #判断点击了【下一页】还是【上一页】
+            if pageType == 'pageDown':
+                curPage += 1
+            elif pageType == 'pageUp':
+                curPage -= 1
+
+            startPos = (curPage - 1) * ONE_PAGE_OF_DATA
+            endPos = startPos + ONE_PAGE_OF_DATA
+            events = event.objects.all()[startPos:endPos]
+
+            if curPage == 1 and allPage == 1: #标记1
+                allPostCounts = event.objects.count()
+                allPage = allPostCounts / ONE_PAGE_OF_DATA
+                remainPost = allPostCounts % ONE_PAGE_OF_DATA
+                if remainPost > 0:
+                    allPage += 1
+
+            return render_to_response("list_event.html", {'title': '活动列表', 'user': user, 'events':events, 'allPage':allPage, 'curPage':curPage}, context_instance=RequestContext(rq))
+        else:
             user = rq.user
-            if user.is_superuser == 1:
-                try:
-                    curPage = int(rq.GET.get('curPage', '1'))
-                    allPage = int(rq.GET.get('allPage','1'))
-                    pageType = str(rq.GET.get('pageType', ''))
-                except ValueError:
-                    curPage = 1
-                    allPage = 1
-                    pageType = ''
+            try:
+                curPage = int(rq.GET.get('curPage', '1'))
+                allPage = int(rq.GET.get('allPage','1'))
+                pageType = str(rq.GET.get('pageType', ''))
+                type = str(rq.GET.get('type', 'mine'))
+            except ValueError:
+                curPage = 1
+                allPage = 1
+                pageType = ''
+                type = 'mine'
 
-                #判断点击了【下一页】还是【上一页】
-                if pageType == 'pageDown':
-                    curPage += 1
-                elif pageType == 'pageUp':
-                    curPage -= 1
+            #判断点击了【下一页】还是【上一页】
+            if pageType == 'pageDown':
+                curPage += 1
+            elif pageType == 'pageUp':
+                curPage -= 1
 
-                startPos = (curPage - 1) * ONE_PAGE_OF_DATA
-                endPos = startPos + ONE_PAGE_OF_DATA
-                events = event.objects.all()[startPos:endPos]
+            startPos = (curPage - 1) * ONE_PAGE_OF_DATA
+            endPos = startPos + ONE_PAGE_OF_DATA
+            if type == 'mine':
+                events = event.objects.filter(updated_by=wechatUser.id)[startPos:endPos]
+                if curPage == 1 and allPage == 1:  #标记1
+                    allPostCounts = event.objects.filter(updated_by=wechatUser.id).count()
+                    allPage = allPostCounts / ONE_PAGE_OF_DATA
+                    remainPost = allPostCounts % ONE_PAGE_OF_DATA
+                    if remainPost > 0:
+                        allPage += 1
+            elif type == 'other':
+                evenidtList = participant.objects.filter(partici_user=wechatUser).values_list('event_ID', flat=True).distinct()
+                eventsall = []
+                for i in evenidtList:
+                    eventsall.append(event.objects.get(pk=i))
+                events = eventsall[startPos:endPos]
 
-                if curPage == 1 and allPage == 1: #标记1
-                    allPostCounts = event.objects.count()
+                if curPage == 1 and allPage == 1:  #标记1
+                    allPostCounts = len(eventsall)
                     allPage = allPostCounts / ONE_PAGE_OF_DATA
                     remainPost = allPostCounts % ONE_PAGE_OF_DATA
                     if remainPost > 0:
                         allPage += 1
 
-                return render_to_response("list_event.html", {'title': '活动列表', 'user': user, 'events':events, 'allPage':allPage, 'curPage':curPage}, context_instance=RequestContext(rq))
-            else:
-                user = rq.user
-                try:
-                    curPage = int(rq.GET.get('curPage', '1'))
-                    allPage = int(rq.GET.get('allPage','1'))
-                    pageType = str(rq.GET.get('pageType', ''))
-                    type = str(rq.GET.get('type', 'mine'))
-                except ValueError:
-                    curPage = 1
-                    allPage = 1
-                    pageType = ''
-                    type = 'mine'
-
-                #判断点击了【下一页】还是【上一页】
-                if pageType == 'pageDown':
-                    curPage += 1
-                elif pageType == 'pageUp':
-                    curPage -= 1
-
-                startPos = (curPage - 1) * ONE_PAGE_OF_DATA
-                endPos = startPos + ONE_PAGE_OF_DATA
-                if type == 'mine':
-                    events = event.objects.filter(updated_by=wechatUser.id)[startPos:endPos]
-                    if curPage == 1 and allPage == 1:  #标记1
-                        allPostCounts = event.objects.filter(updated_by=wechatUser.id).count()
-                        allPage = allPostCounts / ONE_PAGE_OF_DATA
-                        remainPost = allPostCounts % ONE_PAGE_OF_DATA
-                        if remainPost > 0:
-                            allPage += 1
-                elif type == 'other':
-                    evenidtList = participant.objects.filter(partici_user=wechatUser).values_list('event_ID', flat=True).distinct()
-                    eventsall = []
-                    for i in evenidtList:
-                        eventsall.append(event.objects.get(pk=i))
-                    events = eventsall[startPos:endPos]
-
-                    if curPage == 1 and allPage == 1:  #标记1
-                        allPostCounts = len(eventsall)
-                        allPage = allPostCounts / ONE_PAGE_OF_DATA
-                        remainPost = allPostCounts % ONE_PAGE_OF_DATA
-                        if remainPost > 0:
-                            allPage += 1
-
-                return render_to_response("list_event.html", {'title': '活动列表', 'user': user, 'events':events, 'allPage':allPage, 'curPage':curPage, 'type': type}, context_instance=RequestContext(rq))
-        return HttpResponseRedirect('welcome.html')
+            return render_to_response("list_event.html", {'title': '活动列表', 'user': user, 'events':events, 'allPage':allPage, 'curPage':curPage, 'type': type}, context_instance=RequestContext(rq))
+    return HttpResponseRedirect('/welcome/')
 
 # 添加活动
 @login_required
@@ -167,9 +166,7 @@ def add_event(request):
                 updated_by = userId,
                 event_type = 1,
                 updated_date = datetime.now(),
-                #TODO: get fakeID/openID from wechat
                 event_hostfakeID = wechatUser.openid,
-                #TODO: get hostname from wechat_user according to fakeID
                 event_hostname = wechatUser.wechat_inputname,
                 event_status = 0,
             )
@@ -245,9 +242,8 @@ def showEvent(request):
         if user is not None:
             real_user = user.real_user
             logger.debug(real_user.id)
-            request.session['userid'] = real_user.id
+            request.session["userid"] = real_user.id
             login(request, user)
-
             if request.GET.get('remsg'):
                 remsg = request.GET['remsg']
             else:
@@ -256,7 +252,7 @@ def showEvent(request):
                 userId = real_user.id
                 wechatUser = wechat_user.objects.get(pk=userId)
             except:
-                return HttpResponseRedirect('welcome.html')
+                return HttpResponseRedirect('/welcome/')
 
             try:
                 eventId = request.GET.get('eventid')
@@ -285,7 +281,7 @@ def showEvent(request):
                                       context_instance=RequestContext(request))
 
         else:
-            return HttpResponseRedirect('welcome.html')
+            return HttpResponseRedirect('/welcome/')
     else:
         if request.GET.get('remsg'):
             remsg = request.GET['remsg']
@@ -321,7 +317,6 @@ def joinEvent(request):
             userId = request.session["userid"]
             wechatUser = wechat_user.objects.get(pk=userId)
         except:
-            #TODO: 跳转到注册页面
             return HttpResponseRedirect('welcome.html')
 
         try:
@@ -382,7 +377,7 @@ def joinEvent(request):
         return showEvent(request)
 
     else:
-        return HttpResponseRedirect("/accounts/login/")
+        return HttpResponseRedirect("/welcome/")
 
 # 处理消息机制，应该是公众平台中最核心的处理部分
 import hashlib
@@ -467,7 +462,7 @@ def setting(request):
             try:
                 wechatUser = wechat_user.objects.get(pk=userid)
             except wechat_user.DoesNotExist:
-                return HttpResponseRedirect('welcome.html')
+                return HttpResponseRedirect('/welcome/')
 
             #assert user.openid==userid
             wechatUser.wechat_inputname = form.data['wechat_inputname']
