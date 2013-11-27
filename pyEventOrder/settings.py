@@ -124,6 +124,8 @@ CACHES = {
 }
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+SESSION_COOKIE_AGE = 12096000
 
 ROOT_URLCONF = 'pyEventOrder.urls'
 

@@ -1,7 +1,9 @@
 本文档用来保存一些有用的信息
 ==============================
+Appid: wxceec3a78555b9cdd
+Secret: a50a85115e419c06fcffc7b2efe5882b
 {
-    "access_token": "l3QcryY7U2p5ZAN_ddE1eOUJCTLMAPvmw5AVXWRtGUAqFBBI7Fa2k0zVPZ0VKXLjwXEnJHUlVAZNjMsI9WsDAo6Q-j3gLa_fxL4vVi9gIKMKYlXnOPbaglEZUmN-qP1pv47rHv5-4Ipwx_7js0W1dA",
+    "access_token": "8bad52foDbFTFsq1oA7838wWJ4_ApWr7ZkpYJgnGFQ_UO9uv3Tg59puivAwQIPQqCz5xaGVSjW1P7nhhZgnCgRAuTdCAwcug8y_Y3LZkU4CevSYbb_weLU4zlRqrh7DFbQnUxx0hpX-5KVfYMmo6GA",
     "expires_in": 7200
 }
 {

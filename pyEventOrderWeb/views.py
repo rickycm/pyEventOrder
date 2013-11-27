@@ -3,7 +3,7 @@ import logging
 from datetime import datetime
 
 from django.contrib.auth.forms import *
-from django.shortcuts import render_to_response, render
+from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.contrib.auth import authenticate, login, logout
 from django.template import RequestContext
@@ -232,6 +232,7 @@ def updateEvent(request):
 
 def showEvent(request):
 
+    logger.debug("Now user is " + str(request.user.is_authenticated()))
         # 首先检查COOKIES里面是否已经存在用户信息
     if request.COOKIES.has_key('wxopenid'):
         # 进到这个分支的人，应该是关注了公众号的人。
