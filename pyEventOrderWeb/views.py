@@ -247,6 +247,8 @@ def showEvent(request):
             logger.debug(real_user.id)
             request.session["userid"] = real_user.id
             login(request, user)
+        else:
+            real_user = request.user.real_user
 
         if request.GET.get('remsg'):
             remsg = request.GET['remsg']
@@ -257,7 +259,7 @@ def showEvent(request):
             #wechatUser = wechat_user.objects.get(pk=userId)
         #except:
             #return HttpResponseRedirect('/welcome/')
-        wechatUser = request.user.real_user
+        wechatUser = real_user
 
         try:
             eventId = request.GET.get('eventid')
