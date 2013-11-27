@@ -232,57 +232,62 @@ def updateEvent(request):
 
 def showEvent(request):
 
-    logger.debug("Now user is " + str(request.user.is_authenticated()))
-        # 首先检查COOKIES里面是否已经存在用户信息
+    # 首先检查COOKIES里面是否已经存在用户信息
     if request.COOKIES.has_key('wxopenid'):
         # 进到这个分支的人，应该是关注了公众号的人。
         # 它们的记录在events中已经建立
-        openid = request.COOKIES['wxopenid']
-        logger.info('Cookie has openid ' + openid)
-        user = authenticate(openid=openid)
-        if user is not None:
+        if not request.user.is_authenticated:
+            openid = request.COOKIES['wxopenid']
+            logger.info('Cookie has openid ' + openid)
+            user = authenticate(openid=openid)
+            if user is None:
+                return HttpResponseRedirect('/welcome/')
+
             real_user = user.real_user
             logger.debug(real_user.id)
             request.session["userid"] = real_user.id
             login(request, user)
-            if request.GET.get('remsg'):
-                remsg = request.GET['remsg']
-            else:
-                remsg = ''
-            try:
-                userId = real_user.id
-                wechatUser = wechat_user.objects.get(pk=userId)
-            except:
-                return HttpResponseRedirect('/welcome/')
 
-            try:
-                eventId = request.GET.get('eventid')
-                thisEvent = event.objects.get(pk=eventId)
-            except event.DoesNotExist:
-                title = u'出错了'
-                errorMessage = u'您查询的活动不存在。'
-                return render_to_response("errorMessage.html", {'errorMessage': errorMessage, 'title': title},
-                                      context_instance=RequestContext(request))
-
-            participantlist = participant.objects.filter(event_ID=eventId)
-            eventin = sum(p.partici_type == 1 for p in participantlist)
-            eventout = sum(p.partici_type == 0 for p in participantlist)
-            eventmaybe = sum(p.partici_type == 2 for p in participantlist)
-            numbers = {'eventin': eventin, 'eventout': eventout, 'eventmaybe': eventmaybe}
-            userStatus = 5 # 0-不参加，1-参加，2-可能参加，5-未报名，10-活动发起人，100-未关注账号用户
-            try:
-                thisparticipant = participant.objects.get(event_ID=thisEvent, partici_user=wechatUser)
-                userStatus = int(thisparticipant.partici_type)
-            except participant.DoesNotExist:
-                userStatus = 5
-            if wechatUser.id == int(thisEvent.updated_by):
-                userStatus = 10
-            return render_to_response("showEvent.html", {'title': thisEvent.event_title, 'thisEvent': thisEvent, 'userStatus': userStatus,
-                                                         'participantlist': participantlist, "numbers": numbers, 'remsg': remsg},
-                                      context_instance=RequestContext(request))
-
+        if request.GET.get('remsg'):
+            remsg = request.GET['remsg']
         else:
-            return HttpResponseRedirect('/welcome/')
+            remsg = ''
+        #try:
+            #userId = request.session["userid"]
+            #wechatUser = wechat_user.objects.get(pk=userId)
+        #except:
+            #return HttpResponseRedirect('/welcome/')
+        wechatUser = request.user.real_user
+
+        try:
+            eventId = request.GET.get('eventid')
+            thisEvent = event.objects.get(pk=eventId)
+        except event.DoesNotExist:
+            title = u'出错了'
+            errorMessage = u'您查询的活动不存在。'
+            return render_to_response("errorMessage.html", {'errorMessage': errorMessage, 'title': title},
+                                      context_instance=RequestContext(request))
+
+        participantlist = participant.objects.filter(event_ID=eventId)
+        eventin = sum(p.partici_type == 1 for p in participantlist)
+        eventout = sum(p.partici_type == 0 for p in participantlist)
+        eventmaybe = sum(p.partici_type == 2 for p in participantlist)
+        numbers = {'eventin': eventin, 'eventout': eventout, 'eventmaybe': eventmaybe}
+        userStatus = 5 # 0-不参加，1-参加，2-可能参加，5-未报名，10-活动发起人，100-未关注账号用户
+        try:
+            thisparticipant = participant.objects.get(event_ID=thisEvent, partici_user=wechatUser)
+            userStatus = int(thisparticipant.partici_type)
+        except participant.DoesNotExist:
+            userStatus = 5
+
+        if wechatUser.id == int(thisEvent.updated_by):
+            userStatus = 10
+        return render_to_response("showEvent.html", {'title': thisEvent.event_title, 'thisEvent': thisEvent, 'userStatus': userStatus,
+                                                    'participantlist': participantlist, "numbers": numbers, 'remsg': remsg},
+                                context_instance=RequestContext(request))
+
+        #else:
+            #return HttpResponseRedirect('/welcome/')
     else:
         if request.GET.get('remsg'):
             remsg = request.GET['remsg']
