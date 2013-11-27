@@ -232,7 +232,7 @@ def updateEvent(request):
                               context_instance=RequestContext(request))
 
 # 活动页面，并展现用户参与情况
-@login_required
+
 def showEvent(request):
     if request.user.is_authenticated():
         if request.GET.get('remsg'):
