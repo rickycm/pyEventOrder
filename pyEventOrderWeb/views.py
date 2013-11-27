@@ -237,6 +237,7 @@ def showEvent(request):
         # 进到这个分支的人，应该是关注了公众号的人。
         # 它们的记录在events中已经建立
         if not request.user.is_authenticated():
+            # 客户端会话不会因为退回微信界面而丢失，但服务端重启会造成会话失效。
             openid = request.COOKIES['wxopenid']
             logger.info('Cookie has openid ' + openid)
             user = authenticate(openid=openid)
@@ -285,8 +286,6 @@ def showEvent(request):
                                                     'participantlist': participantlist, "numbers": numbers, 'remsg': remsg},
                                 context_instance=RequestContext(request))
 
-        #else:
-            #return HttpResponseRedirect('/welcome/')
     else:
         if request.GET.get('remsg'):
             remsg = request.GET['remsg']
