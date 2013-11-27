@@ -236,28 +236,28 @@ def showEvent(request):
     if request.COOKIES.has_key('wxopenid'):
         # 进到这个分支的人，应该是关注了公众号的人。
         # 它们的记录在events中已经建立
-        if not request.user.is_authenticated():
+        if request.user.is_authenticated():
+            try:
+                userId = request.session["userid"]
+                wechatUser = wechat_user.objects.get(pk=userId)
+            except:
+                return HttpResponseRedirect('/welcome/')
+        else:
             # 客户端会话不会因为退回微信界面而丢失，但服务端重启会造成会话失效。
             openid = request.COOKIES['wxopenid']
             logger.info('Cookie has openid ' + openid)
             user = authenticate(openid=openid)
             if user is None:
                 return HttpResponseRedirect('/welcome/')
-
-            real_user = user.real_user
-            logger.debug(real_user.id)
-            request.session["userid"] = real_user.id
+            wechatUser = user.real_user
+            logger.debug(wechatUser.id)
+            request.session["userid"] = wechatUser.id
             login(request, user)
 
         if request.GET.get('remsg'):
             remsg = request.GET['remsg']
         else:
             remsg = ''
-        try:
-            userId = request.session["userid"]
-            wechatUser = wechat_user.objects.get(pk=userId)
-        except:
-            return HttpResponseRedirect('/welcome/')
 
         try:
             eventId = request.GET.get('eventid')
