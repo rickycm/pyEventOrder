@@ -52,7 +52,7 @@ def sendSetting(userid, msg):
     logger.debug('My id is ' + msg_out['fromUser'])
     msg_out['time'] = int(time.time())
 
-    article={'title':'欢迎', 'description':'使用之前，请点这里设置您的个人信息。'}
+    article={'title':'欢迎', 'description':'亲，点这里设置您的个人信息，才能正常使用活动功能哦！'}
     article['picurl'] = URLBASE + '/media/badminton.png'
     article['url'] = URLBASE + '/setting/?openid=' + userid
 
