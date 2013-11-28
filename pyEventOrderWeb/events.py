@@ -53,7 +53,7 @@ def sendSetting(userid, msg):
     msg_out['time'] = int(time.time())
 
     article={'title':'欢迎', 'description':'使用之前，请点这里设置您的个人信息。'}
-    article['picurl'] = URLBASE + '/media/mask.png'
+    article['picurl'] = URLBASE + '/media/badminton.png'
     article['url'] = URLBASE + '/setting/?openid=' + userid
 
     msg_out['articles'] = [article]
