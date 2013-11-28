@@ -52,10 +52,13 @@ def sendSetting(user, msg):
     logger.debug('My id is ' + msg_out['fromUser'])
     msg_out['time'] = int(time.time())
 
+    logger.debug('title')
     if not user.wechat_inputname:
-        title = '您好，陌生人'
+        title = u'您好，陌生人'
+        logger.debug(title)
     else:
-        title = '您好，'+user.wechat_inputname
+        title = u'您好，'+user.wechat_inputname
+        logger.debug(title)
     article={'title':title, 'description':'亲，点这里设置您的个人信息，才能正常使用活动功能哦！'}
     article['picurl'] = URLBASE + '/media/badminton.png'
     article['url'] = URLBASE + '/setting/?openid=' + user.openid
