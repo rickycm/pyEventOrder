@@ -616,7 +616,8 @@ def get_wx_info(code, session):
     session['openid'] = jobj['openid']
     return jobj
 
-
 def welcome(request):
     return render_to_response('welcome.html')
 
+def test(request):
+    return render_to_response('test.html')
