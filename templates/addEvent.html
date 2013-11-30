@@ -8,6 +8,11 @@
     {{block.super}}
     <link rel="stylesheet" type="text/css" href='{% static "datetimepicker/css/jqm-datebox.css" %}' />
     <style>
+        .ui-corner-all {
+            -moz-border-radius:     0;
+            -webkit-border-radius:  0;
+            border-radius:          0;
+        }
         label.error {
             color: red;
             width: 100%;
@@ -19,48 +24,39 @@
 {% block content %}
 <form action="/add_event/" id="addeventForm" method="post" class="form-horizontal">
     {% csrf_token %}
-    <fieldset>
-        <!-- Text input-->
-        <div class="control-group">
-          <!--<label class="control-label" for="event_title">活动名称</label> -->
-          <div class="controls">
-            <input id="event_title" name="event_title" type="text" placeholder="请输入活动名称" required>
 
-          </div>
-        </div>
-        <!-- Textarea -->
-        <div class="control-group">
-          <!--<label class="control-label" for="event_detail">活动详情</label>-->
-          <div class="controls">
-            <textarea id="event_detail" name="event_detail" placeholder="请输入活动详情" required></textarea>
-          </div>
-        </div>
-        <div data-role="fieldcontain">
-            <label for="event_limit">人数限制：</label>
-            <input type="range" name="event_limit" id="event_limit" value="10"  min="0" max="200" data-highlight="true" />
-        </div>
+    <!-- Text input-->
+    <div>
+        <!--<label class="control-label" for="event_title">活动名称</label> -->
+        <input id="event_title" name="event_title" type="text" placeholder="请输入活动名称" required>
+    </div>
 
-        <div>
+    <!-- Textarea -->
+    <div>
+        <!--<label class="control-label" for="event_detail">活动详情</label>-->
+        <textarea id="event_detail" name="event_detail" placeholder="请输入活动详情" required></textarea>
+    </div>
+
+    <div data-role="fieldcontain">
+        <label for="event_limit">人数限制：</label>
+        <input type="range" name="event_limit" id="event_limit" value="10"  min="0" max="200" data-highlight="true" />
+    </div>
+
+    <div>
         <!--<label for="eventdate">活动日期：</label> -->
         <input name="eventdate" id="eventdate" type="date" data-role="datebox"
-           data-options='{"mode": "datebox"}' placeholder="请输入活动日期" required>
+               data-options='{"mode": "datebox"}' placeholder="请输入活动日期" required>
 
         <!--<label for="eventtime">活动时间：</label> -->
         <input name="eventtime" id="eventtime" type="time" data-role="datebox"
-           data-options='{"mode": "timebox"}' placeholder="请输入活动时间" required>
-        </div>
-        <!-- Button (Double) -->
-        <div class="control-group">
-          <label class="control-label" for="submit"></label>
+               data-options='{"mode": "timebox"}' placeholder="请输入活动时间" required>
+    </div>
 
-            <div class="ui-body ui-body-b">
-                    <button type="submit" id="submit" name="submit"  data-theme="b">发布</button>
-                    <button type="reset" data-theme="d">取消</button>
-            </div>
-        </div>
-
-
-    </fieldset>
+    <!-- Button (Double) -->
+    <div class="ui-body ui-body-b">
+        <button type="submit" id="submit" name="submit"  data-theme="b">发布</button>
+        <button type="reset" data-theme="d">取消</button>
+    </div>
 </form>
 {% endblock %}
 

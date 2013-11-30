@@ -79,11 +79,11 @@
                    <tr><td>报名截止: {{ thisEvent.event_registdeadline }}</td></tr>
                    <tr><td>人数限制:{{ thisEvent.event_limit }}</td></tr>
                    <tr>
-                       <td>
+                       <td><ul>
                            <li>确定参加：{{ numbers.eventin }}</li>
                            <li>不能参加：{{ numbers.eventout }}</li>
                            <li>可能参加：{{ numbers.eventmaybe }}</li>
-                       </td>
+                       </ul></td>
                    </tr>
             </table>
             <!--
@@ -109,7 +109,7 @@
 
                 <a href="/joinevent/?eventid={{thisEvent.id}}&jointype=join" data-role="button" data-theme="b" data-icon="check" class="ui-disabled">我参加！</a>
                 <a href="/joinevent/?eventid={{thisEvent.id}}&jointype=notjoin" data-role="button" data-theme="e" data-icon="delete" class="ui-disabled">不能参加</a>
-                <a href="/joinevent/?eventid={{thisEvent.id}}&jointype=maybe" data-role="button" data-theme="d" data-icon="info" class="ui-disabled">可能吧...</a>
+                <a href="/joinevent/?eventid={{thisEvent.id}}&jointype=maybe" data-role="button" data-theme="d" data-icon="info" class="ui-disabled">可能吧，先收藏下...</a>
                 <a href="#rightpanel" data-role="button" data-inline="false" data-icon="arrow-r" data-iconpos="right">查看已报名用户</a>
 
                 <p style="text-align:center">请长按复制我们的账号，关注后回来报名：</p>
@@ -195,9 +195,11 @@
         <div data-role="panel" id="rightpanel" data-position="right" data-display="overlay" data-theme="b">
             <h3>已报名用户：</h3>
             <p>
+                <ul>
                 {% for participant in participantlist %}
                     <li>{{ participant.partici_name}} : {{ participant.get_partici_type_display }}</li>
                 {% endfor %}
+                </ul>
             </p>
             <a href="#" data-rel="close" data-role="button" data-theme="c" data-icon="delete" data-inline="false" data-mini="true">关闭</a>
         </div><!-- /rightpanel -->
@@ -208,9 +210,6 @@
 {{ block.super }}
 <script type="text/javascript">
   $(document).ready(function() {
-    // disable ajax nav
-    $.mobile.ajaxEnabled = false;
-
     document.addEventListener('WeixinJSBridgeReady',function onBridgeReady() {
       WeixinJSBridge.call('hideToolbar');
     });

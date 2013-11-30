@@ -2,8 +2,8 @@
 
 {% block page_content %}
     {% block main_content %}
-    <div role="main" class="ui-content">
-        {% block content %}{% endblock %}
+    <div data-role="content">
+        {% block content %}{{ content }}{% endblock %}
     </div>
     {% endblock %}
     {% block user_page_js %}{% endblock %}
