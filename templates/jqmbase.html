@@ -1,0 +1,31 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>{% block title %}{% endblock %}</title>
+    <meta name="description" content="{% block description %}{% endblock %}">
+    {% block jqm_css %}
+	<link rel="stylesheet"  href="{% static 'jqm/jquery.mobile-1.4.0-rc.1.min.css' %}">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
+    {% endblock %}
+    {% block user_css %}
+    {% endblock %}
+    {% block jqm_js %}
+	<script src="{% static 'js/dh5bp/vendor/jquery-1.10.2.min.js' %}"></script>
+	<script src="{% static 'jqm/jquery.mobile-1.4.0-rc.1.min.js' %}"></script>
+    {% endblock %}
+    {% block user_head_js %}
+    {% endblock %}
+</head>
+<body >
+  {% block page_block %}
+  <div data-role="page">
+    {% block page_content %}{% endblock %}
+  </div>
+  {% endblock %}
+  {% block user_foot_js %}{% endblock %}
+</body>
+</html>
