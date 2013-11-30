@@ -206,6 +206,15 @@
 
 {% block post_main_script %}
 {{ block.super }}
+<script type="text/javascript">
+  $(document).ready(function() {
+    // disable ajax nav
+    $.mobile.ajaxEnabled = false;
 
+    document.addEventListener('WeixinJSBridgeReady',function onBridgeReady() {
+      WeixinJSBridge.call('hideToolbar');
+    });
+  });
+</script>
 {% endblock %}
 
