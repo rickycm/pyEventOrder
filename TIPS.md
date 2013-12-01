@@ -1,5 +1,6 @@
 本文档用来保存一些有用的信息
 ==============================
+openid: gh_982e9c43c16c
 Appid: wxceec3a78555b9cdd
 Secret: a50a85115e419c06fcffc7b2efe5882b
 {
@@ -33,6 +34,10 @@ Secret: a50a85115e419c06fcffc7b2efe5882b
            "key":"SETTING"
       }]
  }
+
+测试号 gh_581ecdd3e72a
+appId wx8763ead7d4408241
+appsecret 4042d9f53dfa2abfdd542af803116787
 
 在公众账号中输入set，会触发一条消息，点击进入set页面。
 通过这种方式，服务端会将openid保存到浏览器Cookie内，之后就可以根据这个Cookie来判定是由谁发出的微信访问。

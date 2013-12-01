@@ -159,6 +159,7 @@ INSTALLED_APPS = (
     'dh5mbp',
     'bootstrap3_datetime',
     'pyEventOrderWeb',
+    'djWeixinApp',
 )
 
 CRISPY_TEMPLATE_PACK = 'uni_form'

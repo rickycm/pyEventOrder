@@ -4,6 +4,7 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.conf import settings
 from django.conf.urls.static import static
 from pyEventOrderWeb import views
+from djWeixinApp import urls
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -38,6 +39,8 @@ urlpatterns = patterns('',
     (r'^welcome/$', views.welcome),
     (r'^test/$', views.test),
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+urlpatterns += urls.urlpatterns
 
 urlpatterns += staticfiles_urlpatterns()
 
