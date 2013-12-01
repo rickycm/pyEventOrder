@@ -159,8 +159,23 @@ INSTALLED_APPS = (
     'dh5mbp',
     'bootstrap3_datetime',
     'pyEventOrderWeb',
-    'djWeixinApp',
+    #'djWeixinApp',
+    'rest_framework',
+    'restComments',
 )
+
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.TemplateHTMLRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ),
+    #'DEFAULT_PARSER_CLASSES': (
+        #'rest_framework.parsers.JSONParser',
+        #'rest_framework.parsers.FormParser',
+        #'rest_framework.parsers.MultiPartParser',
+    #)
+}
 
 CRISPY_TEMPLATE_PACK = 'uni_form'
 

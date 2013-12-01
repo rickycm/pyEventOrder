@@ -1,0 +1,53 @@
+{% extends 'jqmform.html' %}
+{% block title %}留言簿{% endblock %}
+
+{% block content %}
+<form id="commentForm">
+    <table>
+        {{ form }}
+        <tr>
+            <th></th>
+            <td><input type="submit" value="发送" /></td>
+        </tr>
+    </table>
+</form>
+最近的留言：
+<ul>
+    {% for comment in comments %}
+    <li>{{ comment.post }}</li>
+    {% endfor %}
+</ul>
+{% endblock %}
+
+{% block user_page_js %}
+<script>
+  $(document).ready(function() {
+    document.addEventListener('WeixinJSBridgeReady',function onBridgeReady() {
+      WeixinJSBridge.call('hideToolbar');
+    });
+  });
+
+  $(document).on("pageinit", function () {
+    $('#commentForm').submit(function(e) {
+      //cache the form element for use in this function
+      var $this = $(this);
+
+      //prevent the default submission of the form
+      e.preventDefault();
+
+      //run an AJAX post request to your server-side script, $this.serialize() is the data from your form being added to the request
+      console.log($this.serialize());
+      $.post($this.attr('action'), $this.serialize(), function (resp) {
+        // 需要将数据插入到列表中
+        console.log(resp);
+      }).fail(function(xhr, statusText, err){
+        // 下面获得的是错误信息，需要将它插入到Form中
+        err = JSON.parse(xhr.responseText);
+        console.log(err);
+      });
+
+      return false;
+    });
+  });
+</script>
+{% endblock %}
