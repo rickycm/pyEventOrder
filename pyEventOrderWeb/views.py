@@ -156,6 +156,7 @@ def add_event(request):
             form = forms.SetupuserForm(instance=wechatUser)
             return render_to_response('setupinfo.html', {'title': '个人设置', 'form': form})
 
+        # 基于活动重新发布功能
         renew = request.GET.get('renew')
         if renew == 'true':
             try:
