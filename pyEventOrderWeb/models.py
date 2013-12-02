@@ -33,7 +33,7 @@ class wechat_user(models.Model):
     wechat_fakeID = models.CharField(max_length=200, blank=True)
     wechat_username = models.CharField(max_length=200, blank=True)
     wechat_inputname = models.CharField(max_length=200, blank=True)
-    wechat_usertype = models.CharField(max_length=20, blank=True)
+    wechat_usertype = models.CharField(max_length=20, blank=True, default='0')
 
     subscribe = models.BooleanField()
     openid = models.CharField(max_length=30, unique=True)

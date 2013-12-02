@@ -146,6 +146,15 @@ def list_events(rq):
 @login_required
 def add_event(request):
     if request.method == 'GET':
+        try:
+            userId = request.session["userid"]
+            wechatUser = wechat_user.objects.get(pk=userId)
+        except:
+            return HttpResponseRedirect('welcome.html')
+        if wechatUser.wechat_inputname == '':
+            settingForm = forms.SetupuserForm(instance=wechatUser)
+            return render_to_response('setupinfo.html', {'title': '个人设置', 'form': settingForm})
+
         form = forms.EventForm()
         return render_to_response('addEvent.html', {'title': '新建活动', 'form': form},
                               context_instance=RequestContext(request))
