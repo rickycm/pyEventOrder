@@ -89,19 +89,68 @@
         <!-- userStatus: 0-不参加，1-参加，2-可能参加，5-未报名，10-活动发起人，100-未关注账号用户 -->
         {% if userStatus == 100 %}
 
-            <a href="/joinevent/?eventid={{thisEvent.id}}&jointype=join" data-role="button" data-theme="b" data-icon="check" class="ui-disabled">我参加！</a>
-            <a href="/joinevent/?eventid={{thisEvent.id}}&jointype=notjoin" data-role="button" data-theme="e" data-icon="delete" class="ui-disabled">不能参加</a>
-            <a href="/joinevent/?eventid={{thisEvent.id}}&jointype=maybe" data-role="button" data-theme="d" data-icon="info" class="ui-disabled">可能吧，先收藏下...</a>
-            <a href="#rightpanel" data-role="button" data-inline="false" data-icon="arrow-r" data-iconpos="right">查看已报名用户</a>
+                   <h3 style="text-align:center">{{ thisEvent.event_title }}  -
+                        {% if thisEvent.event_status == 0 %}
+                            <em style="color: #008AE6">
+                            {{ thisEvent.get_event_status_display }} </em>
+                        {% elif thisEvent.event_status == 1 %}
+                            <em style="color: #FFCC66">
+                            {{ thisEvent.get_event_status_display }} </em>
+                        {% else %}
+                            <em style="color: #FF3300">
+                            {{ thisEvent.get_event_status_display }} </em>
+                        {% endif %}
+                    </h3>
+            <div id="ajaxMessage"><h4 style="color: #4682B4; text-align: center">{{remsg}}</h4></div>
+            <table>
+                   <tr><td>活动详情: {{ thisEvent.event_detail }}</td></tr>
+                   <tr><td>活动时间: {{ thisEvent.event_date|date:"Y-m-d, H:i" }}</td></tr>
+                   <tr><td>活动发起: {{ thisEvent.event_hostname }}</td></tr>
+                   <tr><td>发布时间: {{ thisEvent.updated_date|date:"Y-m-d, H:i" }}</td></tr>
+                   <!--<tr><td>报名截止: {{ thisEvent.event_registdeadline }}</td></tr> -->
+                   <tr><td>人数限制:{{ thisEvent.event_limit }}</td></tr>
+                   <tr>
+                       <td><ul>
+                           <li>确定参加：{{ numbers.eventin }}</li>
+                           <li>不能参加：{{ numbers.eventout }}</li>
+                           <li>可能参加：{{ numbers.eventmaybe }}</li>
+                       </ul></td>
+                   </tr>
+            </table>
+            <!--
+            <table>
+                   <tr><td style="width: 20%">详情</td><td>{{ thisEvent.event_detail }}</td></tr>
+                   <tr><td>时间</td><td>{{ thisEvent.event_date|date:"Y-m-d, H:i" }}</td></tr>
+                   <tr><td>发起人</td><td>{{ thisEvent.event_hostname }}</td></tr>
+                   <tr><td>发起时间</td><td>{{ thisEvent.updated_date|date:"Y-m-d, H:i" }}</td></tr>
+                   <tr><td>报名截止时间</td><td>{{ thisEvent.event_registdeadline }}</td></tr>
+                   <tr><td>人数限制</td><td>{{ thisEvent.event_limit }}</td></tr>
+                   <tr>
+                       <td>已报名</td>
+                       <td>
+                           <li>确定参加：{{ numbers.eventin }}</li>
+                           <li>不能参加：{{ numbers.eventout }}</li>
+                           <li>可能参加：{{ numbers.eventmaybe }}</li>
+                       </td>
+                   </tr>
+            </table>
+            -->
+            <!-- userStatus: 0-不参加，1-参加，2-可能参加，5-未报名，10-活动发起人，100-未关注账号用户 -->
+            {% if userStatus == 100 %}
 
-            <p style="text-align:center">请长按复制我们的账号，关注后回来报名：</p>
-            <h3 style="text-align:center">yuntongzhonghe</h3>
-        {% else %}
-            {% if userStatus == 10 %}
-                <div data-role="controlgroup">
-                    <a href="/updateevent/?eventid={{thisEvent.id}}" data-role="button" data-theme="b" data-icon="gear" data-ajax="false">修改活动</a>
-                    <a href="/add_event/?eventid={{thisEvent.id}}&renew=true" data-role="button" data-theme="b" data-icon="gear" data-ajax="false">重新发布活动</a>
-                    {% if thisEvent.event_status != 3 %}
+                <a href="/joinevent/?eventid={{thisEvent.id}}&jointype=join" data-role="button" data-theme="b" data-icon="check" class="ui-disabled">我参加！</a>
+                <a href="/joinevent/?eventid={{thisEvent.id}}&jointype=notjoin" data-role="button" data-theme="e" data-icon="delete" class="ui-disabled">不能参加</a>
+                <a href="/joinevent/?eventid={{thisEvent.id}}&jointype=maybe" data-role="button" data-theme="d" data-icon="info" class="ui-disabled">可能吧，先收藏下...</a>
+                <a href="#rightpanel" data-role="button" data-inline="false" data-icon="arrow-r" data-iconpos="right">查看已报名用户</a>
+
+                <p style="text-align:center">请长按复制我们的账号，关注后回来报名：</p>
+                <h3 style="text-align:center">yuntongzhonghe</h3>
+            {% else %}
+                {% if userStatus == 10 %}
+                    <div data-role="controlgroup">
+                        <a href="/updateevent/?eventid={{thisEvent.id}}" data-role="button" data-theme="b" data-icon="gear" data-ajax="false">修改活动</a>
+                        <a href="/add_event/?eventid={{thisEvent.id}}&renew=true" data-role="button" data-theme="b" data-icon="star" data-ajax="false">重新发布活动</a>
+                        {% if thisEvent.event_status != 3 %}
                         <a href="/joinevent/?eventid={{thisEvent.id}}&jointype=stop" data-role="button" data-theme="e" data-icon="check">停止报名</a>
                     {% endif %}
                     {% if thisEvent.event_status != 2 %}
@@ -197,3 +246,4 @@
         });
     </script>
 {% endblock %}
+
