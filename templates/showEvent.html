@@ -188,9 +188,9 @@
     </div><!-- /rightpanel -->
 
     <script type="text/javascript">
-        $(document).ready(function() {
+        $(document).on("pageinit", function () {
             document.addEventListener('WeixinJSBridgeReady',function onBridgeReady() {
-                WeixinJSBridge.call('hideToolbar');
+                WeixinJSBridge.call('showToolbar');
                 WeiXinJSBridge.call('showOptionMenu');
             });
         });
