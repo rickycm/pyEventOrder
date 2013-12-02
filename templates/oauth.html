@@ -1,17 +1,13 @@
-{% extends 'bootstrap.html' %}
+{% extends 'jqmbase.html' %}
 
-{% block bootstrap3_title %}{{ title }}{% endblock %}
+{% block title %}OAuth2{% endblock %}
 
-{% block usercss %}
-{% endblock %}
-
-{% block bootstrap3_content %}
+{% block page_block %}
    自动转向OAuth认证界面
    <div id="log">log</div>
 {% endblock %}
 
-{% block js_post %}
-{{ block.super }}
+{% block user_foot_js %}
 <script>
    var url;
    if (window.WeixinJSBridge) { // 检查是否微信客户端环境
