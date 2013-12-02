@@ -1,9 +1,15 @@
-{% extends 'dh5mbp/base.html' %}
-{% load url from future %}
-{% load staticfiles %}
+{% extends 'jqmpage.html' %}
 
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
-{{ form }}
+<form method="post">
+    <table>
+        {{ form }}
+        <tr>
+            <th></th>
+            <td><input type="submit" value="发送" /></td>
+        </tr>
+    </table>
+</form>
 {% endblock %}
