@@ -328,6 +328,10 @@ def joinEvent(request):
         except:
             return HttpResponseRedirect('welcome.html')
 
+        if wechatUser.wechat_inputname=='':
+            form = forms.SetupuserForm(instance=wechatUser)
+            return render_to_response('setupinfo.html', {'title': '个人设置', 'form': form})
+
         try:
             eventId = request.GET.get('eventid')
             jointype = request.GET.get('jointype')
