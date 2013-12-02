@@ -191,7 +191,7 @@
         $(document).on("pageinit", function () {
             WeiXinJSBridge.call('showOptionMenu');
             document.addEventListener('WeixinJSBridgeReady',function onBridgeReady() {
-                WeixinJSBridge.call('showToolbar');
+                WeixinJSBridge.call('hideToolbar');
             });
         });
     </script>
