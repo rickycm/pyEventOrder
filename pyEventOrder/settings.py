@@ -146,8 +146,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     #'django.contrib.flatpages',
-    'crispy_forms',
-    'admin_bootstrap',
+    #'crispy_forms',
+    #'admin_bootstrap',
     'django.contrib.admin',
     'django.contrib.admindocs',
     'south',
@@ -158,9 +158,18 @@ INSTALLED_APPS = (
     'dh5mbp',
     'bootstrap3_datetime',
     'pyEventOrderWeb',
+    'tinymce',
+    'jqmFlatPages',
     #'rest_framework',
     #'restComments',
 )
+
+TINYMCE_JS_URL = '/static/tiny_mce/tiny_mce.js'
+TINYMCE_DEFAULT_CONFIG = {
+    'theme': "advanced",
+    'cleanup_on_startup': True,
+    'custom_undo_redo_levels': 10,
+}
 
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': (

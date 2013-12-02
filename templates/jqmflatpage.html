@@ -1,0 +1,9 @@
+{% extends 'jqmbase.html' %}
+
+{% block title %}{{ page.title }}{% endblock %}
+{% block page_id %}page_{{ page.page_id }}{% endblock %}
+{% block page_content %}
+    <div data-rel="content">
+        {{ page.page_content|safe }}
+    </div>
+{% endblock %}

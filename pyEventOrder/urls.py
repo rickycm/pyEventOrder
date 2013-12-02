@@ -37,8 +37,8 @@ urlpatterns = patterns('',
     (r'^oauth/$', views.oauth),
     (r'^welcome/$', views.welcome),
     (r'^test/$', views.test),
-    #('',include('djWeixinApp.urls')),
-    #('',include('restComments.urls')),
+    (r'^tinymce/', include('tinymce.urls')),
+    (r'', include('jqmFlatPages.urls')),
 )
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
