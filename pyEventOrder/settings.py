@@ -152,16 +152,14 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     'south',
     # 引入对bootstrap3的支持，由于admin界面所采用的是2.x版本，因此需要加以区别
-    'jquery',
     'bootstrap3',
     'awesome_bootstrap',
     'dh5bp',
     'dh5mbp',
     'bootstrap3_datetime',
     'pyEventOrderWeb',
-    #'djWeixinApp',
-    'rest_framework',
-    'restComments',
+    #'rest_framework',
+    #'restComments',
 )
 
 REST_FRAMEWORK = {
