@@ -17,7 +17,8 @@
 {% endblock %}
 
 {% block content %}
-          <h3 style="text-align:center">请务必先设置你的个人信息</h3>
+          <h3 style="text-align:center">设置个人信息</h3>
+          <h4 style="text-align:left">请先设置显示姓名以发布或参加活动。</h4>
 <form action="/setting/" id="setupinfoForm" method="post" class="form-horizontal">
     {% csrf_token %}
     <fieldset>
