@@ -118,6 +118,7 @@
                 {% if userStatus == 10 %}
                     <div data-role="controlgroup">
                         <a href="/updateevent/?eventid={{thisEvent.id}}" data-role="button" data-theme="b" data-icon="gear" data-ajax="false">修改活动</a>
+                        <a href="/add_event/?eventid={{thisEvent.id}}&renew=true" data-role="button" data-theme="b" data-icon="gear" data-ajax="false">重新发布活动</a>
                         {% if thisEvent.event_status != 3 %}
                         <a href="/joinevent/?eventid={{thisEvent.id}}&jointype=stop" data-role="button" data-theme="e" data-icon="check">停止报名</a>
                         {% endif %}

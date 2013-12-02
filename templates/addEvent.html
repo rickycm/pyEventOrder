@@ -25,18 +25,18 @@
     <!-- Text input-->
     <div>
         <!--<label class="control-label" for="event_title">活动名称</label> -->
-        <input id="event_title" name="event_title" type="text" placeholder="请输入活动名称" required>
+        <input id="event_title" name="event_title" type="text" placeholder="请输入活动名称" value="{{form.event_title.value|default_if_none:''}}"  required>
     </div>
 
     <!-- Textarea -->
     <div>
         <!--<label class="control-label" for="event_detail">活动详情</label>-->
-        <textarea id="event_detail" name="event_detail" placeholder="请输入活动详情" required></textarea>
+        <textarea id="event_detail" name="event_detail" placeholder="请输入活动详情" required>{{form.event_detail.value|default_if_none:''}}</textarea>
     </div>
 
     <div data-role="fieldcontain">
         <label for="event_limit">人数限制：</label>
-        <input type="range" name="event_limit" id="event_limit" value="10"  min="0" max="100" data-highlight="true" />
+        <input type="range" name="event_limit" id="event_limit"  value="{{form.event_limit.value|default_if_none:'10'}}" min="0" max="100" data-highlight="true" />
     </div>
 
     <div>

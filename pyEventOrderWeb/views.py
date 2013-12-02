@@ -152,11 +152,23 @@ def add_event(request):
         return HttpResponseRedirect('welcome.html')
 
     if request.method == 'GET':
-        if wechatUser.wechat_inputname=='':
+        if wechatUser.wechat_inputname == '':
             form = forms.SetupuserForm(instance=wechatUser)
             return render_to_response('setupinfo.html', {'title': '个人设置', 'form': form})
 
-        form = forms.EventForm()
+        renew = request.GET.get('renew')
+        if renew == 'true':
+            try:
+                eventId = request.GET.get('eventid')
+                thisEvent = event.objects.get(pk=eventId)
+            except event.DoesNotExist:
+                title = u'出错了'
+                errorMessage = u'您查询的活动不存在。'
+                return render_to_response("errorMessage.html", {'errorMessage': errorMessage, 'title': title},
+                                      context_instance=RequestContext(request))
+            form = forms.EventForm(instance=thisEvent)
+        else:
+            form = forms.EventForm()
         return render_to_response('addEvent.html', {'title': '新建活动', 'form': form},
                               context_instance=RequestContext(request))
     else:
@@ -199,7 +211,8 @@ def updateEvent(request):
         errorMessage = u'您查询的活动不存在。'
         return render_to_response("errorMessage.html", {'errorMessage': errorMessage, 'title': title},
                               context_instance=RequestContext(request))
-    if request.method == "POST":
+
+    if request.method == 'POST':
         form = forms.EventForm(request.POST, instance=thisEvent)
         if form.is_valid():
             userId = request.session["userid"]
