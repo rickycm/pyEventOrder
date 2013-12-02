@@ -145,15 +145,16 @@ def list_events(rq):
 # 添加活动
 @login_required
 def add_event(request):
+    try:
+        userId = request.session["userid"]
+        wechatUser = wechat_user.objects.get(pk=userId)
+    except:
+        return HttpResponseRedirect('welcome.html')
+
     if request.method == 'GET':
-        try:
-            userId = request.session["userid"]
-            wechatUser = wechat_user.objects.get(pk=userId)
-        except:
-            return HttpResponseRedirect('welcome.html')
-        if wechatUser.wechat_inputname == '':
-            settingForm = forms.SetupuserForm(instance=wechatUser)
-            return render_to_response('setupinfo.html', {'title': '个人设置', 'form': settingForm})
+        if wechatUser.wechat_inputname=='':
+            form = forms.SetupuserForm(instance=wechatUser)
+            return render_to_response('setupinfo.html', {'title': '个人设置', 'form': form})
 
         form = forms.EventForm()
         return render_to_response('addEvent.html', {'title': '新建活动', 'form': form},
@@ -161,11 +162,6 @@ def add_event(request):
     else:
         form = forms.EventForm(request.POST)
         s = datetime.strptime(form.data['eventdate'] + ' ' + form.data['eventtime'], "%Y-%m-%d %H:%M")
-        try:
-            userId = request.session["userid"]
-            wechatUser = wechat_user.objects.get(pk=userId)
-        except:
-            return HttpResponseRedirect('welcome.html')
         if form.is_valid():
             e = event.objects.create(
                 event_title = form.data['event_title'],
