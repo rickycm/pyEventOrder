@@ -149,7 +149,7 @@ def add_event(request):
         userId = request.session["userid"]
         wechatUser = wechat_user.objects.get(pk=userId)
     except:
-        return HttpResponseRedirect('welcome.html')
+        return HttpResponseRedirect('/welcome/')
 
     if request.method == 'GET':
         if wechatUser.wechat_inputname == '':
