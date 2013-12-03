@@ -39,7 +39,7 @@ urlpatterns = patterns('',
     (r'^test/$', views.test),
     (r'^tinymce/', include('tinymce.urls')),
     (r'', include('jqmFlatPages.urls')),
-    (r'^setcookie/$', views.cookie_openid())
+    (r'^setcookie/$', views.cookie_openid)
 )
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
