@@ -146,9 +146,9 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     #'django.contrib.flatpages',
-    #'bootstrap_admin',
+    'bootstrap_admin',
     'django.contrib.admin',
-    'django.contrib.admindocs',
+    #'django.contrib.admindocs',
     'south',
     # 引入对bootstrap3的支持，由于admin界面所采用的是2.x版本，因此需要加以区别
     'pyEventOrderWeb',
