@@ -146,17 +146,11 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     #'django.contrib.flatpages',
-    #'crispy_forms',
     'bootstrap_admin',
     'django.contrib.admin',
     'django.contrib.admindocs',
     'south',
     # 引入对bootstrap3的支持，由于admin界面所采用的是2.x版本，因此需要加以区别
-    #'bootstrap3',
-    #'awesome_bootstrap',
-    #'dh5bp',
-    #'dh5mbp',
-    #'bootstrap3_datetime',
     'pyEventOrderWeb',
     'tinymce',
     'jqmFlatPages',
@@ -183,15 +177,6 @@ REST_FRAMEWORK = {
         #'rest_framework.parsers.MultiPartParser',
     #)
 }
-
-# 覆盖bootstrap3中间的缺省值，用来通过awesome_bootstrap载入静态文件
-# dist子目录下的bootstrap为版本3，从而可以避免版本上的混乱
-#BOOTSTRAP3 = {
-#    'include_jquery': False,
-#    'jquery_url': '/static/admin/js/jquery.min.js',
-#    'base_url': '/static/twitter_bootstrap/dist/',
-#    'theme_url': '/static/twitter_bootstrap/dist/css/bootstrap-theme.min.css',
-#}
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
