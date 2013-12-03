@@ -537,7 +537,9 @@ WX_APP_ID='wxf0e81c3bee622d60'
 APP_KEY='dbbea5729ffd5182deff63f90131bc3b'
 def check_auth(request):
 
+    logger.debug('Check Auth')
     next = request.GET.get('next','/')
+    logger.debug(next)
     if request.user.is_authenticated():
         return HttpResponseRedirect(next)
 
@@ -557,8 +559,14 @@ def check_auth(request):
         else:
             return HttpResponse(status=500)
     else:
-        # 暂时不要后面的处理
-        return render_to_response('welcome.html')
+        if next.startswith('/moveuser/'):
+            # 暂时不要后面的处理
+            return render_to_response('welcome.html')
+        else:
+            url = 'http://whitemay.pythonanywhere.com/moveuser/?' + urllib.urlencode({
+                'dest':next
+            })
+            return HttpResponseRedirect(url)
 
     # 然后启动OAuth2过程，在这里需要判断启动谁
     #url = request.build_absolute_uri()
@@ -572,7 +580,7 @@ def check_auth(request):
             urllib.urlencode({
                 'response_type':'code',
                 'client_id':WX_APP_ID,
-                'redirect_uri':'http://whitemay.pythonanywhere.com/oauth',
+                'redirect_uri':'http://www.eztogether.net/oauth',
                 'scope':'snsapi_userinfo',
                 #'state':'Foperate',
             }) + '&state=ForpeateWX#wechat_redirect'
@@ -581,7 +589,7 @@ def check_auth(request):
             urllib.urlencode({
                 'response_type':'code',
                 'client_id':APP_ID,
-                'redirect_uri':'http://whitemay.pythonanywhere.com/oauth',
+                'redirect_uri':'http://www.eztogether.net/oauth',
                 'state':'FoperateQQ',
             })
     logger.debug(auth_url)
@@ -595,7 +603,7 @@ def get_qq_info(code, session):
         'client_id':APP_ID,
         'client_secret':APP_KEY,
         'code':code,
-        'redirect_uri':'http://whitemay.pythonanywhere.com/oauth',
+        'redirect_uri':'http://www.eztogether.net/oauth',
     })
     f = urllib.urlopen(url)
     text = f.read()
@@ -625,7 +633,7 @@ def get_wx_info(code, session):
         'appid':WX_APP_ID,
         'secret':APP_KEY,
         'code':code,
-        'redirect_uri':'http://whitemay.pythonanywhere.com/oauth',
+        'redirect_uri':'http://www.eztogether.net/oauth',
     })
     f = urllib.urlopen(url)
     jobj = json.load(f)
@@ -658,7 +666,18 @@ def cookie_openid(request):
         response.set_cookie("wxopenid", openid, max_age=max_age)
         return response
     except:
-        raise Http404
+        raise render_to_response('welcome.html')
 
-
-
+@login_required
+def move_user(request):
+    logger.debug("Move User")
+    try:
+        openid = request.COOKIES['wxopenid']
+        next = request.GET['dest']
+        url = "http://www.eztogether.net/setcookie/?" + urllib.urlencode({
+            'openid':openid,
+            'next':next,
+        })
+        return HttpResponseRedirect(url)
+    except:
+        return render_to_response('welcome.html')
