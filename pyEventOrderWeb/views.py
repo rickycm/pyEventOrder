@@ -658,7 +658,7 @@ def cookie_openid(request):
         response.set_cookie("wxopenid", openid, max_age=max_age)
         return response
     except:
-        return Http404
+        raise Http404
 
 
 
