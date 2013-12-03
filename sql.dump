@@ -1,0 +1,560 @@
+-- MySQL dump 10.13  Distrib 5.5.34, for debian-linux-gnu (x86_64)
+--
+-- Host: mysql.server    Database: whitemay$pyeventorder
+-- ------------------------------------------------------
+-- Server version	5.1.63-log
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `auth_group`
+--
+
+DROP TABLE IF EXISTS `auth_group`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `auth_group` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(80) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `auth_group`
+--
+
+LOCK TABLES `auth_group` WRITE;
+/*!40000 ALTER TABLE `auth_group` DISABLE KEYS */;
+/*!40000 ALTER TABLE `auth_group` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `auth_group_permissions`
+--
+
+DROP TABLE IF EXISTS `auth_group_permissions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `auth_group_permissions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `group_id` int(11) NOT NULL,
+  `permission_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `group_id` (`group_id`,`permission_id`),
+  KEY `auth_group_permissions_bda51c3c` (`group_id`),
+  KEY `auth_group_permissions_1e014c8f` (`permission_id`),
+  CONSTRAINT `group_id_refs_id_3cea63fe` FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`),
+  CONSTRAINT `permission_id_refs_id_a7792de1` FOREIGN KEY (`permission_id`) REFERENCES `auth_permission` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `auth_group_permissions`
+--
+
+LOCK TABLES `auth_group_permissions` WRITE;
+/*!40000 ALTER TABLE `auth_group_permissions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `auth_group_permissions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `auth_message`
+--
+
+DROP TABLE IF EXISTS `auth_message`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `auth_message` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `message` longtext NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `auth_message_fbfc09f1` (`user_id`),
+  CONSTRAINT `user_id_refs_id_9af0b65a` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `auth_message`
+--
+
+LOCK TABLES `auth_message` WRITE;
+/*!40000 ALTER TABLE `auth_message` DISABLE KEYS */;
+/*!40000 ALTER TABLE `auth_message` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `auth_permission`
+--
+
+DROP TABLE IF EXISTS `auth_permission`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `auth_permission` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL,
+  `content_type_id` int(11) NOT NULL,
+  `codename` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `content_type_id` (`content_type_id`,`codename`),
+  KEY `auth_permission_e4470c6e` (`content_type_id`),
+  CONSTRAINT `content_type_id_refs_id_728de91f` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `auth_permission`
+--
+
+LOCK TABLES `auth_permission` WRITE;
+/*!40000 ALTER TABLE `auth_permission` DISABLE KEYS */;
+INSERT INTO `auth_permission` VALUES (1,'Can add permission',1,'add_permission'),(2,'Can change permission',1,'change_permission'),(3,'Can delete permission',1,'delete_permission'),(4,'Can add group',2,'add_group'),(5,'Can change group',2,'change_group'),(6,'Can delete group',2,'delete_group'),(7,'Can add user',3,'add_user'),(8,'Can change user',3,'change_user'),(9,'Can delete user',3,'delete_user'),(13,'Can add content type',5,'add_contenttype'),(14,'Can change content type',5,'change_contenttype'),(15,'Can delete content type',5,'delete_contenttype'),(16,'Can add session',6,'add_session'),(17,'Can change session',6,'change_session'),(18,'Can delete session',6,'delete_session'),(19,'Can add log entry',7,'add_logentry'),(20,'Can change log entry',7,'change_logentry'),(21,'Can delete log entry',7,'delete_logentry'),(22,'Can add migration history',8,'add_migrationhistory'),(23,'Can change migration history',8,'change_migrationhistory'),(24,'Can delete migration history',8,'delete_migrationhistory'),(25,'Can add Event',9,'add_event'),(26,'Can change Event',9,'change_event'),(27,'Can delete Event',9,'delete_event'),(28,'Can add Participant',10,'add_participant'),(29,'Can change Participant',10,'change_participant'),(30,'Can delete Participant',10,'delete_participant'),(31,'Can add WechatUser',11,'add_wechat_user'),(32,'Can change WechatUser',11,'change_wechat_user'),(33,'Can delete WechatUser',11,'delete_wechat_user'),(34,'Can add site',12,'add_site'),(35,'Can change site',12,'change_site'),(36,'Can delete site',12,'delete_site'),(37,'Can add flat page',13,'add_flatpage'),(38,'Can change flat page',13,'change_flatpage'),(39,'Can delete flat page',13,'delete_flatpage'),(40,'Can add jqm flat page',14,'add_jqmflatpage'),(41,'Can change jqm flat page',14,'change_jqmflatpage'),(42,'Can delete jqm flat page',14,'delete_jqmflatpage');
+/*!40000 ALTER TABLE `auth_permission` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `auth_user`
+--
+
+DROP TABLE IF EXISTS `auth_user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `auth_user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(30) NOT NULL,
+  `first_name` varchar(30) NOT NULL,
+  `last_name` varchar(30) NOT NULL,
+  `email` varchar(75) NOT NULL,
+  `password` varchar(128) NOT NULL,
+  `is_staff` tinyint(1) NOT NULL,
+  `is_active` tinyint(1) NOT NULL,
+  `is_superuser` tinyint(1) NOT NULL,
+  `last_login` datetime NOT NULL,
+  `date_joined` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username` (`username`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `auth_user`
+--
+
+LOCK TABLES `auth_user` WRITE;
+/*!40000 ALTER TABLE `auth_user` DISABLE KEYS */;
+INSERT INTO `auth_user` VALUES (1,'admin','','','meihao@live.cn','pbkdf2_sha256$12000$8Ir8vt4aVMsO$GJsKocjZvZ9WBxEI8+SownGraEp/IW/c6yMBdTRPaF8=',1,1,1,'2013-12-02 16:46:41','2013-11-19 09:55:18'),(2,'user','user','','','pbkdf2_sha256$12000$nGadutrX1uOO$iQSfnfO0IAjtbcXy6/0/TqVU4ParPAbDVuJJ1soQKeM=',0,1,0,'2013-12-03 02:54:32','2013-11-21 08:59:24'),(3,'Ricky','','','','pbkdf2_sha256$12000$NBBFluAqdxKw$uRBQpXLDbg+k+5ugWB9fVpMVpWBxemRx+2SaGMV3KQM=',0,1,0,'2013-11-22 22:11:00','2013-11-22 22:09:40');
+/*!40000 ALTER TABLE `auth_user` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `auth_user_groups`
+--
+
+DROP TABLE IF EXISTS `auth_user_groups`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `auth_user_groups` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `group_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `user_id` (`user_id`,`group_id`),
+  KEY `auth_user_groups_fbfc09f1` (`user_id`),
+  KEY `auth_user_groups_bda51c3c` (`group_id`),
+  CONSTRAINT `group_id_refs_id_f0ee9890` FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`),
+  CONSTRAINT `user_id_refs_id_831107f1` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `auth_user_groups`
+--
+
+LOCK TABLES `auth_user_groups` WRITE;
+/*!40000 ALTER TABLE `auth_user_groups` DISABLE KEYS */;
+/*!40000 ALTER TABLE `auth_user_groups` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `auth_user_user_permissions`
+--
+
+DROP TABLE IF EXISTS `auth_user_user_permissions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `auth_user_user_permissions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `permission_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `user_id` (`user_id`,`permission_id`),
+  KEY `auth_user_user_permissions_fbfc09f1` (`user_id`),
+  KEY `auth_user_user_permissions_1e014c8f` (`permission_id`),
+  CONSTRAINT `permission_id_refs_id_67e79cb` FOREIGN KEY (`permission_id`) REFERENCES `auth_permission` (`id`),
+  CONSTRAINT `user_id_refs_id_f2045483` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `auth_user_user_permissions`
+--
+
+LOCK TABLES `auth_user_user_permissions` WRITE;
+/*!40000 ALTER TABLE `auth_user_user_permissions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `auth_user_user_permissions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `django_admin_log`
+--
+
+DROP TABLE IF EXISTS `django_admin_log`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `django_admin_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `action_time` datetime NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `content_type_id` int(11) DEFAULT NULL,
+  `object_id` longtext,
+  `object_repr` varchar(200) NOT NULL,
+  `action_flag` smallint(5) unsigned NOT NULL,
+  `change_message` longtext NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `django_admin_log_fbfc09f1` (`user_id`),
+  KEY `django_admin_log_e4470c6e` (`content_type_id`),
+  CONSTRAINT `content_type_id_refs_id_288599e6` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`),
+  CONSTRAINT `user_id_refs_id_c8665aa` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `django_admin_log`
+--
+
+LOCK TABLES `django_admin_log` WRITE;
+/*!40000 ALTER TABLE `django_admin_log` DISABLE KEYS */;
+INSERT INTO `django_admin_log` VALUES (1,'2013-11-20 06:01:49',1,12,'1','whitemay.pythonanywhere.com',2,'已修改 domain 和 name 。'),(2,'2013-11-21 08:59:24',1,3,'2','user',1,''),(3,'2013-11-21 09:00:39',1,3,'2','user',2,'已修改 first_name 。'),(4,'2013-11-21 17:12:42',1,13,'1','/simple/ -- 测试页面',1,''),(5,'2013-11-21 17:12:50',1,13,'1','/simple/ -- 测试页面',2,'没有字段被修改。'),(6,'2013-11-21 17:13:10',1,13,'1','/simple/ -- 测试页面',2,'没有字段被修改。'),(7,'2013-11-22 22:09:40',1,3,'3','Ricky',1,''),(8,'2013-11-26 16:25:41',1,9,'7','奥体羽毛球1',2,'已修改 event_title 。'),(9,'2013-11-26 16:26:37',1,9,'7','奥体羽毛球1',3,''),(10,'2013-11-26 16:27:23',1,9,'3','Ffffffffff',2,'已修改 updated_by 和 event_hostfakeID 。'),(11,'2013-11-26 16:27:41',1,9,'3','Ffffffffff',3,''),(12,'2013-11-26 16:27:41',1,9,'2','Hshshsshs',3,''),(13,'2013-11-26 16:27:41',1,9,'1','MovileTest111',3,''),(14,'2013-11-28 05:31:07',1,11,'1','',3,''),(15,'2013-11-28 05:32:33',1,11,'3','',3,''),(16,'2013-12-02 04:26:34',1,11,'4','',2,'已修改 wechat_inputname 。'),(17,'2013-12-02 06:30:10',1,9,'19','chjj',3,''),(18,'2013-12-02 06:30:10',1,9,'18','hiitf',3,''),(19,'2013-12-02 06:30:10',1,9,'17','hjhiigh',3,''),(20,'2013-12-02 06:30:10',1,9,'16','udnkk',3,''),(21,'2013-12-02 06:30:10',1,9,'15','yubd',3,''),(22,'2013-12-02 06:30:10',1,9,'14','工大羽毛球',3,'');
+/*!40000 ALTER TABLE `django_admin_log` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `django_content_type`
+--
+
+DROP TABLE IF EXISTS `django_content_type`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `django_content_type` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  `app_label` varchar(100) NOT NULL,
+  `model` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `app_label` (`app_label`,`model`)
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `django_content_type`
+--
+
+LOCK TABLES `django_content_type` WRITE;
+/*!40000 ALTER TABLE `django_content_type` DISABLE KEYS */;
+INSERT INTO `django_content_type` VALUES (1,'permission','auth','permission'),(2,'group','auth','group'),(3,'user','auth','user'),(5,'content type','contenttypes','contenttype'),(6,'session','sessions','session'),(7,'log entry','admin','logentry'),(8,'migration history','south','migrationhistory'),(9,'Event','pyEventOrderWeb','event'),(10,'Participant','pyEventOrderWeb','participant'),(11,'WechatUser','pyEventOrderWeb','wechat_user'),(12,'site','sites','site'),(13,'flat page','flatpages','flatpage'),(14,'jqm flat page','jqmFlatPages','jqmflatpage');
+/*!40000 ALTER TABLE `django_content_type` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `django_flatpage`
+--
+
+DROP TABLE IF EXISTS `django_flatpage`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `django_flatpage` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `url` varchar(100) NOT NULL,
+  `title` varchar(200) NOT NULL,
+  `content` longtext NOT NULL,
+  `enable_comments` tinyint(1) NOT NULL,
+  `template_name` varchar(70) NOT NULL,
+  `registration_required` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `django_flatpage_c379dc61` (`url`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `django_flatpage`
+--
+
+LOCK TABLES `django_flatpage` WRITE;
+/*!40000 ALTER TABLE `django_flatpage` DISABLE KEYS */;
+INSERT INTO `django_flatpage` VALUES (1,'/simple/','测试页面','这是一个测试页面。',0,'',0);
+/*!40000 ALTER TABLE `django_flatpage` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `django_flatpage_sites`
+--
+
+DROP TABLE IF EXISTS `django_flatpage_sites`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `django_flatpage_sites` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `flatpage_id` int(11) NOT NULL,
+  `site_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `flatpage_id` (`flatpage_id`,`site_id`),
+  KEY `django_flatpage_sites_872c4601` (`flatpage_id`),
+  KEY `django_flatpage_sites_99732b5c` (`site_id`),
+  CONSTRAINT `flatpage_id_refs_id_83cd0023` FOREIGN KEY (`flatpage_id`) REFERENCES `django_flatpage` (`id`),
+  CONSTRAINT `site_id_refs_id_2df951cb` FOREIGN KEY (`site_id`) REFERENCES `django_site` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `django_flatpage_sites`
+--
+
+LOCK TABLES `django_flatpage_sites` WRITE;
+/*!40000 ALTER TABLE `django_flatpage_sites` DISABLE KEYS */;
+INSERT INTO `django_flatpage_sites` VALUES (3,1,1);
+/*!40000 ALTER TABLE `django_flatpage_sites` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `django_session`
+--
+
+DROP TABLE IF EXISTS `django_session`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `django_session` (
+  `session_key` varchar(40) NOT NULL,
+  `session_data` longtext NOT NULL,
+  `expire_date` datetime NOT NULL,
+  PRIMARY KEY (`session_key`),
+  KEY `django_session_c25c2c28` (`expire_date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `django_session`
+--
+
+LOCK TABLES `django_session` WRITE;
+/*!40000 ALTER TABLE `django_session` DISABLE KEYS */;
+INSERT INTO `django_session` VALUES ('0ucj253pqa0tpgquga2tj9z2tfep5g5z','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-04 10:11:06'),('173wj8d2ghqk206m5kueeul00vmcglp3','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-04 09:22:02'),('1ch37k8rt8x7osbcnll3ez67hjobgfoc','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-03 07:50:14'),('1doyvwxvrtftbx5sergf4gzjxh916qs6','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-04 06:03:23'),('1euhqfgvnzdt04acp6bhudtoo70me3js','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-03 07:08:38'),('1ldyibnd9zoy6tmaak3wbj6wuxa71bzw','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-04 09:44:37'),('1lw1rdvv8jd6ubaoqavd0aahc9qai3pg','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-05 07:52:06'),('1zzvo3mb6h5c0wim0qv9f1rh088z96fc','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-03 18:32:02'),('209keqx4ndu3az4ut5yzbugcgcnznacw','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-05 05:33:41'),('2338wes1guibs1ywglxft9rg4zawp1ui','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-04 06:17:28'),('251hkrcvsasyz0ftdfpsb15q3gtdgmxo','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-03 07:18:18'),('271tuvmzjqlrtb9541ju5f5w67x0vz2z','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-05 03:21:13'),('2arfb017d576flkf3vzn399vvbho9eej','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-04 10:06:05'),('2lwimdbpge6ad9rhxhgojxobiwn149j6','OTAzODFjNTJkZWM4NjM5NTBhZTMwMDBhODk3ZTg4OGIxMDhmZmNjMjp7ImRqYW5nb19sYW5ndWFnZSI6InpoLWNuIn0=','2013-12-05 07:30:53'),('2nga5siiffyxdjpmzxakyvqbwpcbwdhs','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-03 07:23:43'),('2v72l9snvlqiug9mknncltqtrlw2clda','NTQzZjBjOThiYjUxNTRiZjdhZDZkOTQ2OTQ5MWVhZTc4YjUyZmM2Njp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiZGphbmdvX2xhbmd1YWdlIjoiemgtY24iLCJfYXV0aF91c2VyX2lkIjoxfQ==','2013-12-04 05:43:06'),('3cwofxh6eovatu3ojmbkyljj798hljg8','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-04 09:44:50'),('3qezm27q4c9ff8v4dm4cdhdfsdmpuvns','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-05 04:32:44'),('3ya8q23ldta9otv67xgnuajrqp4eb8k0','MDkxOWEwZjEyNTIzODQ4N2JjNzA3ZDJkYzkzZmVkNjg0MTdjM2QxYTp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiZGphbmdvX2xhbmd1YWdlIjoiZW4iLCJfYXV0aF91c2VyX2lkIjoxfQ==','2013-12-05 05:25:57'),('50aux98uganitsdrpr2icrh7wii9rv8y','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-03 15:34:19'),('59da8kc3onieimmzqpuchnpnrci91804','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-03 07:32:04'),('5axyypnk9q8sw9p3tlx1shjv9t3k2gee','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-03 11:04:29'),('5dggdlrf481g93pp2rzwqdbtufr6y678','NTQzZjBjOThiYjUxNTRiZjdhZDZkOTQ2OTQ5MWVhZTc4YjUyZmM2Njp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiZGphbmdvX2xhbmd1YWdlIjoiemgtY24iLCJfYXV0aF91c2VyX2lkIjoxfQ==','2013-12-03 04:03:00'),('5rl7q0sa5iyp4tqfxfi6n14h8jzyd1q7','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-03 11:04:13'),('621jvg1sin4574aoqq2ebsqvnfknbpp0','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-03 16:36:29'),('6ft4xrkdvq9xsdsgrhhehk3ijb2441x4','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-04 10:08:38'),('6z83y47tsl4nfpihztd6voooya49ugki','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-03 15:42:53'),('792flxg7fjy1in6agx9uhhi3v03l04v3','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-04 05:49:29'),('7yvplt4zm6q86j9ar16mj4wbfskepv29','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-03 12:12:11'),('85ap0fqjfffvtplrrink9l6dbjgq5tu1','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-03 15:42:54'),('94v1duka1wfs2x6vqxme66ez8tes6a62','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-05 05:33:51'),('99ptmr0giplqqkx8kvd99m4997m383kw','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-05 03:29:51'),('9c95dn5w91m01u7362pnvuamlicsptmx','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-03 10:57:50'),('9k0g69jf2g0n4ktdi2i3qtg52nhee2e8','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-05 04:52:08'),('9p9u50jbfic3a1ju3fclecxe7uj4jyj7','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-03 15:57:41'),('9pnojvy2qwkdzey2rzgqeb86uuuxh5n2','OTAzODFjNTJkZWM4NjM5NTBhZTMwMDBhODk3ZTg4OGIxMDhmZmNjMjp7ImRqYW5nb19sYW5ndWFnZSI6InpoLWNuIn0=','2013-12-03 06:12:53'),('aojnbtdg5knwo5f1ed3yqbrakq2u1fqd','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-05 03:29:34'),('bracqh8ib0j6nsq36c01b2nikzxol26o','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-05 03:30:03'),('cudgs2v51wxhej32auklymrvb4zw0x8n','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-03 07:04:40'),('cxrdo7l7gelkapdsjzxl5hf49l2qitz0','OTAzODFjNTJkZWM4NjM5NTBhZTMwMDBhODk3ZTg4OGIxMDhmZmNjMjp7ImRqYW5nb19sYW5ndWFnZSI6InpoLWNuIn0=','2013-12-03 15:06:56'),('d5ppgm78wgyu7oda7wgwe916okkv2mpy','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-03 07:15:36'),('dbkqfxhewub4xlonqwm8fr09dk90jeev','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-04 09:25:00'),('dghnbqop4a8f7bjdq386gz6o8p0g5jqt','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-03 06:16:01'),('e1p82g0mmcqc0w4xu28o35cx75w8v5ue','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-03 15:42:53'),('e2rhnpoe1rkxy554ytypvhweqc06suhu','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-03 06:57:35'),('e3h4t6we88zwx51ui16g766se2szpfhc','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-05 03:18:39'),('edcalkt9532jqh65i0bnkfckxwfv0szu','OTAzODFjNTJkZWM4NjM5NTBhZTMwMDBhODk3ZTg4OGIxMDhmZmNjMjp7ImRqYW5nb19sYW5ndWFnZSI6InpoLWNuIn0=','2013-12-03 15:21:15'),('fofg28wwc8jyi65g39d2vo6r8ib35vxt','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-05 03:08:00'),('fryao1656q8z2nnbdv1oq95pjupjblnq','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-05 03:20:50'),('geuutv60ah6jcjam68f7uexnjndebln3','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-03 10:58:51'),('ggtx2oxi2ohjmy4pzhty0jxqie33524d','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-03 06:51:35'),('gmy72doyrrqrztyxqqjgzq35pzfpwx0u','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-04 09:26:10'),('gq0iymbaa549easovycfpth5h4reidyq','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-03 12:12:49'),('hqvb8vkoqrmb44wx91aqus65cezfadoh','NTQzZjBjOThiYjUxNTRiZjdhZDZkOTQ2OTQ5MWVhZTc4YjUyZmM2Njp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiZGphbmdvX2xhbmd1YWdlIjoiemgtY24iLCJfYXV0aF91c2VyX2lkIjoxfQ==','2013-12-03 04:03:42'),('icgj3lx18aqyxe1saard3l1c3ooss6l7','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-03 07:13:56'),('in3esyytwtf4hetz6t04p1f2l4tgojd1','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-03 15:42:54'),('ir6fwgxbwl7tri0hql2c0ea7r1qt4lzc','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-03 07:46:53'),('j0utiv4tytdc8ocfttsdqpqpcaslfep2','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-03 04:02:41'),('j4qfa3skysfs6jwk26m402yc9f8a3ehi','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-04 09:24:50'),('j9fciuamj7nsh7mgevr82l07y6n80kov','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-03 07:15:23'),('k0vsxw4lt1a0ktfxzggrgywh76pqdvja','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-03 12:02:09'),('kfx778kxc6y5qajt7cm3995ijdsfhll6','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-03 06:53:38'),('m252l4d01j0lgjqois8t5453b7wiskpl','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-04 09:50:15'),('mg938o0txy3pd9gu61g9b131aytbq62r','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-05 03:23:49'),('n0hosp6xbooatwrbzfa9ph2v6yxlhngt','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-03 15:33:14'),('n4kmycdy4paiwc3beee8sj23ovd6ofnm','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-05 07:39:47'),('nj3auf7wia9izxcsv3d4ho8uisw54ehy','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-04 11:07:44'),('nxj6o72y4rsla7xsr013bzlz6yjdf7lx','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-04 06:44:12'),('o4bcs9okngxzuir06c0kmwrx2iu3sskv','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-03 08:04:48'),('o6aqw8mkoxgfchcsnztt9awgt4qgv5gb','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-03 07:09:06'),('o9tvh7y1op3fg1bl5lertktnpalhmkxh','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-03 05:49:46'),('obic2ipgkcv0anqg5912xafzgfwtz7lx','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-03 15:06:55'),('obv3mthkmwislzsv2rt82asuw4dq3eg9','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-05 05:56:24'),('om61omdfzw2lwcuujsr3cx00u5x2zbbc','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-03 15:42:54'),('oopw35fw9rtgm285tp5l7tzun1pm94g6','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-05 07:52:06'),('pj7y92njgefru8ngm7rx0idgui0gec0b','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-03 15:06:21'),('pkr1hmesyreqn4j6asko8mvcutamtyrv','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-03 15:42:54'),('q110r7woggd2rqbpbjte8ms9vmybvg62','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-03 06:57:08'),('q8ru73sexe3aj2ca3ns81nhtcsk1iff5','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-04 09:25:01'),('qneba9mzczxwobarm90svgb4b86930oo','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-05 01:06:19'),('qu38fzt71jjhfwrldpoc6fvjujf932d1','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-05 07:39:47'),('rpik4gkiylj2bdn3um8x07ttzxk9oz8m','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-03 07:50:03'),('sndobvwr2jepnch9vawuyk9qdfd20ty3','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-04 09:48:15'),('stthewzf8zkrq0aqyqmkw0rauhqco440','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-03 07:13:50'),('sx0ks5be55az2jw9rh5j4vsqu6fbp1mt','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-03 07:48:24'),('syeglls5jn1kgofve9b7zp5rtd8iq7vg','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-05 03:05:30'),('twjfuua6iawdzlc6e2gidkjrj04nfjho','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-03 15:21:06'),('u1cud347qvw2yswykw14x8cxlwmj1fko','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-03 07:29:27'),('u7sj8famekxeaw35mwu1p8im3y31056b','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-03 07:20:09'),('u7yzmyt586mya0cf44rr4xtrp4813g1u','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-04 11:07:45'),('ucoiss1n9hxym20f19bv8b6fs2h6be1i','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-03 06:46:33'),('uix6ien441n8v2w8x55mrq2wcj8p61sw','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-04 09:53:44'),('wm5f835d88os7dneps1t6ox3mxy19cz4','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-03 15:21:16'),('xbwomumiz9oey1510juk9a882brp2z0u','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-04 09:25:00'),('xhbogrte3mmbt9lvd49pe07zxxydo5xz','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-04 10:05:42'),('xkp19j39iclwi200r1t3g1b1bfk4yyhw','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-03 08:05:09'),('xlza5nznvaq1dxgsptk6tbmyrewrw9n4','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-03 07:14:09'),('xnfowt9zjbm0xva1zzassnddyogs84lg','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-04 09:50:30'),('y5pititgimqo4oad01byu0c8e26tz1yr','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-03 12:02:52'),('y68ffquw67zvelfjl61de5ekwu5hc23x','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-03 15:20:26'),('yjreb6733ekcan1t54hxobk0j7ry73p8','ZDE5NDk3Mzc2NWE2YTlmMWFkNmJhMDRkOTk0OTcwNjY3MzU3NzNhMjp7ImRqYW5nb19sYW5ndWFnZSI6ImVuIn0=','2013-12-04 09:48:34');
+/*!40000 ALTER TABLE `django_session` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `django_site`
+--
+
+DROP TABLE IF EXISTS `django_site`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `django_site` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `domain` varchar(100) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `django_site`
+--
+
+LOCK TABLES `django_site` WRITE;
+/*!40000 ALTER TABLE `django_site` DISABLE KEYS */;
+INSERT INTO `django_site` VALUES (1,'whitemay.pythonanywhere.com','pythonanywhere');
+/*!40000 ALTER TABLE `django_site` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `jqm_flat_pages`
+--
+
+DROP TABLE IF EXISTS `jqm_flat_pages`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `jqm_flat_pages` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(20) NOT NULL,
+  `page_id` varchar(50) NOT NULL,
+  `page_content` longtext NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `page_id` (`page_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `jqm_flat_pages`
+--
+
+LOCK TABLES `jqm_flat_pages` WRITE;
+/*!40000 ALTER TABLE `jqm_flat_pages` DISABLE KEYS */;
+/*!40000 ALTER TABLE `jqm_flat_pages` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `pyEventOrderWeb_event`
+--
+
+DROP TABLE IF EXISTS `pyEventOrderWeb_event`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pyEventOrderWeb_event` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `event_title` varchar(200) NOT NULL,
+  `event_date` datetime DEFAULT NULL,
+  `updated_date` datetime,
+  `event_detail` longtext NOT NULL,
+  `updated_by` varchar(100) NOT NULL,
+  `event_type` int(11) NOT NULL,
+  `event_registdeadline` datetime DEFAULT NULL,
+  `event_hostfakeID` varchar(200) NOT NULL,
+  `event_hostname` varchar(1000) NOT NULL,
+  `event_limit` int(11) NOT NULL,
+  `event_sn` varchar(20) NOT NULL,
+  `event_status` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `pyEventOrderWeb_event`
+--
+
+LOCK TABLES `pyEventOrderWeb_event` WRITE;
+/*!40000 ALTER TABLE `pyEventOrderWeb_event` DISABLE KEYS */;
+INSERT INTO `pyEventOrderWeb_event` VALUES (4,'Test333','2013-11-25 14:37:00','2013-11-26 01:37:21','Tttttttttt','2',1,NULL,'12345678','12345678',31,'',0),(5,'Ricky-测试活动111','2013-11-26 03:13:00','2013-11-26 14:13:32','测试111','2',1,NULL,'oMJjPjt71JPhAv3w8l2NI4rbaAHQ','Ricky',10,'',3),(6,'奥体羽毛球','2013-11-28 11:00:00','2013-11-26 14:34:38','周四晚羽毛球，七到十点，两块场地。\r\n请速报名。','3',1,NULL,'','',10,'',0),(8,'test2-Ricky','2013-11-26 03:59:00','2013-11-26 14:59:25','1111111壹一①','2',1,NULL,'oMJjPjt71JPhAv3w8l2NI4rbaAHQ','Ricky',34,'',0),(9,'rickytest333','2013-11-26 04:06:00','2013-11-26 15:05:53','\r\nAll newsletter offers apply to select seller stores and continue while supplies last from 26 November - 2 December 2013.','2',1,NULL,'oMJjPjt71JPhAv3w8l2NI4rbaAHQ','Ricky',54,'',0),(10,'打羽毛球','2013-11-28 12:00:00','2013-11-28 05:48:42','奥体中心','5',1,NULL,'oMJjPjkrEri7FCEhgcoDvd1-XeGc','漂亮的大猫',1,'',0),(11,'奥体中心国奥羽毛球俱乐部','2013-11-28 12:00:00','2013-11-28 05:50:30','每周四20～22点','6',1,NULL,'oMJjPjrJ8J7H9LSd09-TWlqRY8fw','蔡谱',6,'',0),(12,'良木羽毛球俱乐部每周三和日活动','2013-12-04 11:00:00','2013-11-28 07:27:16','地点在中医药大学体育馆三层\r\n周三: 晚上7-10点\r\n周日: 下午5-8点','7',1,NULL,'','',30,'',2),(13,'rickytest333-renew','2013-12-04 11:00:00','2013-12-02 05:20:06','All newsletter offers apply to select seller stores and continue while supplies last from 26 November - 2 December 2013.','2',1,NULL,'','',70,'',0),(20,'德德饭否风格','2014-02-02 12:00:00','2013-12-02 06:43:47','仍然对方方法','15',1,NULL,'oMJjPjq8PK-2tCdOQ7a7i7g5K-9I','中心',51,'',0),(21,'德德饭否风格','2014-02-02 12:00:00','2013-12-02 06:43:50','仍然对方方法','15',1,NULL,'oMJjPjq8PK-2tCdOQ7a7i7g5K-9I','中心',51,'',0),(22,'良木羽毛球俱乐部每周三和日活动','2013-12-11 11:00:00','2013-12-02 08:23:31','地点在中医药大学体育馆三层\r\n周三: 晚上7-10点\r\n周日: 下午5-8点','7',1,NULL,'oMJjPjiM4cGnHFuiJnvGQqUcktPQ','小胖',30,'',0),(23,'周四12月5日奥体羽毛球','2013-12-05 12:00:00','2013-12-02 15:39:55','业余5级以上。','5',1,NULL,'oMJjPjkrEri7FCEhgcoDvd1-XeGc','漂亮的大猫',4,'',0),(24,'测试活动','2013-12-12 11:00:00','2013-12-03 01:38:21','工作也很重','4',1,NULL,'oMJjPjkSC_L-4VtUTvBrrm4CqqYg','Meihao',40,'',0);
+/*!40000 ALTER TABLE `pyEventOrderWeb_event` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `pyEventOrderWeb_participant`
+--
+
+DROP TABLE IF EXISTS `pyEventOrderWeb_participant`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pyEventOrderWeb_participant` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `partici_fakeID` varchar(200) NOT NULL,
+  `event_ID_id` int(11) NOT NULL,
+  `event_sn` varchar(200) NOT NULL,
+  `partici_name` varchar(200) NOT NULL,
+  `partici_type` int(11) NOT NULL,
+  `register_time` datetime NOT NULL,
+  `partici_user_id` int(11) NOT NULL,
+  `partici_openid` varchar(30) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `pyEventOrderWeb_participant_event_ID_id_5307c28753411944_uniq` (`event_ID_id`,`partici_user_id`),
+  KEY `pyEventOrderWeb_participant_f54fd925` (`event_ID_id`),
+  KEY `pyEventOrderWeb_participant_e3144952` (`partici_user_id`),
+  CONSTRAINT `event_ID_id_refs_id_c9165496` FOREIGN KEY (`event_ID_id`) REFERENCES `pyEventOrderWeb_event` (`id`),
+  CONSTRAINT `partici_user_id_refs_id_9f09812d` FOREIGN KEY (`partici_user_id`) REFERENCES `pyEventOrderWeb_wechat_user` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `pyEventOrderWeb_participant`
+--
+
+LOCK TABLES `pyEventOrderWeb_participant` WRITE;
+/*!40000 ALTER TABLE `pyEventOrderWeb_participant` DISABLE KEYS */;
+INSERT INTO `pyEventOrderWeb_participant` VALUES (4,'',6,'','Ricky',1,'2013-11-27 05:29:38',2,'oMJjPjt71JPhAv3w8l2NI4rbaAHQ'),(5,'',12,'','',1,'2013-11-28 08:10:34',9,'oMJjPjt5DpPJoFjI8f9zlMequBxw'),(6,'',12,'','夕纹',1,'2013-11-28 10:39:18',10,'oMJjPjpug24Tla2euYJQQYG_oiBw'),(7,'',12,'','Meihao',2,'2013-11-30 02:53:27',4,'oMJjPjkSC_L-4VtUTvBrrm4CqqYg'),(8,'',23,'','蔡谱',1,'2013-12-02 16:10:11',6,'oMJjPjrJ8J7H9LSd09-TWlqRY8fw'),(9,'',23,'','小武',1,'2013-12-02 16:28:49',21,'oMJjPjkxLNdnRtGwnOYbyoNVCxIU');
+/*!40000 ALTER TABLE `pyEventOrderWeb_participant` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `pyEventOrderWeb_wechat_user`
+--
+
+DROP TABLE IF EXISTS `pyEventOrderWeb_wechat_user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pyEventOrderWeb_wechat_user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `wechat_fakeID` varchar(200) NOT NULL,
+  `wechat_username` varchar(200) NOT NULL,
+  `wechat_inputname` varchar(200) NOT NULL,
+  `wechat_usertype` varchar(20) NOT NULL,
+  `subscribe` tinyint(1) NOT NULL,
+  `openid` varchar(30) NOT NULL,
+  `nickname` varchar(50) NOT NULL,
+  `sex` tinyint(1) DEFAULT NULL,
+  `language` varchar(10) NOT NULL,
+  `city` varchar(20) NOT NULL,
+  `province` varchar(20) NOT NULL,
+  `country` varchar(20) NOT NULL,
+  `headimageurl` varchar(200) NOT NULL,
+  `initialized` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `openid` (`openid`)
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `pyEventOrderWeb_wechat_user`
+--
+
+LOCK TABLES `pyEventOrderWeb_wechat_user` WRITE;
+/*!40000 ALTER TABLE `pyEventOrderWeb_wechat_user` DISABLE KEYS */;
+INSERT INTO `pyEventOrderWeb_wechat_user` VALUES (2,'','','RickyChi','',1,'oMJjPjt71JPhAv3w8l2NI4rbaAHQ','',NULL,'zh-CN','','','中国','',1),(4,'','','Meihao','',1,'oMJjPjkSC_L-4VtUTvBrrm4CqqYg','',NULL,'zh-CN','','','中国','',1),(5,'','','漂亮的大猫','',1,'oMJjPjkrEri7FCEhgcoDvd1-XeGc','',NULL,'zh-CN','','','中国','',1),(6,'','','蔡谱','',1,'oMJjPjrJ8J7H9LSd09-TWlqRY8fw','',NULL,'zh-CN','','','中国','',1),(7,'','','小胖','',1,'oMJjPjiM4cGnHFuiJnvGQqUcktPQ','',NULL,'zh-CN','','','中国','',1),(8,'','','老海','',1,'oMJjPjjOlRxfS3uVbnntEb_1RzxI','',NULL,'zh-CN','','','中国','',1),(9,'','','','',1,'oMJjPjt5DpPJoFjI8f9zlMequBxw','',NULL,'zh-CN','','','中国','',0),(10,'','','夕纹','',1,'oMJjPjpug24Tla2euYJQQYG_oiBw','',NULL,'zh-CN','','','中国','',1),(11,'','','','',1,'oMJjPjhf8-Te8ZQ0_RY_1gOfiT2M','',NULL,'zh-CN','','','中国','',0),(12,'','','真实生活','',1,'oMJjPjglBY4gA0BE6GEYCghtzMwA','',NULL,'zh-CN','','','中国','',1),(13,'','','','',1,'oab-5uDboqcwd9LQISPB8VVawr24','',NULL,'zh-CN','','','中国','',0),(14,'','','','0',1,'oMJjPjrf0u0nG17Anhus1JMZaL-0','',NULL,'zh-CN','','','中国','',0),(15,'','','中心','0',1,'oMJjPjq8PK-2tCdOQ7a7i7g5K-9I','',NULL,'zh-CN','','','中国','',1),(16,'','','','0',1,'oMJjPjgYlJQXy4WGbfG1KZYB63bk','',NULL,'zh-CN','','','中国','',0),(17,'','','','0',1,'oMJjPjijGkyrBp2eMLJHNGbYUAuI','',NULL,'zh-CN','','','中国','',0),(18,'','','','0',1,'oMJjPjtI0xaN3hQYVdpOJZusOCvo','',NULL,'zh-CN','','','中国','',0),(19,'','','','0',1,'oMJjPjlIPkMV48xUd9-dxVtfSWlE','',NULL,'zh-CN','','','中国','',0),(20,'','','Mandy','0',1,'oMJjPjqNqUdRiri5b5uKIYWhIf0s','',NULL,'zh-CN','','','中国','',1),(21,'','','小武','0',1,'oMJjPjkxLNdnRtGwnOYbyoNVCxIU','',NULL,'zh-CN','','','中国','',1),(22,'','','超','0',1,'oMJjPjifeVYSTxmnt1ZdFD6OajQg','',NULL,'zh-CN','','','中国','',1);
+/*!40000 ALTER TABLE `pyEventOrderWeb_wechat_user` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `south_migrationhistory`
+--
+
+DROP TABLE IF EXISTS `south_migrationhistory`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `south_migrationhistory` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `app_name` varchar(255) NOT NULL,
+  `migration` varchar(255) NOT NULL,
+  `applied` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `south_migrationhistory`
+--
+
+LOCK TABLES `south_migrationhistory` WRITE;
+/*!40000 ALTER TABLE `south_migrationhistory` DISABLE KEYS */;
+INSERT INTO `south_migrationhistory` VALUES (1,'pyEventOrderWeb','0001_initial','2013-11-21 03:01:36'),(2,'pyEventOrderWeb','0002_initial','2013-11-21 03:04:36'),(3,'pyEventOrderWeb','0003_auto__add_field_event_event_status__chg_field_event_updated_date__chg_','2013-11-24 00:52:12'),(4,'pyEventOrderWeb','0004_auto__chg_field_event_updated_by','2013-11-28 05:30:39'),(5,'jqmFlatPages','0001_initial','2013-12-02 15:23:55');
+/*!40000 ALTER TABLE `south_migrationhistory` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2013-12-03  8:36:43
