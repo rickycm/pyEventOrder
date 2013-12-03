@@ -17,32 +17,29 @@
 <script src='{% static "js/jquery.validate.min.js" %}' type="text/javascript"></script>
 {% endblock %}
 
+{% block page_id %}user_setup{% endblock %}
 {% block main_content %}
-          <h4 style="text-align:left">请先设置显示姓名以发布或参加活动。</h4>
-<form action="/setting/" id="setupinfoForm" method="post" class="form-horizontal">
-    {% csrf_token %}
-    <fieldset>
+    <h4 style="text-align:left">请先设置显示姓名以发布或参加活动。</h4>
+    <form action="/setting/" id="setupinfoForm" method="post" class="form-horizontal">
+        {% csrf_token %}
         <!-- Text input-->
         <div class="control-group">
-          <!--<label class="control-label" for="event_title">活动名称</label> -->
-          <div class="controls">
+            <!--<label class="control-label" for="event_title">活动名称</label> -->
+            <div class="controls">
                 <input id="wechat_inputname" name="wechat_inputname" type="text" placeholder="请设置姓名"
-                   value="{{form.wechat_inputname.value|default_if_none:''}}" required>
-          </div>
+                    value="{{form.wechat_inputname.value|default_if_none:''}}" required>
+            </div>
         </div>
 
         <!-- Button (Double) -->
         <div class="control-group">
-          <label class="control-label" for="submit"></label>
+            <label class="control-label" for="submit"></label>
             <div class="ui-body ui-body-b">
-                    <button type="submit" id="submit" name="submit"  data-theme="b">保存</button>
-                    <button type="reset" data-theme="d">取消</button>
+                <button type="submit" id="submit" name="submit"  data-theme="b">保存</button>
+                <button type="reset" data-theme="d">取消</button>
             </div>
         </div>
-
-
-    </fieldset>
-</form>
+    </form>
 {% endblock %}
 
 {% block user_page_js %}

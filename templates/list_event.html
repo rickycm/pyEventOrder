@@ -1,11 +1,7 @@
-{% extends 'dh5mbp/base.html' %}
-{% load url from future %}
+{% extends 'jqmpage.html' %}
 {% load staticfiles %}
 
-{% block title %}{{ title }}{% endblock %}
-
-{% block dh5mbp_css %}
-    {{block.super}}
+{% block user_css %}
     <style>
         table {
             color: black;
@@ -36,29 +32,30 @@
 
     </style>
 {% endblock %}
-{% block content %}
+
+{% block page_id %}list_event{% endblock %}
+{% block main_content %}
 
     <body>
-            {% if type == 'mine' %}
-                <h3 style="text-align:center">以下是您发布的活动，点击标题可查看或编辑：</h3>
-            {% elif type == 'other' %}
-                <h3 style="text-align:center">以下是您参与的活动，点击标题可查看或修改：</h3>
-            {% endif %}
+    {% if type == 'mine' %}
+         <h3 style="text-align:center">以下是您发布的活动，点击标题可查看或编辑：</h3>
+    {% elif type == 'other' %}
+         <h3 style="text-align:center">以下是您参与的活动，点击标题可查看或修改：</h3>
+    {% endif %}
+    <p></p>
 
-                <p>
-                    <table border="1px" cellspacing="0px" style="border-collapse:collapse">
-                        <tr>
-                            <td>活动名称</td>
-                            <td>活动时间</td>
-                        </tr>
-                        {% for event in events %}
-                        <tr>
-                            <td><a href="/showevent/?eventid={{ event.id }}" >{{ event.event_title }} </a></td>
-                            <td>{{ event.event_date|date:"Y-m-d, H:i" }}</td>
-                        </tr>
-                        {% endfor %}
-                    </table>
-                </p>
+    <table border="1px" cellspacing="0px" style="border-collapse:collapse">
+         <tr>
+              <td>活动名称</td>
+              <td>活动时间</td>
+         </tr>
+         {% for event in events %}
+              <tr>
+                   <td><a href="/showevent/?eventid={{ event.id }}" >{{ event.event_title }} </a></td>
+                   <td>{{ event.event_date|date:"Y-m-d, H:i" }}</td>
+              </tr>
+         {% endfor %}
+    </table>
 
     <div style="text-align:center">
         <!-- 如果当前是第一页，就不显示【上一页】链接 -->
@@ -77,31 +74,32 @@
             </a>
         {% endif %}
     </div>
-    <p>    </p>
+    <p></p>
 
-<div id="adminlinks">
-{% if user.is_authenticated and user != "" %}
-    ========={{ user }}
-    +++++++++{{ user.is_authenticated }}
-    <p>Welcome, {{ user.username }}. Thanks for logging in.</p>
-    <li><a href = "/list_events/?type=mine"> 我发布的活动 </a></li>
-    <li><a href = "/list_events/?type=other"> 我参与的活动 </a></li>
-        <li><a href = "/add_event/"> add_event </a></li>
-    <li><a href = "/accounts/logout/"> 退出 </a></li>
-    <li><a href = "/admin/"> 管理界面 </a></li>
-{% else %}
-    <p>Welcome, new user. Please log in.</p>
-    <li><a href ="/accounts/login/?next=/"> 登录 </a></li>
-    <li><a href ="/accounts/register/?next=/"> 注册 </a></li>
-{% endif %}
-</div>
-    </body>
-
+    <div id="adminlinks">
+    {% if user.is_authenticated and user != "" %}
+        ========={{ user }}
+        +++++++++{{ user.is_authenticated }}
+        <p>Welcome, {{ user.username }}. Thanks for logging in.</p>
+        <ul>
+            <li><a href = "/list_events/?type=mine"> 我发布的活动 </a></li>
+            <li><a href = "/list_events/?type=other"> 我参与的活动 </a></li>
+            <li><a href = "/add_event/"> add_event </a></li>
+            <li><a href = "/accounts/logout/"> 退出 </a></li>
+            <li><a href = "/admin/"> 管理界面 </a></li>
+        </ul>
+    {% else %}
+        <p>Welcome, new user. Please log in.</p>
+        <ul>
+            <li><a href ="/accounts/login/?next=/"> 登录 </a></li>
+            <li><a href ="/accounts/register/?next=/"> 注册 </a></li>
+        </ul>
+    {% endif %}
+    </div>
 {% endblock %}
 
-{% block post_main_script %}
-{{ block.super }}
-<script type="text/javascript">
+{% block user_foot_js %}
+    <script type="text/javascript">
          $(document).ready(function() {
           // disable ajax nav
           $.mobile.ajaxEnabled = false;
@@ -113,5 +111,5 @@
           }
          });
 
-</script>
+    </script>
 {% endblock %}

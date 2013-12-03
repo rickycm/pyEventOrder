@@ -1,12 +1,7 @@
-{% extends 'dh5mbp/base.html' %}
-{% load url from future %}
+{% extends 'jqmbase.html' %}
 {% load staticfiles %}
 
-{% block title %}{{ title }}{% endblock %}
-
-{% block dh5mbp_css %}
-    {{block.super}}
-    <link rel="stylesheet" type="text/css" href='{% static "datetimepicker/css/jqm-datebox.css" %}' />
+{% block user_css %}
     <style>
         label.error {
             color: red;
@@ -16,11 +11,9 @@
     </style>
 {% endblock %}
 
-{% block content %}
-
+{% block page_id %}error_message{% endblock %}
+{% block page_content %}
     <p style="text-align:center">
         {{ errorMessage }}
     </p>
-
-
 {% endblock %}

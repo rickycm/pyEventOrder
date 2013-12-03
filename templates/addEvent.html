@@ -1,5 +1,4 @@
 {% extends 'jqmpage.html' %}
-{% load url from future %}
 {% load staticfiles %}
 
 {% block user_css %}
@@ -59,10 +58,10 @@
 {% endblock %}
 
 {% block user_head_js %}
-<script src='{% static "js/jquery.validate.min.js" %}' type="text/javascript"></script>
-<script src='{% static "datetimepicker/js/jqm-datebox.core.js" %}' type="text/javascript"></script>
-<script src='{% static "datetimepicker/js/jqm-datebox.mode.datebox.js" %}' type="text/javascript"></script>
-<script src='{% static "datetimepicker/js/jquery.mobile.datebox.i18n.zh-CN.utf8.js" %}' type="text/javascript"></script>
+    <script src='{% static "js/jquery.validate.min.js" %}' type="text/javascript"></script>
+    <script src='{% static "datetimepicker/js/jqm-datebox.core.js" %}' type="text/javascript"></script>
+    <script src='{% static "datetimepicker/js/jqm-datebox.mode.datebox.js" %}' type="text/javascript"></script>
+    <script src='{% static "datetimepicker/js/jquery.mobile.datebox.i18n.zh-CN.utf8.js" %}' type="text/javascript"></script>
 {% endblock %}
 {% block user_page_js %}
 <script type="text/javascript">

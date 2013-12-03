@@ -1,39 +1,38 @@
-{% extends 'dh5mbp/base.html' %}
-{% load url from future %}
+{% extends 'jqmbase.html' %}
 {% load staticfiles %}
 
 {% block title %} 欢迎使用 {% endblock %}
 
-{% block dh5mbp_css %}
-    {{block.super}}
-
-{% endblock %}
-
 {% block meta %}
-    {{ block.super }}
     <meta property="qc:admins" content="3123217701455116014076161705256375" />
+    {{ block.super }}
 {% endblock %}
 
-{% block content %}
+{% block page_id %}index{% endblock %}
+{% block page_content %}
 <div id="adminlinks">
 {% if user.is_authenticated and user != "" %}
     ========={{ user }}
     +++++++++{{ user.is_authenticated }}
     <p>Welcome, {{ user.username }}. Thanks for logging in.</p>
+    <ul>
     <li><a href = "/list_events/?type=mine"> 我发布的活动 </a></li>
     <li><a href = "/list_events/?type=other"> 我参与的活动 </a></li>
         <li><a href = "/add_event/"> add_event </a></li>
     <li><a href = "/accounts/logout/"> 退出 </a></li>
     <li><a href = "/admin/"> 管理界面 </a></li>
+    </ul>
 {% else %}
     <p>Welcome, new user. Please log in.</p>
+    <ul>
     <li><a href ="/accounts/login/?next=/"> 登录 </a></li>
     <li><a href ="/accounts/register/?next=/"> 注册 </a></li>
+    </ul>
 {% endif %}
 </div>
 {% endblock %}
 
-{% block post_main_script %}
+{% block user_foot_js %}
 {{ block.super }}
 <script type="text/javascript">
          $(document).ready(function() {
