@@ -146,7 +146,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     #'django.contrib.flatpages',
-    'bootstrap_admin',
+    #'bootstrap_admin',
     'django.contrib.admin',
     'django.contrib.admindocs',
     'south',
