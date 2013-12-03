@@ -9,8 +9,8 @@ class EventAdmin(admin.ModelAdmin):
     date_hierarchy = 'updated_date'
 
 class Wechat_userAdmin(admin.ModelAdmin):
-    list_display = ('wechat_fakeID', 'wechat_username', 'wechat_inputname', 'wechat_usertype', 'openid', 'initialized')
-    fields = ('wechat_fakeID', 'wechat_username', 'wechat_inputname', 'wechat_usertype', 'openid', 'initialized')
+    list_display = ('openid', 'wechat_fakeID', 'wechat_username', 'wechat_inputname', 'wechat_usertype', 'initialized')
+    fields = ('openid', 'wechat_fakeID', 'wechat_username', 'wechat_inputname', 'wechat_usertype', 'initialized')
 
 class ParticipantAdmin(admin.ModelAdmin):
     list_display = ('event_ID', 'partici_name', 'partici_type', 'partici_openid', 'register_time')
