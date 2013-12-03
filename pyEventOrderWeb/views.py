@@ -647,15 +647,18 @@ def test(request):
 
 # 根据传递过来的参数设置openid以及设定转向
 def cookie_openid(request):
-    next = request.GET['next']
-    response = HttpResponseRedirect(next)
+    try:
+        next = request.GET['next']
+        response = HttpResponseRedirect(next)
 
-    openid = request.GET['openid']
-    logger.debug('Request has openid ' + openid)
-    max_age = 365 * 24 * 60 * 60
+        openid = request.GET['openid']
+        logger.debug('Request has openid ' + openid)
+        max_age = 365 * 24 * 60 * 60
 
-    response.set_cookie("wxopenid", openid, max_age=max_age)
-    return response
+        response.set_cookie("wxopenid", openid, max_age=max_age)
+        return response
+    except:
+        return Http404
 
 
 
