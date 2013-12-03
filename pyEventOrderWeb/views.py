@@ -644,3 +644,18 @@ def welcome(request):
 
 def test(request):
     return render_to_response('test.html')
+
+# 根据传递过来的参数设置openid以及设定转向
+def cookie_openid(request):
+    next = request.GET['next']
+    response = HttpResponseRedirect(next)
+
+    openid = request.GET['openid']
+    logger.debug('Request has openid ' + openid)
+    max_age = 365 * 24 * 60 * 60
+
+    response.set_cookie("wxopenid", openid, max_age=max_age)
+    return response
+
+
+
