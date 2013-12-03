@@ -558,7 +558,7 @@ def check_auth(request):
             return HttpResponse(status=500)
     else:
         # 暂时不要后面的处理
-        raise Http404
+        return render_to_response('welcome.html')
 
     # 然后启动OAuth2过程，在这里需要判断启动谁
     #url = request.build_absolute_uri()
