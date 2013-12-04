@@ -83,5 +83,6 @@ def sendEvent(fromUser, toUser, active):
             'url':URLBASE + '/showevent/?' + str(active.id),
         }
     }
+    logger.debug(msg_out)
     return render_to_response('multimsg.xml', msg_out, content_type='text/xml')
 
