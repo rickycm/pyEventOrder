@@ -44,9 +44,8 @@ def processEvent(msg,event):
             myid = msg.find('ToUserName').text
             openid = msg.find('FromUserName').text
             wechatUser = wechat_user.objects.get(openid=openid)
-            logger.debug("User is " + str(wechatUser.id))
             active = activity.objects.filter(updated_by=wechatUser.id).latest('updated_date')
-            logger.debug('get active ' + str(active.id))
+            logger.debug('get activity ' + str(active.id))
             return sendEvent(fromUser=myid, toUser=openid, active=active)
 
     raise Http404
@@ -81,7 +80,7 @@ def sendEvent(fromUser, toUser, active):
             'title':'活动发布',
             'description':active.event_title,
             'picurl':URLBASE + '/media/badminton.png',
-            'url':URLBASE + '/showevent/?' + active.id,
+            'url':URLBASE + '/showevent/?' + str(active.id),
         }
     }
     return render_to_response('multimsg.xml', msg_out, content_type='text/xml')
