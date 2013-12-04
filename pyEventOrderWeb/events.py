@@ -77,7 +77,7 @@ def sendEvent(fromUser, toUser, active):
         'toUser':toUser,
         'time':int(time.time()),
         'article':{
-            'title':'活动发布',
+            'title':u'活动发布',
             'description':active.event_title,
             'picurl':URLBASE + '/media/badminton.png',
             'url':URLBASE + '/showevent/?' + str(active.id),
