@@ -462,8 +462,8 @@ def setting(request):
             if user is not None:
                 real_user = user.real_user
                 logger.debug(real_user.id)
-                request.session['userid'] = real_user.id
                 login(request, user)
+                request.session['userid'] = real_user.id
 
                 form = forms.SetupuserForm(instance=real_user)
                 response = render_to_response('setupinfo.html', {'title': '个人设置', 'form': form})
