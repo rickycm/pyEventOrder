@@ -116,16 +116,16 @@ AUTHENTICATION_BACKENDS = (
 
 LOGIN_URL = "/login/"
 
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'wx-eventorder',
-    }
-}
+#CACHES = {
+    #'default': {
+        #'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        #'LOCATION': 'wx-eventorder',
+    #}
+#}
 
-SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
-SESSION_EXPIRE_AT_BROWSER_CLOSE = False
-SESSION_COOKIE_AGE = 12096000
+#SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+#SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+#SESSION_COOKIE_AGE = 12096000
 #SESSION_COOKIE_DOMAIN = 'whitemay.pythonanywhere.com'
 
 ROOT_URLCONF = 'pyEventOrder.urls'
@@ -142,7 +142,7 @@ TEMPLATE_DIRS = (
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
-    #'django.contrib.sessions',
+    'django.contrib.sessions',
     #'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
