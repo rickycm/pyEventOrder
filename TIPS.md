@@ -39,7 +39,7 @@ Secret: a50a85115e419c06fcffc7b2efe5882b
     },{
       "type":"view",
       "name":"关于",
-      "url":"http://whitemay.pythonanywhere.com/welcome/"
+      "url":"http://whitemay.pythonanywhere.com/flat/1/"
     }]
   }]
 }
