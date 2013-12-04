@@ -537,9 +537,8 @@ WX_APP_ID='wxf0e81c3bee622d60'
 APP_KEY='dbbea5729ffd5182deff63f90131bc3b'
 def check_auth(request):
 
-    logger.debug('Check Auth')
     next = request.GET.get('next','/')
-    logger.debug(next)
+    logger.debug('Check Auth for '+ next)
     if request.user.is_authenticated():
         return HttpResponseRedirect(next)
 
@@ -548,6 +547,7 @@ def check_auth(request):
         # 进到这个分支的人，应该是关注了公众号的人。
         # 它们的记录在events中已经建立
         openid = request.COOKIES['wxopenid']
+        logger.debug('We have Cookie: ' + openid)
         #logger.info('Cookie has openid ' + openid)
         user = authenticate(openid=openid)
         if user is not None:
