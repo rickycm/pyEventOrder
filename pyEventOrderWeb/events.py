@@ -73,7 +73,7 @@ def sendSetting(user, msg):
 
 def sendEvent(fromUser, toUser, active):
     msg_out = {
-        'fromUserUser':fromUser,
+        'fromUser':fromUser,
         'toUser':toUser,
         'time':int(time.time()),
         'article':{
