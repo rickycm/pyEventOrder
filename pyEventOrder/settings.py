@@ -25,7 +25,7 @@ DATABASES = {
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ['whitemay.pythonanywhere.com']
+ALLOWED_HOSTS = ['www.eztogether.com','whitemay.pythonanywhere.com']
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -70,11 +70,9 @@ STATIC_URL = '/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-# Put strings here, like "/home/html/static" or "C:/www/django/static".
-# Always use forward slashes, even on Windows.
-# Don't forget to use absolute paths, not relative paths.
-#os.path.join(STATIC_ROOT, 'twitter_bootstrap'),
-#os.path.join(STATIC_ROOT, 'font_awesome'),
+    # Put strings here, like "/home/html/static" or "C:/www/django/static".
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths.
     os.path.join(PROJECT_ROOT, 'resources'),
 )
 
@@ -115,18 +113,6 @@ AUTHENTICATION_BACKENDS = (
 )
 
 LOGIN_URL = "/login/"
-
-#CACHES = {
-    #'default': {
-        #'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        #'LOCATION': 'wx-eventorder',
-    #}
-#}
-
-#SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
-#SESSION_EXPIRE_AT_BROWSER_CLOSE = False
-#SESSION_COOKIE_AGE = 12096000
-#SESSION_COOKIE_DOMAIN = 'whitemay.pythonanywhere.com'
 
 ROOT_URLCONF = 'pyEventOrder.urls'
 
