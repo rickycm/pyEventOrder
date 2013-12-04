@@ -4,15 +4,38 @@
 <head>
 	<meta charset="utf-8">
     <meta property="qc:admins" content="3123217701455116014076161705256375" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<title>欢迎使用</title>
+    <meta name="description" content="It is a test" />
     <link rel="stylesheet" href="{% static 'jqm/jquery.mobile-1.3.2.min.css' %}" />
 	<script src="{% static 'jqm/jquery-1.10.2.min.js' %}"></script>
     <script src="{% static 'jqm/jquery.mobile-1.3.2.min.js' %}"></script>
+    <script>
+  document.domain = "qq.com";
+var _wxao = window._wxao || {};
+
+_wxao.appid = "wx1bc509d4d039b25a";
+_wxao.version = "1.0.0";
+_wxao.begin = (+new Date());
+
+(function() {
+var _onBridgeReady = function(){_wxao.jsbReady=true;};
+if(document.addEventListener){
+document.addEventListener('WeixinJSBridgeReady', _onBridgeReady, false);
+} else if(document.attachEvent){
+document.attachEvent('WeixinJSBridgeReady', _onBridgeReady);
+document.attachEvent('onWeixinJSBridgeReady', _onBridgeReady);
+}
+var wxa = document.createElement('script'); wxa.type = 'text/javascript'; wxa.async = true, version = _wxao.version||"1.0";
+wxa.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/wxa/wxa-' + version + '.js';
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(wxa, s);
+})();
+    </script>
 </head>
 <body >
   <div data-role="page" id="welcome">
+    <img src="https://mp.weixin.qq.com/cgi-bin/getimgdata?token=958122993&msgid={msgid}&mode=large&source=file&fileId=10000001&ow=-1" />
     <p>欢迎您使用运通预订助手！</p>
     <p>您能看到现在的页面，表示您还没有完成开始的配置工作。请逐一确认您完成了下面的工作：</p>
     <ul>
@@ -20,5 +43,101 @@
       <li>从菜单中设置了您的个人信息。</li>
     </ul>
   </div>
+<script>
+$(document).ready(function(){
+
+    function report(link, fakeid, action_type){
+      var parse_link = parseUrl(link);
+      if(parse_link == null)
+      {
+        return ;
+      }
+      var query_obj = parseParams( parse_link['query_str'] );
+      query_obj['action_type'] = action_type;
+      query_obj['uin'] = fakeid;
+      var report_url = '/mp/appmsg/show?' + jQuery.param( query_obj );
+      jQuery.ajax({
+        url: report_url,
+        type: 'POST',
+        timeout: 2000
+      })
+    };
+
+    function share_scene(link, scene_type){
+      var parse_link = parseUrl(link);
+      if(parse_link == null)
+      {
+        return link;
+      }
+      var query_obj = parseParams( parse_link['query_str'] );
+      query_obj['scene'] = scene_type;
+      var share_url = 'http://' + parse_link['domain'] + parse_link['path'] + '?' + jQuery.param( query_obj ) + (parse_link['sharp'] ? parse_link['sharp'] : '');
+      return share_url;
+    };
+
+    //report("http://mp.weixin.qq.com/mp/appmsg/show?__biz=MjM5MTE2OTk3NQ==&appmsgid=10001076&itemidx=1&sign=c7902dab666dab79b59724f3c2df4283#wechat_redirect",1);
+    //console.log('share url %s', share_scene("http://mp.weixin.qq.com/mp/appmsg/show?__biz=MjM5MTE2OTk3NQ==&appmsgid=10001076&itemidx=1&sign=c7902dab666dab79b59724f3c2df4283#wechat_redirect", 1));
+    (function(){
+      var onBridgeReady =  function () {
+        var
+        appId  = '',
+        imgUrl = "http://mmbiz.qpic.cn/mmbiz/ibEiaNT3AvTKT2zm4mfQemmLZER3WFEMotfXTfRHhvvmOfzgj5AzGEAjX5CLeSX5teao3bLth3xWCmySrBW8pwcw/0",
+        link   = "http://mp.weixin.qq.com/mp/appmsg/show?__biz=MjM5MTE2OTk3NQ==&appmsgid=10001076&itemidx=1&sign=c7902dab666dab79b59724f3c2df4283#wechat_redirect",
+        title  = htmlDecode("十二生肖&nbsp;—&nbsp;“守护神”系列"),
+        desc   = htmlDecode("&nbsp;&nbsp;&nbsp;&nbsp;——十二生肖-守护神系列——【子鼠】&nbsp;&nbsp;贺岁&nbsp;&nbsp;传禧&nbsp;&nbsp;祈福&nbsp;&nbsp;平安——机灵&nbsp;务实&nbsp;&nbsp;天生乐观，广结"),
+        fakeid = "MjcyNzAxMjc1",
+        desc = desc || link;
+
+        if ("1" == "0"){
+            WeixinJSBridge.call("hideOptionMenu");
+        }
+
+        jQuery("#post-user").click(function(){
+          WeixinJSBridge.invoke('profile',{'username':'gh_2ba20fa66491','scene':'57'});
+        })
+
+        // 发送给好友;
+        WeixinJSBridge.on('menu:share:appmessage', function(argv){
+          WeixinJSBridge.invoke('sendAppMessage',{
+            "appid"      : appId,
+            "img_url"    : imgUrl,
+            "img_width"  : "640",
+            "img_height" : "640",
+            "link"       : share_scene(link, 1),
+            "desc"       : desc,
+            "title"      : title
+          }, function(res) {
+            report(link, fakeid, 1);
+          });
+        });
+
+        // 分享到朋友圈;
+        WeixinJSBridge.on('menu:share:timeline', function(argv){
+          report(link, fakeid, 2);
+          WeixinJSBridge.invoke('shareTimeline',{
+            "img_url"    : imgUrl,
+            "img_width"  : "640",
+            "img_height" : "640",
+            "link"       : share_scene(link, 2),
+            "desc"       : desc,
+            "title"      : title
+          }, function(res) {});
+        });
+
+        // 隐藏右上角的选项菜单入口;
+        //WeixinJSBridge.call('hideOptionMenu');
+      };
+
+      if(document.addEventListener){
+        document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+      } else if(document.attachEvent){
+        document.attachEvent('WeixinJSBridgeReady'   , onBridgeReady);
+        document.attachEvent('onWeixinJSBridgeReady' , onBridgeReady);
+      }
+    })();
+
+});
+
+</script>
 </body>
 </html>

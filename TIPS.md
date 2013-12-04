@@ -4,36 +4,45 @@ openid: gh_982e9c43c16c
 Appid: wxceec3a78555b9cdd
 Secret: a50a85115e419c06fcffc7b2efe5882b
 {
-    "access_token": "8bad52foDbFTFsq1oA7838wWJ4_ApWr7ZkpYJgnGFQ_UO9uv3Tg59puivAwQIPQqCz5xaGVSjW1P7nhhZgnCgRAuTdCAwcug8y_Y3LZkU4CevSYbb_weLU4zlRqrh7DFbQnUxx0hpX-5KVfYMmo6GA",
+    "access_token": "4HIIgxM9dL_UPtSE3V5sbJ1nIp5zvDrDKP-ll8ar7_1GR0HT4QhEo4zkizAqxeBc5DF8-EiSAVcfvo83kqHcaAxI4N_lIKN9eOVMF0F6GaoP4M0Yu8kS2hCm4y6rv6aMC4vLPh4c13L85vuQtIHdJQ",
     "expires_in": 7200
 }
 {
-     "button":[
-     {
-          "type":"view",
-          "name":"发布活动",
-          "url":"http://whitemay.pythonanywhere.com/add_event/"
-      },
-      {
-          "name":"活动管理",
-           "sub_button":[
-           {
-               "type":"view",
-               "name":"我发布的活动",
-               "url":"http://whitemay.pythonanywhere.com/list_events/?type=mine"
-            },
-            {
-               "type":"view",
-               "name":"我报名的活动",
-               "url":"http://whitemay.pythonanywhere.com/list_events/?type=other"
-            }]
-      },
-      {
-           "type":"click",
-           "name":"个人信息",
-           "key":"SETTING"
-      }]
- }
+  "button":[{
+    "name":"发布活动",
+    "sub_button":[{
+      "type":"view",
+      "name":"发布球类活动",
+      "url":"http://whitemay.pythonanywhere.com/add_event/"
+    },{
+      "type":"click",
+      "name":"获取推广链接",
+      "key":"GETEVENT"
+    }]
+  },{
+    "name":"活动管理",
+    "sub_button":[{
+       "type":"view",
+       "name":"我发布的活动",
+       "url":"http://whitemay.pythonanywhere.com/list_events/?type=mine"
+    },{
+      "type":"view",
+      "name":"我报名的活动",
+      "url":"http://whitemay.pythonanywhere.com/list_events/?type=other"
+    }]
+  },{
+    "name":"配置",
+    "sub_button":[{
+      "type":"click",
+      "name":"个人信息",
+      "key":"SETTING"
+    },{
+      "type":"view",
+      "name":"关于",
+      "url":"http://whitemay.pythonanywhere.com/welcome/"
+    }]
+  }]
+}
 
 测试号 gh_581ecdd3e72a
 appId wx8763ead7d4408241

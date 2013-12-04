@@ -5,7 +5,7 @@ import logging
 
 from django.http import Http404
 from django.shortcuts import render_to_response
-from models import wechat_user
+from models import wechat_user, event as activity
 
 logger = logging.getLogger('django.dev')
 URLBASE = 'http://whitemay.pythonanywhere.com'
@@ -30,15 +30,23 @@ def processEvent(msg,event):
 
     elif event_type=='CLICK':
         # 目前为止，应该只有SETTING这一个点击项
-        assert msg.find('EventKey').text == 'SETTING'
-        userid = msg.find('FromUserName').text
-        logger.debug(userid + ' clicked!')
-        try:
-            user = wechat_user.objects.get(openid=userid)
-        except wechat_user.DoesNotExist:
-            user = wechat_user.objects.create(openid=userid, subscribe=True, initialized=False)
-            user.save()
-        return sendSetting(user, msg)
+        click = msg.find('EventKey').text
+        if click=='SETTING':
+            userid = msg.find('FromUserName').text
+            logger.debug(userid + ' clicked!')
+            try:
+                user = wechat_user.objects.get(openid=userid)
+            except wechat_user.DoesNotExist:
+                user = wechat_user.objects.create(openid=userid, subscribe=True, initialized=False)
+                user.save()
+            return sendSetting(user, msg)
+        elif click=='GETEVENT':
+            myid = msg.find('ToUserName').text
+            openid = msg.find('FromUserName').text
+            user = wechat_user.objects.get(openid=openid)
+            active = activity.objects.filter(updated_by=user.id).order_by('-id')[0:1]
+            logger.debug('get active ' + active.id)
+            return sendEvent(fromUser=myid, toUser=openid, active=active)
 
     raise Http404
 
@@ -62,3 +70,18 @@ def sendSetting(user, msg):
 
     msg_out['articles'] = [article]
     return render_to_response('multimsg.xml', msg_out, content_type='text/xml')
+
+def sendEvent(fromUser, toUser, active):
+    msg_out = {
+        'fromUserUser':fromUser,
+        'toUser':toUser,
+        'time':int(time.time()),
+        'article':{
+            'title':'活动发布',
+            'description':active.event_title,
+            'picurl':URLBASE + '/media/badminton.png',
+            'url':URLBASE + '/showevent/?' + active.id,
+        }
+    }
+    return render_to_response('multimsg.xml', msg_out, content_type='text/xml')
+
