@@ -464,6 +464,7 @@ def setting(request):
                 logger.debug(real_user.id)
                 login(request, user)
                 request.session['userid'] = real_user.id
+                #request.COOKIES
 
                 form = forms.SetupuserForm(instance=real_user)
                 response = render_to_response('setupinfo.html', {'title': '个人设置', 'form': form})

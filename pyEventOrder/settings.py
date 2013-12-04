@@ -25,7 +25,7 @@ DATABASES = {
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ['www.eztogether.net','whitemay.pythonanywhere.com']
+ALLOWED_HOSTS = ['whitemay.pythonanywhere.com']
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -126,6 +126,7 @@ CACHES = {
 SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 SESSION_COOKIE_AGE = 12096000
+SESSION_COOKIE_DOMAIN = 'whitemay.pythonanywhere.com'
 
 ROOT_URLCONF = 'pyEventOrder.urls'
 
