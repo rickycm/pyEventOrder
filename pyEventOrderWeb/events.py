@@ -77,13 +77,14 @@ def sendEvent(fromUser, toUser, active):
         'fromUser':fromUser,
         'toUser':toUser,
         'time':int(time.time()),
-        'article':{
-            'title':u'活动发布',
-            'description':active.event_title,
-            'picurl':URLBASE + '/media/badminton.png',
-            'url':URLBASE + '/showevent/?' + str(active.id),
-        }
     }
+    article = {
+        'title':u'活动发布',
+        'description':active.event_title,
+        'picurl':URLBASE + '/media/badminton.png',
+        'url':URLBASE + '/showevent/?' + str(active.id),
+    }
+    msg_out['articles'] = [article]
     logger.debug(msg_out)
     return render_to_response('multimsg.xml', msg_out, content_type='text/xml')
 
