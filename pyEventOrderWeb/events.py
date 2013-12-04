@@ -45,8 +45,8 @@ def processEvent(msg,event):
             openid = msg.find('FromUserName').text
             wechatUser = wechat_user.objects.get(openid=openid)
             logger.debug("User is " + str(wechatUser.id))
-            active = activity.objects.filter(updated_by=wechatUser.id).order_by('-updated_date')[0:1].count()
-            logger.debug('get active ' + str(active))
+            active = activity.objects.filter(updated_by=wechatUser.id).latest('updated_date')
+            logger.debug('get active ' + str(active.id))
             return sendEvent(fromUser=myid, toUser=openid, active=active)
 
     raise Http404
