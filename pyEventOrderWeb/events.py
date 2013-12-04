@@ -43,8 +43,8 @@ def processEvent(msg,event):
         elif click=='GETEVENT':
             myid = msg.find('ToUserName').text
             openid = msg.find('FromUserName').text
-            user = wechat_user.objects.get(openid=openid)
-            active = activity.objects.filter(updated_by=user.id).order_by('-updated_date')[0:1]
+            wechatUser = wechat_user.objects.get(openid=openid)
+            active = activity.objects.filter(updated_by=wechatUser.id).order_by('-updated_date')[0:1]
             logger.debug('get active ' + active.id)
             return sendEvent(fromUser=myid, toUser=openid, active=active)
 
