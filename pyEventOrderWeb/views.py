@@ -183,7 +183,7 @@ def add_event(request):
                 event_limit = form.data['event_limit'],
                 updated_by = userId,
                 event_type = 1,
-                updated_date = datetime.now(),
+                #updated_date = datetime.now(),
                 event_hostfakeID = wechatUser.openid,
                 event_hostname = wechatUser.wechat_inputname,
                 event_status = 0,
@@ -225,7 +225,7 @@ def updateEvent(request):
             thisEvent.updated_by = userId
             thisEvent.event_status = 0
             thisEvent.event_type = 1
-            thisEvent.updated_date = datetime.now()
+            #thisEvent.updated_date = datetime.now()
             thisEvent.event_hostfakeID = form.data['event_hostfakeID']
             thisEvent.event_hostname = form.data['event_hostname']
 

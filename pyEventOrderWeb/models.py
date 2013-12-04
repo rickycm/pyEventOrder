@@ -9,7 +9,7 @@ EVENT_STATUS = [(0, u'可报名'), (1, u'报名人满'), (2, u'已取消'), (3, 
 class event(models.Model):
     event_title = models.CharField(max_length=200)
     event_date = models.DateTimeField(blank=True, null=True)
-    updated_date = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    updated_date = models.DateTimeField(auto_now=True)
     event_detail = models.TextField(max_length=100000)
     updated_by = models.CharField(max_length=100, blank=True) # wechat_user.id
     event_type = models.IntegerField(blank=True, choices=EVENT_TYPE, default=1)
