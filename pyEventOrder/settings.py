@@ -124,9 +124,9 @@ CACHES = {
 }
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
-SESSION_EXPIRE_AT_BROWSER_CLOSE = False
-SESSION_COOKIE_AGE = 12096000
-SESSION_COOKIE_DOMAIN = 'whitemay.pythonanywhere.com'
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+#SESSION_COOKIE_AGE = 12096000
+#SESSION_COOKIE_DOMAIN = 'whitemay.pythonanywhere.com'
 
 ROOT_URLCONF = 'pyEventOrder.urls'
 
