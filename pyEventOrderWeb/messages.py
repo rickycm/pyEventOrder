@@ -33,7 +33,7 @@ def processMessage(msg):
     return render_to_response('multimsg.xml', msg_out, content_type='text/xml')
 
 def processText(msg):
-    m_content = msg.find('Content').text
+    m_content = msg.find('Content').text.lower()
     msg_out={
         'toUser':msg.find('FromUserName').text,
         'fromUser':msg.find('ToUserName').text,
@@ -45,14 +45,6 @@ def processText(msg):
             + '<a href="' + URLBASE+ '/list_events/?type=mine' + '">*查询我发布的活动；</a>\n\n' \
             + '<a href="' + URLBASE+ '/list_events/?type=other' + '">*查询我参与的活动。</a>'
     elif m_content=='set':
-
-        #article={'title':'信息设置', 'description':'点这里设置您的信息'}
-        #article['picurl'] = URLBASE + '/media/test.png'
-        #article['url'] = URLBASE + '/setting/?userid=' + msg_out['toUser']
-
-        #msg_out['articles'] = [article]
-        #return render_to_response('multimsg.xml', msg_out, content_type='text/xml')
-
         msg_out['content'] = '亲，微信平台不会允许我直接获得您的个人信息，除非明确授权。所以请<a href="' + URLBASE + '/setting/?openid=' + msg_out['toUser'] + '">点这里设置您的名字</a>，才能正常使用活动功能哦！'
     else:
         msg_out['content'] = '您的消息将被记录下来，并在适当的时候回复您。谢谢！'
