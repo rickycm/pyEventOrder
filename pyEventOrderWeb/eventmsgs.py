@@ -8,7 +8,7 @@ from django.shortcuts import render_to_response
 from models import wechat_user, event as activity
 
 logger = logging.getLogger('django.dev')
-URLBASE = 'http://whitemay.pythonanywhere.com'
+URLBASE = 'http://www.eztogether.net'
 
 def processEventMessage(msg, event_msg):
     event_type = event_msg.text

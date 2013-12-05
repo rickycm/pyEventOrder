@@ -13,7 +13,7 @@ Secret: a50a85115e419c06fcffc7b2efe5882b
     "sub_button":[{
       "type":"view",
       "name":"发布球类活动",
-      "url":"http://whitemay.pythonanywhere.com/add_event/"
+      "url":"http://www.eztogether.net/add_event/"
     },{
       "type":"click",
       "name":"获取推广链接",
@@ -24,11 +24,11 @@ Secret: a50a85115e419c06fcffc7b2efe5882b
     "sub_button":[{
        "type":"view",
        "name":"我发布的活动",
-       "url":"http://whitemay.pythonanywhere.com/list_events/?type=mine"
+       "url":"http://www.eztogether.net/list_events/?type=mine"
     },{
       "type":"view",
       "name":"我报名的活动",
-      "url":"http://whitemay.pythonanywhere.com/list_events/?type=other"
+      "url":"http://www.eztogether.net/list_events/?type=other"
     }]
   },{
     "name":"配置",
@@ -39,7 +39,7 @@ Secret: a50a85115e419c06fcffc7b2efe5882b
     },{
       "type":"view",
       "name":"关于",
-      "url":"http://whitemay.pythonanywhere.com/flat/1/"
+      "url":"http://www.eztogether.net/flat/1/"
     }]
   }]
 }
