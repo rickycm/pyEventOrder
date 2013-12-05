@@ -43,7 +43,7 @@ def processText(msg):
         msg_out['content'] = '选择你想要进行的操作：\n\n' \
             + '<a href="' + URLBASE+ '/add_event/' + '">*发布活动;</a> \n\n' \
             + '<a href="' + URLBASE+ '/list_events/?type=mine' + '">*查询我发布的活动；</a>\n\n' \
-            + '<a href="' + URLBASE+ '/lsit_evnets/?type=other' + '">*查询我参与的活动。</a>'
+            + '<a href="' + URLBASE+ '/list_evnets/?type=other' + '">*查询我参与的活动。</a>'
     elif m_content=='set':
 
         #article={'title':'信息设置', 'description':'点这里设置您的信息'}
