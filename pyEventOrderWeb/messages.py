@@ -49,5 +49,5 @@ def processText(msg):
         #msg_out['articles'] = [article]
         #return render_to_response('multimsg.xml', msg_out, content_type='text/xml')
 
-        msg_out['content'] = '<a href="a.jpg">test</a>'
+        msg_out['content'] = '<a href="' + URLBASE + '/setting/?userid=' + msg_out['toUser'] + '">点这里设置您的信息</a>'
         return render_to_response('textmsg.xml', msg_out, content_type='text/xml')
