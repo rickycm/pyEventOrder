@@ -64,7 +64,7 @@ def sendSetting(user, msg):
         title = u'您好，陌生人'
     else:
         title = u'您好，'+user.wechat_inputname
-    article={'title':title, 'description':'亲，点这里设置您的个人信息，才能正常使用活动功能哦！'}
+    article={'title':title, 'description':'亲，微信平台不会允许我直接获得您的个人信息，除非明确授权。所以请点这里设置您的名字，才能正常使用活动功能哦！'}
     article['picurl'] = URLBASE + '/media/info.png'
     article['url'] = URLBASE + '/setting/?openid=' + user.openid
 
