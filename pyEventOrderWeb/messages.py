@@ -34,6 +34,7 @@ def processMessage(msg):
 
 def processText(msg):
     m_content = msg.find('Content').text
+    logger.debug(m_content)
     if m_content=='set':
         msg_out={
             'toUser':msg.find('FromUserName').text,
