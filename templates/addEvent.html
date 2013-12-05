@@ -48,6 +48,8 @@
         <input name="eventtime" id="eventtime" type="time" data-role="datebox"
                data-options='{"mode": "timebox"}' placeholder="请输入活动时间" value="19:00" required>
     </div>
+    <!-- hidden fields -->
+    <input type="hidden" id="event_type" name="event_type" value="{{eventtype|default_if_none:'1'}}"/>
 
     <!-- Button (Double) -->
     <div class="ui-body ui-body-b">

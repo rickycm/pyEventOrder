@@ -170,8 +170,12 @@ def add_event(request):
                                       context_instance=RequestContext(request))
             form = forms.EventForm(instance=thisEvent)
         else:
+            try:
+                eventType = request.GET.get('eventtype')
+            except:
+                eventType = 1
             form = forms.EventForm()
-        return render_to_response('addEvent.html', {'title': '新建活动', 'form': form},
+        return render_to_response('addEvent.html', {'title': '新建活动', 'form': form, 'eventtype': eventType},
                               context_instance=RequestContext(request))
     else:
         form = forms.EventForm(request.POST)
@@ -183,7 +187,7 @@ def add_event(request):
                 event_date = s,
                 event_limit = form.data['event_limit'],
                 updated_by = userId,
-                event_type = 1,
+                event_type = form.data['event_type'],
                 #updated_date = datetime.now(),
                 event_hostfakeID = wechatUser.openid,
                 event_hostname = wechatUser.wechat_inputname,

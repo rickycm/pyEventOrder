@@ -49,6 +49,7 @@
         <!-- hidden fields -->
         <input type="hidden" id="event_hostfakeID" name="event_hostfakeID" value="{{form.event_hostfakeID.value}}"/>
         <input type="hidden" id="event_hostname" name="event_hostname" value="{{form.event_hostname.value}}"/>
+        <input type="hidden" id="event_type" name="event_type" value="{{form.event_type.value|default_if_none:'1'}}"/>
         <!-- Button (Double) -->
         <div class="control-group">
           <label class="control-label" for="submit"></label>

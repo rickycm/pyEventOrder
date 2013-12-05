@@ -80,7 +80,8 @@ def api_response(request):
 
 
 页面链接：
-1、发布活动：/add_event/
+1、发布体育活动：/add_event/?eventtype=1
+发布聚会活动：/add_event/?eventtype=2
 无参数
 2、活动管理：/list_events/?type=
 参数：type = mine 我发布的活动
