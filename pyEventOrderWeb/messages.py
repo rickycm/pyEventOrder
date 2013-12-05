@@ -8,7 +8,7 @@ import logging
 from django.shortcuts import render_to_response
 
 logger = logging.getLogger('django.dev')
-URLBASE = 'http://whitemay.pythonanywhere.com'
+URLBASE = 'http://www.eztogether.net'
 
 def processMessage(msg):
     logger.debug('It is a message.')
@@ -34,13 +34,17 @@ def processMessage(msg):
 
 def processText(msg):
     m_content = msg.find('Content').text
-    logger.debug(m_content)
-    if m_content=='set':
-        msg_out={
-            'toUser':msg.find('FromUserName').text,
-            'fromUser':msg.find('ToUserName').text,
-            'time':int(time.time()),
-        }
+    msg_out={
+        'toUser':msg.find('FromUserName').text,
+        'fromUser':msg.find('ToUserName').text,
+        'time':int(time.time()),
+    }
+    if m_content=='menu':
+        msg_out['content'] = '选择你想要进行的操作：\n\n' \
+            + '发布活动; \n\n' \
+            + '查询我发布的活动；\n\n' \
+            + '查询我参与的活动。\n\n'
+    elif m_content=='set':
 
         #article={'title':'信息设置', 'description':'点这里设置您的信息'}
         #article['picurl'] = URLBASE + '/media/test.png'
@@ -49,5 +53,5 @@ def processText(msg):
         #msg_out['articles'] = [article]
         #return render_to_response('multimsg.xml', msg_out, content_type='text/xml')
 
-        msg_out['content'] = '<a href="' + URLBASE + '/setting/?userid=' + msg_out['toUser'] + '">点这里设置您的信息</a>'
-        return render_to_response('textmsg.xml', msg_out, content_type='text/xml')
+        msg_out['content'] = '<a href="' + URLBASE + '/setting/?openid=' + msg_out['toUser'] + '">点这里设置您的信息</a>'
+    return render_to_response('textmsg.xml', msg_out, content_type='text/xml')
