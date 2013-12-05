@@ -41,8 +41,8 @@ def processText(msg):
     }
     if m_content=='menu':
         msg_out['content'] = '选择你想要进行的操作：\n\n<a href="a.jpg">*发布活动;</a> \n\n' \
-            #+ '<a href="">*查询我发布的活动；</a>\n\n' \
-            #+ '<a href="">*查询我参与的活动。</a>'
+            + '<a href="b.jpg">*查询我发布的活动；</a>\n\n' \
+            + '<a href="c.jpg">*查询我参与的活动。</a>'
     elif m_content=='set':
 
         #article={'title':'信息设置', 'description':'点这里设置您的信息'}
