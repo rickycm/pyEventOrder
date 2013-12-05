@@ -2,7 +2,7 @@
 from django.db import models
 
 # Create your models here.
-EVENT_TYPE = [(1, 'event'), (2, 'order')]
+EVENT_TYPE = [(1, u'体育活动'), (2, u'聚会活动'), (0, u'推广活动'), (3, u'聚餐')]
 PARTICI_TYPE = [(0, u'不参加'), (1, u'参加'), (2, u'可能参加'), (5, u'未报名'), (10, u'活动发起人')]
 EVENT_STATUS = [(0, u'可报名'), (1, u'报名人满'), (2, u'已取消'), (3, u'已停止报名'), (4, u'已过期')]
 
