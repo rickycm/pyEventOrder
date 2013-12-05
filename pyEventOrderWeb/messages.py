@@ -43,11 +43,11 @@ def processText(msg):
 
         #article={'title':'信息设置', 'description':'点这里设置您的信息'}
         #article['picurl'] = URLBASE + '/media/test.png'
-        #article['url'] =
+        #article['url'] = URLBASE + '/setting/?userid=' + msg_out['toUser']
 
         #msg_out['articles'] = [article]
         #return render_to_response('multimsg.xml', msg_out, content_type='text/xml')
 
-        text = '<a href="' + URLBASE + '/setting/?userid=' + msg_out['toUser'] +'">点击这里进行设置<a>'
-        msg_out['content'] = text
-        return render_to_response('textmsg.xml', msg_out, content_type='text/xml')
+        msg_out['url'] = URLBASE + '/setting/?userid=' + msg_out['toUser']
+        msg_out['description'] = '点这里设置您的信息'
+        return render_to_response('linkmsg.xml', msg_out, content_type='text/xml')
