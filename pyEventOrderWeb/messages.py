@@ -35,14 +35,19 @@ def processMessage(msg):
 def processText(msg):
     m_content = msg.find('Content').text
     if m_content=='set':
-        msg_out={}
-        msg_out['toUser'] =  msg.find('FromUserName').text
-        msg_out['fromUser'] = msg.find('ToUserName').text
-        msg_out['time'] = int(time.time())
+        msg_out={
+            'toUser':msg.find('FromUserName').text,
+            'fromUser':msg.find('ToUserName').text,
+            'time':int(time.time()),
+        }
 
-        article={'title':'信息设置', 'description':'点这里设置您的信息'}
-        article['picurl'] = URLBASE + '/media/test.png'
-        article['url'] = URLBASE + '/setting/?userid=' + msg_out['toUser']
+        #article={'title':'信息设置', 'description':'点这里设置您的信息'}
+        #article['picurl'] = URLBASE + '/media/test.png'
+        #article['url'] =
 
-        msg_out['articles'] = [article]
-        return render_to_response('multimsg.xml', msg_out, content_type='text/xml')
+        #msg_out['articles'] = [article]
+        #return render_to_response('multimsg.xml', msg_out, content_type='text/xml')
+
+        text = '<a href="' + URLBASE + '/setting/?userid=' + msg_out['toUser'] +'">点击这里进行设置<a>'
+        msg_out['content'] = text
+        return render_to_response('textmsg.xml', msg_out, content_type='text/xml')

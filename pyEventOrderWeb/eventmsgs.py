@@ -10,8 +10,8 @@ from models import wechat_user, event as activity
 logger = logging.getLogger('django.dev')
 URLBASE = 'http://whitemay.pythonanywhere.com'
 
-def processEvent(msg,event):
-    event_type = event.text
+def processEventMessage(msg, event_msg):
+    event_type = event_msg.text
     logger.debug('It is a event: ' + event_type)
     if event_type=='subscribe':
         # 这是一个订阅消息。

@@ -410,7 +410,7 @@ def joinEvent(request):
 import hashlib
 from lxml import etree
 from messages import processMessage
-from events import processEvent
+from eventmsgs import processEventMessage
 
 def message(request):
     # 对于任何消息，都需要通过下面的代码来确认消息的合法性。
@@ -439,11 +439,11 @@ def message(request):
                 # 使用函数来进行进一步处理。
                 #logger.debug(request.body)
                 msg_in = etree.parse(request)
-                event = msg_in.find('Event')
-                if event==None : #这是一个事件
+                event_msg = msg_in.find('Event')
+                if event_msg==None : #这是一个消息
                     return processMessage(msg_in)
-                else: #这是一个消息
-                    return processEvent(msg_in,event)
+                else: #这是一个事件消息
+                    return processEventMessage(msg_in,event_msg)
         else:
             logger.info('Illedge message received')
             raise Http404
