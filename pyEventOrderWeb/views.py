@@ -596,7 +596,7 @@ def check_auth(request):
         auth_url = 'https://open.weixin.qq.com/connect/oauth2/authorize?' + \
             urllib.urlencode({
                 'response_type':'code',
-                'client_id':WX_APP_ID,
+                'appid':WX_APP_ID,
                 'redirect_uri':'http://www.eztogether.net/oauth/',
                 'scope':'snsapi_base',
                 #'state':'Foperate',
