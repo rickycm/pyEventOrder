@@ -9,12 +9,14 @@ from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.contrib.auth import authenticate, login, logout
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_protect
 
 from pyEventOrderWeb import forms
 from pyEventOrderWeb.models import *
 
 logger = logging.getLogger('django.dev')
 
+@csrf_protect
 def login_form(request):
     try:
         username = request.POST['username']
@@ -36,6 +38,7 @@ def login_form(request):
         return render_to_response("login.html", {'msg': "请重新登录", 'form': form}, context_instance=RequestContext(request))
 
 
+@csrf_protect
 def register(request):
         form = UserCreationForm()
         if request.method == 'GET':
@@ -59,6 +62,7 @@ def logout_view(request):
 
 #活动列表
 @login_required
+@csrf_protect
 def list_events(rq):
     try:
         userId = rq.session["userid"]
@@ -145,6 +149,7 @@ def list_events(rq):
 
 # 添加活动
 @login_required
+@csrf_protect
 def add_event(request):
     try:
         userId = request.session["userid"]
@@ -209,6 +214,7 @@ def add_event(request):
 
 # 修改活动
 @login_required
+@csrf_protect
 def updateEvent(request):
     try:
         eventId = request.GET.get('eventid')
@@ -254,7 +260,7 @@ def updateEvent(request):
                               context_instance=RequestContext(request))
 
 # 活动页面，并展现用户参与情况
-
+@csrf_protect
 def showEvent(request):
 
     # 首先检查COOKIES里面是否已经存在用户信息
@@ -344,6 +350,7 @@ def showEvent(request):
 
 # 响应按钮事件：报名、修改事件状态
 @login_required
+@csrf_protect
 def joinEvent(request):
     if request.user.is_authenticated():
         reMsg = ''
@@ -463,6 +470,7 @@ def message(request):
         logger.info('Exception received: ' + e.message)
         raise e
 
+@csrf_protect
 def setting(request):
     if request.method=='GET':
         if request.GET.has_key('openid'):
