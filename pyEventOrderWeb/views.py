@@ -540,7 +540,7 @@ def oauth(request):
 
         # 使用新的认证后台来代替现有的后台
         if userinfo is not None:
-            user = authenticate(userinfo = userinfo)
+            user = authenticate(openid = userinfo['openid'])
             request.session['userid'] = user.real_user.id
             login(request, user)
             if request.session.has_key('url'):
