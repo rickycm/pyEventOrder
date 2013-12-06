@@ -427,7 +427,7 @@ def message(request):
     # 对于任何消息，都需要通过下面的代码来确认消息的合法性。
     # 这里的假定是，即使在POST模式下，依然可以通过GET方式来获得参数。
     # 以下代码需要在实际工作环境中检验其正确性
-    logger.debug('get a message: ')
+    logger.debug('get a message: ' + request.method)
     try:
         signature = request.GET['signature']
         timestamp = request.GET['timestamp']
@@ -438,6 +438,7 @@ def message(request):
         tmpStr = ''.join(tmpArr)
         tmpStr = hashlib.sha1(tmpStr).hexdigest()
 
+        logger.debug('Arrived here')
         # 当两者相等时，消息合法。
         if tmpStr == signature:
             if request.method == 'GET':
