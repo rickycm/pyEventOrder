@@ -553,11 +553,12 @@ def oauth(request):
         return render_to_response('oauth.html',{'title','自动认证'})
 
 APP_ID='100561618'
-WX_APP_ID='wxf0e81c3bee622d60'
 APP_KEY='dbbea5729ffd5182deff63f90131bc3b'
+WX_APP_ID='wx8763ead7d4408241'
+WX_APP_KEY='4042d9f53dfa2abfdd542af803116787'
 def check_auth(request):
 
-    next = request.GET.get('next','/')
+    '''next = request.GET.get('next','/')
     if request.user.is_authenticated():
         return HttpResponseRedirect(next)
 
@@ -587,7 +588,7 @@ def check_auth(request):
     # 然后启动OAuth2过程，在这里需要判断启动谁
     #url = request.build_absolute_uri()
     #logger.debug(url)
-    request.session['url'] = next
+    request.session['url'] = next'''
 
     useragent = request.META['HTTP_USER_AGENT']
     logger.debug(useragent)
@@ -647,9 +648,9 @@ def get_wx_info(code, session):
     url = 'https://api.weixin.qq.com/sns/oauth2/access_token?' + urllib.urlencode({
         'grant_type':'authorization_code',
         'appid':WX_APP_ID,
-        'secret':APP_KEY,
+        'secret':WX_APP_KEY,
         'code':code,
-        'redirect_uri':'http://www.eztogether.net/oauth',
+        'redirect_uri':'http://www.eztogether.net/oauth/',
     })
     f = urllib.urlopen(url)
     jobj = json.load(f)
