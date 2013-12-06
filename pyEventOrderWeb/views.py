@@ -597,7 +597,7 @@ def check_auth(request):
             urllib.urlencode({
                 'response_type':'code',
                 'client_id':WX_APP_ID,
-                'redirect_uri':'http://www.eztogether.net/oauth',
+                'redirect_uri':'http://www.eztogether.net/oauth/',
                 'scope':'snsapi_userinfo',
                 #'state':'Foperate',
             }) + '&state=ForpeateWX#wechat_redirect'
@@ -606,7 +606,7 @@ def check_auth(request):
             urllib.urlencode({
                 'response_type':'code',
                 'client_id':APP_ID,
-                'redirect_uri':'http://www.eztogether.net/oauth',
+                'redirect_uri':'http://www.eztogether.net/oauth/',
                 'state':'FoperateQQ',
             })
     logger.debug(auth_url)
