@@ -180,7 +180,7 @@
         {%for comment in comment_list%}
             <li>{{comment.user_name}} ( {{comment.submit_date|date:"Y-m-d, H:i"}} ) 评论: {{comment.comment|safe}}</li>
         {%endfor%}
-        <div name="commentformdiv">
+        <div id="commentformdiv">
             {% if showcomment == 'true' %}
                 {%get_comment_form for thisEvent as form%}
                 <form action='{%comment_form_target%}' method='post' id="commentForm" name="commentForm">
@@ -241,16 +241,15 @@
         $('#commentForm').submit(function() {
             $.ajax({
                 type: "POST",
-                data: {$('#commentForm').serialize(),
-                    'csrfmiddlewaretoken': '{{csrf_token}}'},
+                data: $('#commentForm').serialize(),
                 url: "{% comment_form_target %}",
                 cache: false,
                 dataType: "html",
                 success: function(html, textStatus) {
-                    $('#commentformdiv').replaceWith('感谢您的评论。');
+                    $('#commentformdiv').replaceWith('<p>感谢您的评论。</p>');
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    $('#commentformdiv').replaceWith('对不起，评论提交失败，请重试。');
+                    $('#commentformdiv').replaceWith('<p>对不起，评论提交失败，请重试。</p>');
                 }
             });
             return false;
