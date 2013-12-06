@@ -593,14 +593,10 @@ def check_auth(request):
     useragent = request.META['HTTP_USER_AGENT']
     logger.debug(useragent)
     if 'MicroMessenger' in useragent:
-        auth_url = 'https://open.weixin.qq.com/connect/oauth2/authorize?' + \
+        auth_url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + WX_APP_ID + \
             urllib.urlencode({
-                'response_type':'code',
-                'appid':WX_APP_ID,
                 'redirect_uri':'http://www.eztogether.net/oauth/',
-                'scope':'snsapi_base',
-                #'state':'Foperate',
-            }) + '&state=ForpeateWX#wechat_redirect'
+            }) + '&response_type=code&scope=snsapi_base&state=ForpeateWX#wechat_redirect'
     else:
         auth_url = 'https://graph.qq.com/oauth2.0/authorize?' + \
             urllib.urlencode({
