@@ -4,7 +4,7 @@ openid: gh_982e9c43c16c
 Appid: wxceec3a78555b9cdd
 Secret: a50a85115e419c06fcffc7b2efe5882b
 {
-    "access_token": "4HIIgxM9dL_UPtSE3V5sbJ1nIp5zvDrDKP-ll8ar7_1GR0HT4QhEo4zkizAqxeBc5DF8-EiSAVcfvo83kqHcaAxI4N_lIKN9eOVMF0F6GaoP4M0Yu8kS2hCm4y6rv6aMC4vLPh4c13L85vuQtIHdJQ",
+    "access_token": "O_gMRT-44mfWueHLQ6eBQ9H0P8gKcm97r3317DfKhY0drZOjaplWaoEUhFC6VL50Cr_fIr1pv7KAttWc4Nu6O_r7YPMNMRelIf1jfFV81mkdsgpWwFF-RtY-QgCW5lTmmZcX5sUNSulYgbSkSFkuzw",
     "expires_in": 7200
 }
 {
@@ -13,10 +13,14 @@ Secret: a50a85115e419c06fcffc7b2efe5882b
     "sub_button":[{
       "type":"view",
       "name":"发布球类活动",
-      "url":"http://www.eztogether.net/add_event/"
+      "url":"http://www.eztogether.net/add_event/?event_type=1"
+    },{
+      "type":"view",
+      "name":"发布聚会/聚餐",
+      "url":"http://www.eztogether.net/add_event/?event_type=2"
     },{
       "type":"click",
-      "name":"获取推广链接",
+      "name":"生成活动消息",
       "key":"GETEVENT"
     }]
   },{
@@ -57,15 +61,6 @@ appsecret 4042d9f53dfa2abfdd542af803116787
 
 lxml: 工作环境下已经存在lxml，在virtualenv中安装lxml需要使用如下命令
   STATIC_DEPS=true pip install lxml
-
-django-bootstrap3：支持bootstrap3
-参考：
-  https://github.com/dyve/django-bootstrap3
-
-django-bootstrap3-datepicker：用来选择日期时间的widget
-
-django-jquery-js：最新jQuery库
-django-awesome-boostrap：静态资源文件
 
 当浏览器以JSON传递参数时，Django需要这样解析：
 def api_response(request):
