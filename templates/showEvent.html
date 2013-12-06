@@ -186,8 +186,8 @@
             <ul id="comment_list">
             {% get_comment_list for thisEvent as comment_list %}
             {% for comment in comment_list reversed %}
-                <li>{{comment.user_name}} ( {{comment.submit_date|date:"Y-m-d, H:i"}} ) 评论: {{comment.comment|safe}}</li>
-            {%endfor%}
+                <li>{{comment.user_name}} ( {{comment.submit_date|date:"Y-m-d, H:i"}} ) 评论: {{comment.comment|safe}}</li>
+            {% endfor %}
             </ul>
         </div>
     </div>
