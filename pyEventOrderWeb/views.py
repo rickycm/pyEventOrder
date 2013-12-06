@@ -600,7 +600,7 @@ def check_auth(request):
                 'redirect_uri':'http://www.eztogether.net/oauth/',
                 'scope':'snsapi_base',
                 #'state':'Foperate',
-            }) + '&state=ForpeateWX#wechat_redirect'
+            }) + '&state=FoperateWX#wechat_redirect'
     else:
         auth_url = 'https://graph.qq.com/oauth2.0/authorize?' + \
             urllib.urlencode({
