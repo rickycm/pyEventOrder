@@ -549,6 +549,8 @@ def oauth(request):
             else:
                 url = '/'
             return HttpResponseRedirect(url)
+        else:
+            return render_to_response('welcome.html')
     else:
         return render_to_response('oauth.html',{'title','自动认证'})
 
