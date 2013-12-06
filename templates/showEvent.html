@@ -197,7 +197,7 @@
                     <!-- <p><label for="id_comment">评论（必填）：</label></p> -->
                     <p><textarea id="id_comment" name="comment" placeholder="请填写评论"></textarea></p>
                     <p style="display:none;"><label for="id_honeypot">如果你在该字段中输入任何内容，那么你的评论就会被视为垃圾评论。</label> <input type="text" name="honeypot" id="id_honeypot"></p>
-                    <p><input name="post" value="发表评论" type="submit" /></p>
+                    <p><input name="post" value="发表评论" type="submit" data-theme="e" /></p>
                 </form>
             {% endif %}
         </div>
@@ -235,8 +235,6 @@
             }
         });
       });
-
-
 
       function bindPostCommentHandler() {
         $('#commentForm input.submit-preview').remove();
