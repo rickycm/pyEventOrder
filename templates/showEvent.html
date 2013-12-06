@@ -156,6 +156,40 @@
             {% endif %}
 
         <h4 style="color: #4682B4">请点击右上角箭头邀请更多好友。</h4>
+
+        <!--  评论系统 -->
+        {%load comments%}
+        <div>
+            {% get_comment_count for thisEvent as comment_count %}
+            <h4>评论 ( <span id="comment_count">{{ comment_count }}</span> ) ：</h4>
+            <div id="commentformdiv">
+                {% if showcomment == 'true' %}
+                    {%get_comment_form for thisEvent as form%}
+                    <form action='{%comment_form_target%}' method='post' id="commentForm" name="commentForm">
+                        {% csrf_token %}
+                        {{ form.object_pk }}
+                        {{ form.content_type }}
+                        {{ form.timestamp }}
+                        {{ form.security_hash }}
+                        {{ form.site }}
+                        {{ form.submit_date }}
+                        {{ form.security_hash }}
+                        <input type="hidden" name="name" id="id_name" value="{{username}}">
+                        <input type="hidden" name="email" id="id_email" value="{{useropenid}}@eztogether.net"> <!-- 该字段用于保存用户openid -->
+                        <!-- <p><label for="id_comment">评论（必填）：</label></p> -->
+                        <p><textarea id="id_comment" name="comment" placeholder="请填写评论"></textarea></p>
+                        <p style="display:none;"><label for="id_honeypot">如果你在该字段中输入任何内容，那么你的评论就会被视为垃圾评论。</label> <input type="text" name="honeypot" id="id_honeypot"></p>
+                        <p><input name="post" value="发表评论" type="submit" data-theme="e" /></p>
+                    </form>
+                {% endif %}
+            </div>
+            <ul id="comment_list">
+            {% get_comment_list for thisEvent as comment_list %}
+            {% for comment in comment_list reversed %}
+                <li>{{comment.user_name}} ( {{comment.submit_date|date:"Y-m-d, H:i"}} ) 评论: {{comment.comment|safe}}</li>
+            {%endfor%}
+            </ul>
+        </div>
     </div>
 
     <!-- rightpanel  -->
@@ -171,37 +205,6 @@
         <a href="#" data-rel="close" data-role="button" data-theme="c" data-icon="delete" data-inline="false" data-mini="true">关闭</a>
     </div><!-- /rightpanel -->
 
-    <!--  评论系统 -->
-    {%load comments%}
-    <div>
-        {% get_comment_count for thisEvent as comment_count %}
-        <h4>评论 ( {{ comment_count }} ) ：</h4>
-        {%get_comment_list for thisEvent as comment_list%}
-        {%for comment in comment_list%}
-            <li>{{comment.user_name}} ( {{comment.submit_date|date:"Y-m-d, H:i"}} ) 评论: {{comment.comment|safe}}</li>
-        {%endfor%}
-        <div id="commentformdiv">
-            {% if showcomment == 'true' %}
-                {%get_comment_form for thisEvent as form%}
-                <form action='{%comment_form_target%}' method='post' id="commentForm" name="commentForm">
-                    {% csrf_token %}
-                    {{form.object_pk}}
-                    {{form.content_type}}
-                    {{form.timestamp}}
-                    {{form.security_hash}}
-                    {{ form.site }}
-                    {{ form.submit_date }}
-                    {{ form.security_hash }}
-                    <input type="hidden" name="name" id="id_name" value="{{username}}">
-                    <input type="hidden" name="email" id="id_email" value="{{useropenid}}@eztogether.net"> <!-- 该字段用于保存用户openid -->
-                    <!-- <p><label for="id_comment">评论（必填）：</label></p> -->
-                    <p><textarea id="id_comment" name="comment" placeholder="请填写评论"></textarea></p>
-                    <p style="display:none;"><label for="id_honeypot">如果你在该字段中输入任何内容，那么你的评论就会被视为垃圾评论。</label> <input type="text" name="honeypot" id="id_honeypot"></p>
-                    <p><input name="post" value="发表评论" type="submit" data-theme="e" /></p>
-                </form>
-            {% endif %}
-        </div>
-    </div>
 {% endblock %}
 
 {% block user_foot_js %}
@@ -246,7 +249,10 @@
                 cache: false,
                 dataType: "html",
                 success: function(html, textStatus) {
-                    window.location.reload()
+                    item = '<li>' + $('#id_name').val() + ' ( 刚才 ) 评论: ' + $('#id_comment').val() + '</li>'
+                    $('#comment_list').prepend(item);
+                    $('#id_comment').val('');
+                    $('#comment_count').text(parseInt($('#comment_count').text())+1)
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     $('#commentformdiv').replaceWith('<p>对不起，评论提交失败，请重试。</p>');

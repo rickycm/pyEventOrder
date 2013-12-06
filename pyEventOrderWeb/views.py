@@ -163,6 +163,7 @@ def add_event(request):
             try:
                 eventId = request.GET.get('eventid')
                 thisEvent = event.objects.get(pk=eventId)
+                eventType = thisEvent.event_type
             except event.DoesNotExist:
                 title = u'出错了'
                 errorMessage = u'您查询的活动不存在。'
@@ -477,7 +478,7 @@ def setting(request):
                 #request.COOKIES
 
                 form = forms.SetupuserForm(instance=real_user)
-                response = render_to_response('setupinfo.html', {'title': '个人设置', 'form': form})
+                response = render_to_response('setupinfo.html', {'title': '个人设置', 'form': form}, context_instance=RequestContext(request))
                 response.set_cookie("wxopenid", openid, max_age=max_age)
                 return response
 
