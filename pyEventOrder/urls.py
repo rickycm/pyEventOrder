@@ -41,6 +41,7 @@ urlpatterns = patterns('',
     (r'', include('jqmFlatPages.urls')),
     (r'^setcookie/$', views.cookie_openid),
     (r'^moveuser/$', views.move_user),
+    (r'^comments/', include('django.contrib.comments.urls')),
 )
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

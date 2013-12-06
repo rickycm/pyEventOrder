@@ -310,7 +310,8 @@ def showEvent(request):
         if thisEvent.event_date < timezone.now():
             thisEvent.event_status = 4
         return render_to_response("showEvent.html", {'title': thisEvent.event_title, 'thisEvent': thisEvent, 'userStatus': userStatus,
-                                                    'participantlist': participantlist, "numbers": numbers, 'remsg': remsg},
+                                                    'participantlist': participantlist, "numbers": numbers, 'remsg': remsg,
+                                                    'showcomment': 'true', 'useropenid': wechatUser.openid, 'username': wechatUser.wechat_inputname},
                                 context_instance=RequestContext(request))
 
     else:
@@ -336,7 +337,8 @@ def showEvent(request):
         userStatus = 100  # 0-不参加，1-参加，2-可能参加，5-未报名，10-活动发起人，100-未关注账号用户
 
         return render_to_response("showEvent.html", {'title': thisEvent.event_title, 'thisEvent': thisEvent, 'userStatus': userStatus,
-                                                     'participantlist': participantlist, "numbers": numbers, 'remsg': remsg},
+                                                     'participantlist': participantlist, "numbers": numbers, 'remsg': remsg,
+                                                    'showcomment': 'false', 'useropenid': '', 'username': ''},
                                   context_instance=RequestContext(request))
 
 # 响应按钮事件：报名、修改事件状态

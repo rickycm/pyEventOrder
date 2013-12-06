@@ -35,7 +35,7 @@ class wechat_user(models.Model):
     wechat_inputname = models.CharField(max_length=200, blank=True)
     wechat_usertype = models.CharField(max_length=20, blank=True, default='0')
 
-    subscribe = models.BooleanField()
+    subscribe = models.BooleanField(default=False)
     openid = models.CharField(max_length=30, unique=True)
     nickname = models.CharField(max_length=50, blank=True)
     sex = models.NullBooleanField(default=None, blank=True)

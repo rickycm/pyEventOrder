@@ -170,15 +170,94 @@
         </p>
         <a href="#" data-rel="close" data-role="button" data-theme="c" data-icon="delete" data-inline="false" data-mini="true">关闭</a>
     </div><!-- /rightpanel -->
+
+    <!--  评论系统 -->
+    {%load comments%}
+    <div>
+        {% get_comment_count for thisEvent as comment_count %}
+        <h4>评论 ( {{ comment_count }} ) ：</h4>
+        {%get_comment_list for thisEvent as comment_list%}
+        {%for comment in comment_list%}
+            <li>{{comment.user_name}} ( {{comment.submit_date|date:"Y-m-d, H:i"}} ) 评论: {{comment.comment|safe}}</li>
+        {%endfor%}
+        <div name="commentformdiv">
+            {% if showcomment == 'true' %}
+                {%get_comment_form for thisEvent as form%}
+                <form action='{%comment_form_target%}' method='post' id="commentForm" name="commentForm">
+                    {% csrf_token %}
+                    {{form.object_pk}}
+                    {{form.content_type}}
+                    {{form.timestamp}}
+                    {{form.security_hash}}
+                    {{ form.site }}
+                    {{ form.submit_date }}
+                    {{ form.security_hash }}
+                    <input type="hidden" name="name" id="id_name" value="{{username}}">
+                    <input type="hidden" name="email" id="id_email" value="{{useropenid}}@eztogether.net"> <!-- 该字段用于保存用户openid -->
+                    <!-- <p><label for="id_comment">评论（必填）：</label></p> -->
+                    <p><textarea id="id_comment" name="comment" placeholder="请填写评论"></textarea></p>
+                    <p style="display:none;"><label for="id_honeypot">如果你在该字段中输入任何内容，那么你的评论就会被视为垃圾评论。</label> <input type="text" name="honeypot" id="id_honeypot"></p>
+                    <p><input name="post" value="发表评论" type="submit" /></p>
+                </form>
+            {% endif %}
+        </div>
+    </div>
 {% endblock %}
 
 {% block user_foot_js %}
+    <script src='{% static "js/jquery.validate.min.js" %}' type="text/javascript"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             document.addEventListener('WeixinJSBridgeReady',function onBridgeReady() {
                 WeixinJSBridge.call('hideToolbar');
             });
+            bindPostCommentHandler();
         });
+
+      $(document).on("pageinit", function () {
+        $('#commentForm').validate({ // initialize the plugin
+            rules: {
+                comment: {
+                    minlength: 3,
+                    maxlength: 400,
+                    required: true
+                }
+            },
+            messages: {
+                comment: {
+                    required: "评论不能为空",
+                    minlength: "请输入3个字以上",
+                    maxlength: "最多为200字",
+                }
+            },
+            errorPlacement: function(error, element) {
+                error.insertAfter($(element).parent());
+            }
+        });
+      });
+
+
+
+      function bindPostCommentHandler() {
+        $('#commentForm input.submit-preview').remove();
+        $('#commentForm').submit(function() {
+            $.ajax({
+                type: "POST",
+                data: {$('#commentForm').serialize(),
+                    'csrfmiddlewaretoken': '{{csrf_token}}'},
+                url: "{% comment_form_target %}",
+                cache: false,
+                dataType: "html",
+                success: function(html, textStatus) {
+                    $('#commentformdiv').replaceWith('感谢您的评论。');
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    $('#commentformdiv').replaceWith('对不起，评论提交失败，请重试。');
+                }
+            });
+            return false;
+        });
+    }
     </script>
 {% endblock %}
 
