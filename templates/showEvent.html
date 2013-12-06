@@ -221,7 +221,7 @@
         $('#commentForm').validate({ // initialize the plugin
             rules: {
                 comment: {
-                    minlength: 3,
+                    minlength: 2,
                     maxlength: 400,
                     required: true
                 }
@@ -229,7 +229,7 @@
             messages: {
                 comment: {
                     required: "评论不能为空",
-                    minlength: "请输入3个字以上",
+                    minlength: "请输入2个字以上",
                     maxlength: "最多为200字",
                 }
             },
