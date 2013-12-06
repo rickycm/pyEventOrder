@@ -82,7 +82,7 @@ def sendEvent(fromUser, toUser, active):
         'title':u'活动发布',
         'description':active.event_title,
         'picurl':URLBASE + '/media/badminton.png',
-        'url':URLBASE + '/showevent/?' + str(active.id),
+        'url':URLBASE + '/showevent/?eventid=' + str(active.id),
     }
     msg_out['articles'] = [article]
     logger.debug(msg_out)

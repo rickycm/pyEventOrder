@@ -20,5 +20,18 @@
       <li>从菜单中设置了您的个人信息。</li>
     </ul>
   </div>
+<script>
+  $(document).ready(function() {
+    // disable ajax nav
+    //$.mobile.ajaxEnabled = false;
+
+    document.addEventListener('WeixinJSBridgeReady',function onBridgeReady() {
+      WeixinJSBridge.call('hideToolbar');
+      //WeixinJSBridge.call('hideOptionMenu');
+      alert(WeixinJSBridge._session_data);
+    });
+  });
+</script>
 </body>
+
 </html>
