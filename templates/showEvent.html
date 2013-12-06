@@ -246,7 +246,7 @@
                 cache: false,
                 dataType: "html",
                 success: function(html, textStatus) {
-                    $('#commentformdiv').replaceWith('<p>感谢您的评论。</p>');
+                    window.location.reload()
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     $('#commentformdiv').replaceWith('<p>对不起，评论提交失败，请重试。</p>');
