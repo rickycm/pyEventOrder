@@ -598,7 +598,7 @@ def check_auth(request):
                 'response_type':'code',
                 'client_id':WX_APP_ID,
                 'redirect_uri':'http://www.eztogether.net/oauth/',
-                'scope':'snsapi_userinfo',
+                'scope':'snsapi_base',
                 #'state':'Foperate',
             }) + '&state=ForpeateWX#wechat_redirect'
     else:
