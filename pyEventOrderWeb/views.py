@@ -475,7 +475,6 @@ def setting(request):
         if request.GET.has_key('openid'):
             openid = request.GET['openid']
             logger.debug('Request has openid ' + openid)
-            max_age = 365 * 24 * 60 * 60
 
             user = authenticate(openid=openid)
             if user is not None:
@@ -487,6 +486,7 @@ def setting(request):
 
                 form = forms.SetupuserForm(instance=real_user)
                 response = render_to_response('setupinfo.html', {'title': '个人设置', 'form': form}, context_instance=RequestContext(request))
+                max_age = 365 * 24 * 60 * 60
                 response.set_cookie("wxopenid", openid, max_age=max_age)
                 return response
 
@@ -540,7 +540,8 @@ def oauth(request):
 
         # 使用新的认证后台来代替现有的后台
         if userinfo is not None:
-            user = authenticate(openid = userinfo['openid'])
+            openid = userinfo['openid']
+            user = authenticate(openid = openid)
             request.session['userid'] = user.real_user.id
             login(request, user)
             if request.session.has_key('url'):
@@ -548,7 +549,10 @@ def oauth(request):
                 del request.session['url']
             else:
                 url = '/'
-            return HttpResponseRedirect(url)
+            response = HttpResponseRedirect(url)
+            max_age = 365 * 24 * 60 * 60
+            response.set_cookie("wxopenid", openid, max_age=max_age)
+            return response
         else:
             return render_to_response('welcome.html')
     else:
@@ -560,7 +564,7 @@ WX_APP_ID='wx8763ead7d4408241'
 WX_APP_KEY='4042d9f53dfa2abfdd542af803116787'
 def check_auth(request):
 
-    '''next = request.GET.get('next','/')
+    next = request.GET.get('next','/')
     if request.user.is_authenticated():
         return HttpResponseRedirect(next)
 
@@ -590,7 +594,7 @@ def check_auth(request):
     # 然后启动OAuth2过程，在这里需要判断启动谁
     #url = request.build_absolute_uri()
     #logger.debug(url)
-    request.session['url'] = next'''
+    request.session['url'] = next
 
     useragent = request.META['HTTP_USER_AGENT']
     logger.debug(useragent)
