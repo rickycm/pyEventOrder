@@ -17,7 +17,7 @@ class event(models.Model):
     event_hostfakeID = models.CharField(max_length=200)
     event_hostname = models.CharField(max_length=1000, blank=True)
     event_limit = models.IntegerField(default=0, blank=True)
-    event_sn = models.CharField(max_length=20, blank=True)
+    event_sn = models.CharField(max_length=20, blank=True)  # 保存推广活动邀请码等
     event_status = models.IntegerField(default=0, choices=EVENT_STATUS, blank=True)
 
     class Meta:

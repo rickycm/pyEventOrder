@@ -83,7 +83,7 @@ def api_response(request):
 参数：type = mine 我发布的活动
      type = other 我报名的活动
 
-http://www.eztogether.net/setcookie/?openid=xxxxxxxxxxxx&next=/add_event/
+http://www.eztogether.net/setcookie/?openid=oMJjPjt71JPhAv3w8l2NI4rbaAHQ&next=/add_event/
 
 TODO: 定时提醒功能
 不使用Celery:

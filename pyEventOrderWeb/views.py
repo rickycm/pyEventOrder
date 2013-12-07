@@ -179,9 +179,14 @@ def add_event(request):
             try:
                 eventType = request.GET.get('eventtype')
             except:
-                eventType = 1
+                eventType = '1'
             form = forms.EventForm()
-        return render_to_response('addEvent.html', {'title': '新建活动', 'form': form, 'eventtype': eventType},
+            print("==========", eventType)
+        if eventType == '2':
+            return render_to_response('addDinnerParty.html', {'title': '新建活动', 'form': form, 'eventtype': eventType},
+                              context_instance=RequestContext(request))
+        else:
+            return render_to_response('addEvent.html', {'title': '新建活动', 'form': form, 'eventtype': eventType},
                               context_instance=RequestContext(request))
     else:
         form = forms.EventForm(request.POST)
@@ -210,7 +215,11 @@ def add_event(request):
             return HttpResponseRedirect('/showevent/?eventid='+str(e.id))
         else:
             logger.debug('Setting form is invalid.')
-            return render_to_response('addEvent.html', {'title': '新建活动', 'form': form}, context_instance=RequestContext(request))
+            event_type = form.data['event_type']
+            if event_type == '2':
+                return render_to_response('addDinnerParty.html', {'title': '新建活动', 'form': form}, context_instance=RequestContext(request))
+            else:
+                return render_to_response('addEvent.html', {'title': '新建活动', 'form': form}, context_instance=RequestContext(request))
 
 # 修改活动
 @login_required
@@ -423,6 +432,7 @@ def joinEvent(request):
 
     else:
         return HttpResponseRedirect("/welcome/")
+
 
 # 处理消息机制，应该是公众平台中最核心的处理部分
 import hashlib
