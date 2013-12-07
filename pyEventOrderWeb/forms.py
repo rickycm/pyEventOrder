@@ -25,7 +25,7 @@ class EventForm(forms.ModelForm):
 class SetupuserForm(forms.ModelForm):
     class Meta:
         model = wechat_user
-        fields = ['wechat_inputname', ]
+        fields = ['wechat_inputname', 'openid']
 
     def clean(self):
         if not self.is_valid():
@@ -33,5 +33,3 @@ class SetupuserForm(forms.ModelForm):
         else:
             cleaned_data = super(SetupuserForm, self).clean()
         return cleaned_data
-
-

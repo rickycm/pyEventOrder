@@ -2,6 +2,9 @@
 import logging
 from datetime import datetime
 from django.utils import timezone
+import time
+import random
+import string
 
 from django.contrib.auth.forms import *
 from django.shortcuts import render_to_response
@@ -357,6 +360,19 @@ def showEvent(request):
                                                     'showcomment': 'false', 'useropenid': '', 'username': ''},
                                   context_instance=RequestContext(request))
 
+# 显示活动页面设置用户姓名，设置未关注用户FakeOpenID
+def addWechatUserName(inputname):
+    fakeOpenID = time.strftime('%y%m%d%H%M%S') + ''.join([random.choice(string.lowercase + string.digits) for _ in range(1)])
+    #检查fakeOpenID在数据库中是否存在，存在则重复上述过程，不存在则存入数据库并返回，可能性不大，暂不检查
+    wechatUser = wechat_user.objects.create(
+        openid = fakeOpenID,
+        wechat_inputname = inputname,
+        wechat_usertype = '1', # 未关注用户
+    )
+    wechatUser.save()
+    return wechatUser
+
+
 # 响应按钮事件：报名、修改事件状态
 @login_required
 @csrf_protect
@@ -431,7 +447,67 @@ def joinEvent(request):
         return showEvent(request)
 
     else:
-        return HttpResponseRedirect("/welcome/")
+        reMsg = ''
+        try:
+            inputname = request.GET.get('inputname')
+            wechatUser = addWechatUserName(inputname)
+        except:
+            title = u'出错了'
+            errorMessage = u'您输入的姓名有误，请重试。'
+            return render_to_response("errorMessage.html", {'errorMessage': errorMessage, 'title': title},
+                                  context_instance=RequestContext(request))
+
+        try:
+            eventId = request.GET.get('eventid')
+            jointype = request.GET.get('jointype')
+            thisEvent = event.objects.get(pk=eventId)
+        except event.DoesNotExist:
+            title = u'出错了'
+            errorMessage = u'您查询的活动不存在。'
+            return render_to_response("errorMessage.html", {'errorMessage': errorMessage, 'title': title},
+                                  context_instance=RequestContext(request))
+
+        #partici_type: 0-不参加，1-参加，2-可能参加，5-未报名，10-活动发起人
+        participantlist = participant.objects.filter(event_ID=eventId)
+        eventin = sum(p.partici_type == 1 for p in participantlist)
+        eventout = sum(p.partici_type == 0 for p in participantlist)
+        eventmaybe = sum(p.partici_type == 2 for p in participantlist)
+        try:
+            thisparticipant = participant.objects.get(event_ID=thisEvent, partici_user=wechatUser)
+        except:
+            thisparticipant = participant()
+
+        if jointype == 'join':
+            if thisEvent.event_limit > eventin:
+                thisparticipant = participant(pk=thisparticipant.id, partici_fakeID='', event_ID=thisEvent, event_sn=thisEvent.event_sn,
+                                              partici_name=wechatUser.wechat_inputname, partici_type=1,
+                                              register_time=datetime.now(), partici_user=wechatUser, partici_openid=wechatUser.openid)
+                thisparticipant.save()
+                if thisEvent.event_limit <= ++eventin:
+                    thisEvent.event_status = 1
+                    thisEvent.save()
+                reMsg = u'报名成功。'
+            else:
+                reMsg = u'此活动已报名人满。'
+        elif jointype == 'maybe':
+            thisparticipant = participant(pk=thisparticipant.id, partici_fakeID='', event_ID=thisEvent, event_sn=thisEvent.event_sn,
+                                          partici_name=wechatUser.wechat_inputname, partici_type=2,
+                                          register_time=datetime.now(), partici_user=wechatUser, partici_openid=wechatUser.openid)
+            thisparticipant.save()
+            reMsg = u'报名成功。'
+        elif jointype == 'notjoin':
+            thisparticipant = participant(pk=thisparticipant.id, partici_fakeID='', event_ID=thisEvent, event_sn=thisEvent.event_sn,
+                                          partici_name=wechatUser.wechat_inputname, partici_type=0,
+                                          register_time=datetime.now(), partici_user=wechatUser, partici_openid=wechatUser.openid)
+            thisparticipant.save()
+            reMsg = u'报名成功。'
+
+        rqdata = request.GET.copy()
+        rqdata['eventid'] = eventId
+        rqdata['remsg'] = reMsg
+        request.GET = rqdata
+        return showEvent(request)
+        #return HttpResponseRedirect("/welcome/")
 
 
 # 处理消息机制，应该是公众平台中最核心的处理部分
@@ -681,6 +757,10 @@ def get_wx_info(code, session):
     return jobj
 
 def welcome(request):
+    url = 'http://mp.weixin.qq.com/mp/appmsg/show?__biz=MjM5NTk2OTU4NA==&appmsgid=10012087&itemidx=1&sign=3f9befba95ade73c3c5f83b594881e4c&uin=MTQ5MzI4&key=234b3ec6051a4a544a258b21c00bfcd3c2c6b166e0ca668beded8bbb6dafb7b1700f10cb387dbb1bc3f681e461d14abf&devicetype=iPhone+OS7.0.4&version=15000311&lang=zh_CN'
+    return HttpResponseRedirect(url)
+
+def welcome_old(request):
     return render_to_response('welcome.html')
 
 def test(request):
