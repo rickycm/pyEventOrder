@@ -1,11 +1,11 @@
 #coding=utf-8
 import logging
 from datetime import datetime
-from django.utils import timezone
 import time
 import random
 import string
 
+from django.utils import timezone
 from django.contrib.auth.forms import *
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect, HttpResponse, Http404
@@ -16,6 +16,7 @@ from django.views.decorators.csrf import csrf_protect
 
 from pyEventOrderWeb import forms
 from pyEventOrderWeb.models import *
+
 
 logger = logging.getLogger('django.dev')
 
@@ -627,7 +628,7 @@ def oauth(request):
         # 使用新的认证后台来代替现有的后台
         if userinfo is not None:
             openid = userinfo['openid']
-            user = authenticate(openid = openid)
+            user = authenticate(userinfof = userinfo)
             request.session['userid'] = user.real_user.id
             login(request, user)
             if request.session.has_key('url'):
@@ -648,6 +649,8 @@ APP_ID='100561618'
 APP_KEY='dbbea5729ffd5182deff63f90131bc3b'
 WX_APP_ID='wx8763ead7d4408241'
 WX_APP_KEY='4042d9f53dfa2abfdd542af803116787'
+from urllib2 import unquote
+# 现有版本用户一定能够通过验证并建立新用户记录
 def check_auth(request):
 
     next = request.GET.get('next','/')
@@ -667,12 +670,24 @@ def check_auth(request):
             return HttpResponseRedirect(next)
         else:
             return HttpResponse(status=500)
+    elif request.GET.has_key('newuser'):
+        fakeOpenID = 'fake' + time.strftime('%y%m%d%H%M%S') + ''.join([random.choice(string.lowercase + string.digits) for _ in range(1)])
+        user = authenticate(userinfo = {'openid':fakeOpenID})
+        real_user = user.real_user
+        request.session['userid'] = real_user.id
+        login(request, user)
+        response = HttpResponseRedirect(next)
+        max_age = 365 * 24 * 60 * 60
+        response.set_cookie("wxopenid", fakeOpenID, max_age=max_age)
+        return response
     else:
+        # 这里应该是旧域名上的分支，如果出现这种情况，应该使它转到新域名，并试图建立用户
         if next.startswith('/moveuser/'):
-            # 暂时不要后面的处理
-            return render_to_response('welcome.html')
+            url = 'http://www.eztogether.net:8000/login/?newuser=1&next=' + unquote(next)[16:]
+            logger.debug(url)
+            return HttpResponseRedirect(url)
         else:
-            url = 'http://whitemay.pythonanywhere.com/moveuser/?' + urllib.urlencode({
+            url = 'http://whitemay.pythonanywhere.com:8000/moveuser/?' + urllib.urlencode({
                 'dest':next
             })
             return HttpResponseRedirect(url)
@@ -781,6 +796,7 @@ def cookie_openid(request):
     except:
         raise render_to_response('welcome.html')
 
+# 这个函数是由新域名转到旧域名的函数。能够进去说明它已经能确认可以登陆。
 @login_required
 def move_user(request):
     logger.debug("Move User")

@@ -4,7 +4,7 @@ openid: gh_982e9c43c16c
 Appid: wxceec3a78555b9cdd
 Secret: 4bf88d2f56512313c03f0ce01a514974
 {
-    "access_token": "nyM9KbuhTHMQqQOwCDXyvDZUDW5ZEMqshY-9bFpIkDrIUA9zymTVfyYPomsbLbJ8RpCUALaciZlDXS56MBd5Pqh7Cw1M9DkIQgt0ColrZoHKGa-IyjFScwwIJlckZwU6XFU0AhVK7Tyq-is6XNmJ8w",
+    "access_token": "P8CK4ZZ_Wc4JemOz_zeZD2wKEp18QOeRC0u1hDYNU5r1wW49Ze4zPpTevuqrEdIdrbgunYMHLBKtu7TMjFhLb0IqOsEew2WEP-TlSRu6NJHDO8IDHSVD04P0wGJq8xTZsaZ0kzp_cukXMBDaJcQlEA",
     "expires_in": 7200
 }
 {
@@ -12,12 +12,8 @@ Secret: 4bf88d2f56512313c03f0ce01a514974
     "name":"发布活动",
     "sub_button":[{
       "type":"view",
-      "name":"发布球类活动",
+      "name":"发布活动",
       "url":"http://www.eztogether.net/add_event/?event_type=1"
-    },{
-      "type":"view",
-      "name":"发布聚会/聚餐",
-      "url":"http://www.eztogether.net/add_event/?event_type=2"
     },{
       "type":"click",
       "name":"生成活动消息",
