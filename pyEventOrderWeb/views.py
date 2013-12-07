@@ -374,7 +374,7 @@ def addWechatUserName(inputname):
 
 
 # 响应按钮事件：报名、修改事件状态
-@login_required
+
 @csrf_protect
 def joinEvent(request):
     if request.user.is_authenticated():
