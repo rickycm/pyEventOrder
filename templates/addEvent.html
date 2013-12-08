@@ -23,9 +23,15 @@
     {% csrf_token %}
 
     <!-- Text input-->
+    <div data-role="fieldcontain">
+        <label for="event_hostname">您的名字: </label>
+        <input id="event_hostname" name="event_hostname" type="text" placeholder="" value="{{form.event_hostname.value|default_if_none:''}}" required>
+    </div>
+
+    <!-- Text input-->
     <div>
         <!--<label class="control-label" for="event_title">活动名称</label> -->
-        <input id="event_title" name="event_title" type="text" placeholder="请输入活动名称" value="{{form.event_title.value|default_if_none:''}}"  required>
+        <input id="event_title" name="event_title" type="text" placeholder="请输入活动名称" value="{{form.event_title.value|default_if_none:''}}" required>
     </div>
 
     <!-- Textarea -->
@@ -49,7 +55,7 @@
                data-options='{"mode": "timebox"}' placeholder="请输入活动时间" value="19:00" required>
     </div>
     <!-- hidden fields -->
-    <input type="hidden" id="event_type" name="event_type" value="{{eventtype|default_if_none:'1'}}"/>
+    <input type="hidden" id="event_type" name="event_type" value="{{form.event_type.value|default_if_none:'1'}}"/>
 
     <!-- Button (Double) -->
     <div class="ui-body ui-body-b">
@@ -80,6 +86,10 @@
     $(document).on("pageinit", function () {
         $('#addeventForm').validate({ // initialize the plugin
             rules: {
+                event_hostname:{
+                    maxlength: 20,
+                    required: true
+                },
                 event_title: {
                     minlength: 3,
                     maxlength: 50,

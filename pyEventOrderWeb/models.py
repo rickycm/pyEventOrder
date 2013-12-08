@@ -15,7 +15,7 @@ class event(models.Model):
     event_type = models.IntegerField(blank=True, choices=EVENT_TYPE, default=1)
     event_registdeadline = models.DateTimeField(blank=True, null=True)
     event_hostfakeID = models.CharField(max_length=200)
-    event_hostname = models.CharField(max_length=1000, blank=True)
+    event_hostname = models.CharField(max_length=20, blank=True)
     event_limit = models.IntegerField(default=0, blank=True)
     event_sn = models.CharField(max_length=20, blank=True)  # 保存推广活动邀请码等
     event_status = models.IntegerField(default=0, choices=EVENT_STATUS, blank=True)
@@ -32,7 +32,7 @@ class wechat_user(models.Model):
     # null=True只适合于非String类型
     wechat_fakeID = models.CharField(max_length=200, blank=True)
     wechat_username = models.CharField(max_length=200, blank=True)
-    wechat_inputname = models.CharField(max_length=200, blank=True)
+    wechat_inputname = models.CharField(max_length=20, blank=True)
     wechat_usertype = models.CharField(max_length=20, blank=True, default='0') # 0:默认/已关注用户 1:未关注用户
 
     subscribe = models.BooleanField(default=False)
@@ -61,9 +61,9 @@ class participant(models.Model):
     partici_fakeID = models.CharField(max_length=200)
     event_ID = models.ForeignKey(event)
     event_sn = models.CharField(max_length=200, blank=True)
-    partici_name = models.CharField(max_length=200)
+    partici_name = models.CharField(max_length=20)
     partici_type = models.IntegerField(choices=PARTICI_TYPE, default=5)
-    register_time = models.DateTimeField(auto_now_add=True)
+    register_time = models.DateTimeField(auto_now=True)
 
     partici_user = models.ForeignKey(wechat_user)
     partici_openid = models.CharField(max_length=30, blank=True)

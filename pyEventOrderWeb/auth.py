@@ -27,7 +27,11 @@ class OAuthBackend(object):
 
         elif userinfo is not None:
             # 新用户驾到
-            _user = wechat_user.objects.create(openid=userinfo['openid'], subscribe=False, initialized=False)
+            openid = userinfo.pop('openid')
+            _user, created = wechat_user.objects.get_or_create(openid=openid)
+            for attr, val in userinfo.items():
+                if hasattr(_user, attr):
+                    setattr(_user, attr, val)
             _user.save()
             user.real_user = _user
             return user

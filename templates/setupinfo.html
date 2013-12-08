@@ -57,7 +57,10 @@
     $(document).on("pageinit", function () {
         $('#setupinfoForm').validate({ // initialize the plugin
             rules: {
-                wechat_inputname: "required"
+                wechat_inputname: {
+                    maxlength: 20,
+                    required: true
+                }
             },
             messages: {
                 wechat_inputname: "请设置您的姓名",

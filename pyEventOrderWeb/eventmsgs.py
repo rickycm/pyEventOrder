@@ -20,12 +20,10 @@ def processEventMessage(msg, event_msg):
         userid = msg.find('FromUserName').text
         try:
             user = wechat_user.objects.get(openid=userid)
-            user.subscribe = True
-            user.initialized = False
+            #user.subscribe = True
+            #user.save()
         except wechat_user.DoesNotExist:
-            user = wechat_user.objects.create(openid=userid, subscribe=True, initialized=False)
-        user.save()
-
+            user = None
         return sendSetting(user, msg)
 
     elif event_type=='CLICK':
@@ -37,8 +35,7 @@ def processEventMessage(msg, event_msg):
             try:
                 user = wechat_user.objects.get(openid=userid)
             except wechat_user.DoesNotExist:
-                user = wechat_user.objects.create(openid=userid, subscribe=True, initialized=False)
-                user.save()
+                user = None
             return sendSetting(user, msg)
         elif click=='GETEVENT':
             myid = msg.find('ToUserName').text
@@ -55,16 +52,16 @@ def sendSetting(user, msg):
     # 设置页面的URL中间包括用户的userid
     # 这样用户在打开设置页面时，就可以将userid保存在Cookie中了。
     msg_out={}
-    msg_out['toUser'] =  user.openid
+    msg_out['toUser'] =  msg.find('FromUserName').text
     msg_out['fromUser'] = msg.find('ToUserName').text
     logger.debug('My id is ' + msg_out['fromUser'])
     msg_out['time'] = int(time.time())
 
-    if not user.wechat_inputname:
+    if (user is None) or (not user.wechat_inputname):
         title = u'您好，陌生人'
     else:
         title = u'您好，'+user.wechat_inputname
-    article={'title':title, 'description':'亲，微信平台不会允许我直接获得您的个人信息，除非明确授权。所以请点这里设置您的名字，才能正常使用活动功能哦！'}
+    article={'title':title, 'description':'亲，为了更好地使用活动功能，请点这里设置您的信息！'}
     article['picurl'] = URLBASE + '/media/info.png'
     article['url'] = URLBASE + '/setting/?openid=' + user.openid
 
