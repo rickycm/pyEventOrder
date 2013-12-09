@@ -242,13 +242,11 @@
                 }
             });
             $('.cancelevent').click(function(){
-                alert('here');
                 $this = $(this);
-                alert($this);
-                alert($this.data('jointype'));
-                return false;
-                var url = "/joinevent/?eventid={{thisEvent.id}}&jointype=maybe&inputname=";
-                window.location = url + inputname;
+                jointype = $this.data('jointype');
+                var url = "/joinevent/?eventid={{thisEvent.id}}&jointype="+jointype+"&inputname="+{{username}};
+                //window.location = url + {{username}};
+                alert(url);
                 return false;
             });
             $('.joinevent').click(function(){
