@@ -544,6 +544,7 @@ def message(request):
         logger.info('Exception received: ' + e.message)
         raise e
 
+from django.db import IntegrityError
 @csrf_protect
 def setting(request):
     if request.method=='GET':
@@ -558,7 +559,7 @@ def setting(request):
                 real_user.subscribe = True
                 try:
                     real_user.save()
-                except wechat_user.IntegrityError:
+                except IntegrityError:
                     real_user = wechat_user.objects.get(openid=openid)
                     request.session['userid'] = real_user.id
                     real_user.subscribe = True
