@@ -79,7 +79,7 @@
                     <a href="/joinevent/?eventid={{thisEvent.id}}&jointype=stop" data-role="button" data-theme="e" data-icon="check">停止报名</a>
                 {% endif %}
                 {% if thisEvent.event_status != 2 %}
-                    <a class='joinevent' data-jointype="cancel" data-role="button" data-theme="a" data-icon="delete">取消活动</a>
+                    <a class='cancelevent' data-jointype="cancel" data-role="button" data-theme="a" data-icon="delete">取消活动</a>
                 {% endif %}
             </div>
         {% else %}
@@ -241,8 +241,17 @@
                     return false;
                 }
             });
-            $('.joinevent').click(function(){
+            $('.cancelevent').click(function(){
                 alert('here');
+                $this = $(this);
+                alert(JSON.stringify($this))
+                alert($this.data('jointype'));
+                return false;
+                var url = "/joinevent/?eventid={{thisEvent.id}}&jointype=maybe&inputname=";
+                window.location = url + inputname;
+                return false;
+            });
+            $('.joinevent').click(function(){
                 var inputname = $('#inputname').val();
                 if(inputname.length<2){
                     var input_error = "<font color=red>请输入姓名</font>";
