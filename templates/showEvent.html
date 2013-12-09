@@ -76,10 +76,10 @@
                 <a href="/updateevent/?eventid={{thisEvent.id}}" data-role="button" data-theme="b" data-icon="gear" data-ajax="false">修改活动</a>
                 <a href="/add_event/?eventid={{thisEvent.id}}&renew=true" data-role="button" data-theme="b" data-icon="star" data-ajax="false">重新发布活动</a>
                 {% if thisEvent.event_status != 3 %}
-                    <a class='cancelevent' data-jointype="stop" data-role="button" data-theme="e" data-icon="check">停止报名</a>
+                    <a class='manageevent' data-jointype="stop" data-role="button" data-theme="e" data-icon="check">停止报名</a>
                 {% endif %}
                 {% if thisEvent.event_status != 2 %}
-                    <a class='cancelevent' data-jointype="cancel" data-role="button" data-theme="a" data-icon="delete">取消活动</a>
+                    <a class='manageevent' data-jointype="cancel" data-role="button" data-theme="a" data-icon="delete">取消活动</a>
                 {% endif %}
             </div>
         {% else %}
@@ -205,7 +205,7 @@
             });
             bindPostCommentHandler();
 
-            $('.cancelevent').click(function(){
+            $('.manageevent').click(function(){
                 jointype = $(this).data('jointype');
                 var url = "/joinevent/?eventid={{thisEvent.id}}&jointype="+jointype+"&inputname={{username}}";
                 window.location = url;
