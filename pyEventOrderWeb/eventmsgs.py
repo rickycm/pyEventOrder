@@ -66,7 +66,7 @@ def sendSetting(user, msg):
     article['url'] = URLBASE + '/setting/?openid=' + user.openid
 
     msg_out['articles'] = [article]
-    logger.debug(msg_out)
+    #logger.debug(msg_out)
     return render_to_response('multimsg.xml', msg_out, content_type='text/xml')
 
 def sendEvent(fromUser, toUser, active):
@@ -82,6 +82,6 @@ def sendEvent(fromUser, toUser, active):
         'url':URLBASE + '/showevent/?eventid=' + str(active.id),
     }
     msg_out['articles'] = [article]
-    logger.debug(msg_out)
+    #logger.debug(msg_out)
     return render_to_response('multimsg.xml', msg_out, content_type='text/xml')
 
