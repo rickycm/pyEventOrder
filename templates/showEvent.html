@@ -242,6 +242,7 @@
                 }
             });
             $('.joinevent').click(function(){
+                alert('here');
                 var inputname = $('#inputname').val();
                 if(inputname.length<2){
                     var input_error = "<font color=red>请输入姓名</font>";
@@ -249,6 +250,7 @@
                     return false;
                 }else{
                     $this = $(this);
+                    alert(JSON.stringify($this))
                     alert($this.data('jointype'));
                     return false;
                     var url = "/joinevent/?eventid={{thisEvent.id}}&jointype=maybe&inputname=";
