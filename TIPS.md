@@ -4,7 +4,7 @@ openid: gh_982e9c43c16c
 Appid: wxceec3a78555b9cdd
 Secret: 4bf88d2f56512313c03f0ce01a514974
 {
-    "access_token": "P8CK4ZZ_Wc4JemOz_zeZD2wKEp18QOeRC0u1hDYNU5r1wW49Ze4zPpTevuqrEdIdrbgunYMHLBKtu7TMjFhLb0IqOsEew2WEP-TlSRu6NJHDO8IDHSVD04P0wGJq8xTZsaZ0kzp_cukXMBDaJcQlEA",
+    "access_token": "sfXfgya36Jr25Y7EZHRzhZilfrC5MgIB84blyCmNZtswVr18X_fqcTYtU3ipWTuXSrJLIFbrVsU2_8K_ZOXpOwhUtxaJvLqlmDRiEzIATDu3IDcLg4UxX5BbEEddMiSgqakYLlFFHDNflbtqMU1hSw",
     "expires_in": 7200
 }
 {
@@ -39,7 +39,7 @@ Secret: 4bf88d2f56512313c03f0ce01a514974
     },{
       "type":"view",
       "name":"关于",
-      "url":"http://www.eztogether.net/flat/1/"
+      "url":"http://www.eztogether.net/welcome/"
     }]
   }]
 }

@@ -556,7 +556,13 @@ def setting(request):
                 real_user = wechat_user.objects.get(pk=userid)
                 real_user.openid = openid
                 real_user.subscribe = True
-                real_user.save()
+                try:
+                    real_user.save()
+                except wechat_user.IntegrityError:
+                    real_user = wechat_user.objects.get(openid=openid)
+                    request.session['userid'] = real_user.id
+                    real_user.subscribe = True
+                    real_user.save()
             else:
                 user = authenticate(userinfo={'openid':openid,'subscribe':True})
                 if user is not None:
