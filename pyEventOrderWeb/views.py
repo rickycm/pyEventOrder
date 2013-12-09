@@ -370,6 +370,7 @@ def joinEvent(request):
 
         inputname = request.GET.get('inputname')
         if wechatUser.wechat_inputname!=inputname:
+            logger.debug(wechatUser.wechat_inputname +':'+inputname)
             wechatUser.wechat_inputname = inputname
             wechatUser.save()
 
