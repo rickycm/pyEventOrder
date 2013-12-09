@@ -244,7 +244,7 @@
             $('.cancelevent').click(function(){
                 alert('here');
                 $this = $(this);
-                alert(JSON.stringify($this))
+                alert($this);
                 alert($this.data('jointype'));
                 return false;
                 var url = "/joinevent/?eventid={{thisEvent.id}}&jointype=maybe&inputname=";
