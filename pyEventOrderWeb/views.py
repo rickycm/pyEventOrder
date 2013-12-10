@@ -202,7 +202,7 @@ def add_event(request):
                 event_limit = form.data['event_limit'],
                 updated_by = wechatUser,
                 event_type = form.data['event_type'],
-                event_hostfakeID = wechatUser.openid,
+                #event_hostfakeID = wechatUser.openid,
                 event_hostname = hostname,
                 event_status = 0,
             )
@@ -243,7 +243,7 @@ def updateEvent(request):
             thisEvent.event_status = 0
             thisEvent.event_type = 1
             #thisEvent.updated_date = datetime.now()
-            thisEvent.event_hostfakeID = form.data['event_hostfakeID']
+            #thisEvent.event_hostfakeID = form.data['event_hostfakeID']
             thisEvent.event_hostname = form.data['event_hostname']
 
             try:
@@ -663,7 +663,6 @@ APP_ID='100561618'
 APP_KEY='dbbea5729ffd5182deff63f90131bc3b'
 WX_APP_ID='wx8763ead7d4408241'
 WX_APP_KEY='4042d9f53dfa2abfdd542af803116787'
-from urllib2 import unquote
 
 # 现有版本用户一定能够通过验证并建立新用户记录
 def check_auth(request):
