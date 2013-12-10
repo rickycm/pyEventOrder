@@ -127,9 +127,9 @@ def list_events(rq):
             startPos = (curPage - 1) * ONE_PAGE_OF_DATA
             endPos = startPos + ONE_PAGE_OF_DATA
             if type == 'mine':
-                events = event.objects.filter(updated_by=wechatUser.id)[startPos:endPos]
+                events = event.objects.filter(updated_by=wechatUser)[startPos:endPos]
                 if curPage == 1 and allPage == 1:  #标记1
-                    allPostCounts = event.objects.filter(updated_by=wechatUser.id).count()
+                    allPostCounts = event.objects.filter(updated_by=wechatUser).count()
                     allPage = allPostCounts / ONE_PAGE_OF_DATA
                     remainPost = allPostCounts % ONE_PAGE_OF_DATA
                     if remainPost > 0:
@@ -203,7 +203,7 @@ def add_event(request):
                 event_detail = form.data['event_detail'],
                 event_date = s,
                 event_limit = form.data['event_limit'],
-                updated_by = userId,
+                updated_by = wechatUser,
                 event_type = form.data['event_type'],
                 event_hostfakeID = wechatUser.openid,
                 event_hostname = hostname,
@@ -242,7 +242,7 @@ def updateEvent(request):
             thisEvent.event_detail = form.data['event_detail']
             thisEvent.event_date = s
             thisEvent.event_limit = form.data['event_limit']
-            thisEvent.updated_by = userId
+            thisEvent.updated_by_id = userId
             thisEvent.event_status = 0
             thisEvent.event_type = 1
             #thisEvent.updated_date = datetime.now()
@@ -319,7 +319,7 @@ def showEvent(request):
         except participant.DoesNotExist:
             userStatus = 5
 
-        if wechatUser.id == int(thisEvent.updated_by):
+        if wechatUser == thisEvent.updated_by:
             userStatus = 10
 
         if thisEvent.event_date < timezone.now():
@@ -349,7 +349,7 @@ def showEvent(request):
         eventout = sum(p.partici_type == 0 for p in participantlist)
         eventmaybe = sum(p.partici_type == 2 for p in participantlist)
         numbers = {'eventin': eventin, 'eventout': eventout, 'eventmaybe': eventmaybe}
-        userStatus = 100  # 0-不参加，1-参加，2-可能参加，5-未报名，10-活动发起人，100-未关注账号用户
+        userStatus = 5  # 0-不参加，1-参加，2-可能参加，5-未报名，10-活动发起人，100-未关注账号用户
 
         return render_to_response("showEvent.html", {'title': thisEvent.event_title, 'thisEvent': thisEvent, 'userStatus': userStatus,
                                                      'participantlist': participantlist, "numbers": numbers, 'remsg': remsg,
@@ -555,15 +555,22 @@ def setting(request):
             if request.user.is_authenticated():
                 userid = request.session['userid']
                 real_user = wechat_user.objects.get(pk=userid)
+                cancelopenid = real_user.openid
                 real_user.openid = openid
                 real_user.subscribe = True
                 try:
                     real_user.save()
                 except IntegrityError:
+                    del_user = real_user
+
                     real_user = wechat_user.objects.get(openid=openid)
                     request.session['userid'] = real_user.id
                     real_user.subscribe = True
                     real_user.save()
+
+                    if cancelopenid.startswith('fake'):
+                        participant.objects.filter(partici_user=del_user).update(partici_user=real_user)
+                        event.objects.filter(updated_by=del_user).update(updated_by=real_user)
             else:
                 user = authenticate(userinfo={'openid':openid,'subscribe':True})
                 if user is not None:
@@ -628,8 +635,8 @@ def oauth(request):
         if userinfo is not None:
             openid = userinfo['openid']
             user = authenticate(userinfof = userinfo)
-            request.session['userid'] = user.real_user.id
             login(request, user)
+            request.session['userid'] = user.real_user.id
             if request.session.has_key('url'):
                 url = request.session['url']
                 del request.session['url']
@@ -664,8 +671,8 @@ def check_auth(request):
         user = authenticate(openid=openid)
         if user is not None:
             real_user = user.real_user
-            request.session['userid'] = real_user.id
             login(request, user)
+            request.session['userid'] = real_user.id
             return HttpResponseRedirect(next)
         else:
             return HttpResponse(status=500)
@@ -673,8 +680,8 @@ def check_auth(request):
         fakeOpenID = 'fake' + time.strftime('%y%m%d%H%M%S') + ''.join([random.choice(string.lowercase + string.digits) for _ in range(1)])
         user = authenticate(userinfo = {'openid':fakeOpenID})
         real_user = user.real_user
-        request.session['userid'] = real_user.id
         login(request, user)
+        request.session['userid'] = real_user.id
         response = HttpResponseRedirect(next)
         max_age = 365 * 24 * 60 * 60
         response.set_cookie("wxopenid", fakeOpenID, max_age=max_age)

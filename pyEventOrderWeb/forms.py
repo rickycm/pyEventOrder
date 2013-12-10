@@ -12,7 +12,7 @@ class LoginForm(forms.Form):
 class EventForm(forms.ModelForm):
     class Meta:
         model = event
-        fields = ['event_title', 'event_detail', 'event_date', 'event_limit', 'updated_by', 'event_hostname', 'event_type']
+        fields = ['event_title', 'event_detail', 'event_date', 'event_limit', 'event_hostname', 'event_type']
 
     def clean(self):
         if not self.is_valid():

@@ -6,28 +6,6 @@ EVENT_TYPE = [(1, u'体育活动'), (2, u'聚餐聚会'), (0, u'推广活动')]
 PARTICI_TYPE = [(0, u'不参加'), (1, u'参加'), (2, u'可能参加'), (5, u'未报名'), (10, u'活动发起人')]
 EVENT_STATUS = [(0, u'可报名'), (1, u'报名人满'), (2, u'已取消'), (3, u'已停止报名'), (4, u'已过期')]
 
-class event(models.Model):
-    event_title = models.CharField(max_length=200)
-    event_date = models.DateTimeField(blank=True, null=True)
-    updated_date = models.DateTimeField(auto_now=True)
-    event_detail = models.TextField(max_length=100000)
-    updated_by = models.CharField(max_length=100, blank=True) # wechat_user.id
-    event_type = models.IntegerField(blank=True, choices=EVENT_TYPE, default=1)
-    event_registdeadline = models.DateTimeField(blank=True, null=True)
-    event_hostfakeID = models.CharField(max_length=200)
-    event_hostname = models.CharField(max_length=20, blank=True)
-    event_limit = models.IntegerField(default=0, blank=True)
-    event_sn = models.CharField(max_length=20, blank=True)  # 保存推广活动邀请码等
-    event_status = models.IntegerField(default=0, choices=EVENT_STATUS, blank=True)
-
-    class Meta:
-        verbose_name = 'Event'
-        verbose_name_plural = 'Events'
-        ordering = ["-updated_date"]
-    def __unicode__(self):
-        return u'%s' % (self.event_title)
-
-
 class wechat_user(models.Model):
     # null=True只适合于非String类型
     wechat_fakeID = models.CharField(max_length=200, blank=True)
@@ -56,6 +34,27 @@ class wechat_user(models.Model):
 
     def __unicode__(self):
         return u'%s' % (self.wechat_username)
+
+class event(models.Model):
+    event_title = models.CharField(max_length=200)
+    event_date = models.DateTimeField(blank=True, null=True)
+    updated_date = models.DateTimeField(auto_now=True)
+    event_detail = models.TextField(max_length=100000)
+    updated_by = models.ForeignKey(wechat_user) # wechat_user.id
+    event_type = models.IntegerField(blank=True, choices=EVENT_TYPE, default=1)
+    event_registdeadline = models.DateTimeField(blank=True, null=True)
+    event_hostfakeID = models.CharField(max_length=200)
+    event_hostname = models.CharField(max_length=20, blank=True)
+    event_limit = models.IntegerField(default=0, blank=True)
+    event_sn = models.CharField(max_length=20, blank=True)  # 保存推广活动邀请码等
+    event_status = models.IntegerField(default=0, choices=EVENT_STATUS, blank=True)
+
+    class Meta:
+        verbose_name = 'Event'
+        verbose_name_plural = 'Events'
+        ordering = ["-updated_date"]
+    def __unicode__(self):
+        return u'%s' % (self.event_title)
 
 class participant(models.Model):
     partici_fakeID = models.CharField(max_length=200)
