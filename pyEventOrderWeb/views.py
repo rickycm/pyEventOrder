@@ -556,7 +556,11 @@ def setting(request):
                     userid = request.session['userid']
                     real_user = wechat_user.objects.get(pk=userid)
                 except:
-                    real_user = wechat_user.objects.get(openid=cookie_openid)
+                    try:
+                        real_user = wechat_user.objects.get(openid=cookie_openid)
+                    except:
+                        logout(request)
+                        return setting(request)
                     request.session['userid'] = real_user.id
 
                 real_user.openid = openid
