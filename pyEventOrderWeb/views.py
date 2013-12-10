@@ -159,7 +159,7 @@ def add_event(request):
         userId = request.session["userid"]
         wechatUser = wechat_user.objects.get(pk=userId)
     except:
-        openid = request.COOKIES['openid']
+        openid = request.COOKIES['wxopenid']
         wechatUser = wechat_user.objects.get(openid=openid)
         request.session['userid'] = wechatUser.id
 
