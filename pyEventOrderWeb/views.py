@@ -179,7 +179,7 @@ def add_event(request):
             form = forms.EventForm(instance=thisEvent)
         else:
             eventType = request.GET.get('eventtype','1')
-            form = forms.EventForm({'eventtype':eventType, 'event_hostname':wechatUser.wechat_inputname})
+            form = forms.EventForm({'eventtype':eventType, 'event_hostname':wechatUser.inputname})
         if eventType == '2':
             return render_to_response('addDinnerParty.html', {'title': '新建活动', 'form': form},
                               context_instance=RequestContext(request))
@@ -191,8 +191,8 @@ def add_event(request):
         s = datetime.strptime(form.data['eventdate'] + ' ' + form.data['eventtime'], "%Y-%m-%d %H:%M")
         if form.is_valid():
             hostname = form.data['event_hostname']
-            if hostname!=wechatUser.wechat_inputname:
-                wechatUser.wechat_inputname = hostname
+            if hostname!=wechatUser.inputname:
+                wechatUser.inputname = hostname
                 wechatUser.save()
 
             e = event.objects.create(
@@ -324,7 +324,7 @@ def showEvent(request):
             thisEvent.event_status = 4
         return render_to_response("showEvent.html", {'title':thisEvent.event_title, 'thisEvent':thisEvent, 'userStatus':userStatus,
                                                     'participantlist': participantlist, "numbers": numbers, 'remsg': remsg,
-                                                    'showcomment': 'true', 'useropenid': wechatUser.openid, 'username': wechatUser.wechat_inputname},
+                                                    'showcomment': 'true', 'useropenid': wechatUser.openid, 'username': wechatUser.inputname},
                                 context_instance=RequestContext(request))
 
     else:
@@ -366,9 +366,9 @@ def joinEvent(request):
             return HttpResponseRedirect('welcome.html')
 
         inputname = request.GET.get('inputname')
-        if wechatUser.wechat_inputname!=inputname:
-            logger.debug(wechatUser.wechat_inputname +':'+inputname)
-            wechatUser.wechat_inputname = inputname
+        if wechatUser.inputname!=inputname:
+            logger.debug(wechatUser.inputname +':'+inputname)
+            wechatUser.inputname = inputname
             wechatUser.save()
 
         try:
@@ -430,7 +430,7 @@ def joinEvent(request):
         try:
             inputname = request.GET.get('inputname')
             fakeOpenID = 'fake' + time.strftime('%y%m%d%H%M%S') + ''.join([random.choice(string.lowercase + string.digits) for _ in range(1)])
-            user = authenticate(userinfo = {'openid':fakeOpenID, 'wechat_inputname':inputname})
+            user = authenticate(userinfo = {'openid':fakeOpenID, 'inputname':inputname})
             if user is not None:
                 wechatUser = user.real_user
                 request.session['userid'] = wechatUser.id
@@ -609,7 +609,7 @@ def setting(request):
                 return HttpResponseRedirect('/welcome/')
 
             #assert user.openid==userid
-            wechatUser.wechat_inputname = form.data['wechat_inputname']
+            wechatUser.inputname = form.data['inputname']
             wechatUser.initialized = True
             wechatUser.save()
 

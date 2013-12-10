@@ -8,6 +8,7 @@ EVENT_STATUS = [(0, u'可报名'), (1, u'报名人满'), (2, u'已取消'), (3, 
 
 class wechat_user(models.Model):
     # null=True只适合于非String类型
+    inputname = models.CharField(max_length=20, blank=True)
     wechat_inputname = models.CharField(max_length=20, blank=True)
     last_login = models.DateTimeField(auto_now=True)
     email = models.EmailField(blank=True)

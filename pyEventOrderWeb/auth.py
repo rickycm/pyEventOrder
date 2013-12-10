@@ -20,6 +20,7 @@ class OAuthBackend(object):
         if openid is not None:
             try:
                 _user = wechat_user.objects.get(openid=openid)
+                _user.save()
                 user.real_user = _user
                 return user
             except wechat_user.DoesNotExist:

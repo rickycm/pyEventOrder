@@ -3,8 +3,8 @@ from django.contrib import admin
 from pyEventOrderWeb.models import event, participant, wechat_user
 
 class Wechat_userAdmin(admin.ModelAdmin):
-    list_display = ('openid', 'wechat_inputname', 'last_login', 'email', 'email_valid')
-    fields = ('openid', 'wechat_inputname', 'last_login', 'email', 'email_valid')
+    list_display = ('openid', 'inputname', 'last_login', 'email', 'email_valid')
+    fields = ('openid', 'inputname', 'last_login', 'email', 'email_valid')
 
 class EventAdmin(admin.ModelAdmin):
     list_display = ('event_title', 'related_updated_by', 'updated_date', 'event_date')
@@ -12,13 +12,13 @@ class EventAdmin(admin.ModelAdmin):
     list_filter = ('updated_date',)
     date_hierarchy = 'updated_date'
     def related_updated_by(self, obj):
-        return obj.updated_by.wechat_inputname
+        return obj.updated_by.inputname
     related_updated_by.short_description = 'updated_by'
 
 class ParticipantAdmin(admin.ModelAdmin):
     list_display = ('event_ID', 'partici_name', 'partici_type', 'related_partici_user', 'register_time')
     def related_partici_user(self, obj):
-        return obj.partici_user.wechat_inputname
+        return obj.partici_user.inputname
     related_partici_user.short_description = 'partici_user'
 
 admin.site.register(event, EventAdmin)

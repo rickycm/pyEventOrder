@@ -57,10 +57,10 @@ def sendSetting(user, msg):
     logger.debug('My id is ' + msg_out['fromUser'])
     msg_out['time'] = int(time.time())
 
-    if (user is None) or (not user.wechat_inputname):
+    if (user is None) or (not user.inputname):
         title = u'您好，陌生人'
     else:
-        title = u'您好，'+user.wechat_inputname
+        title = u'您好，'+user.inputname
     article={'title':title, 'description':'亲，为了更好地使用活动功能，请点这里设置您的信息！'}
     article['picurl'] = URLBASE + '/media/info.png'
     article['url'] = URLBASE + '/setting/?openid=' + user.openid
