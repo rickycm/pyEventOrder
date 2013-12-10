@@ -155,12 +155,13 @@ def list_events(rq):
 @login_required
 @csrf_protect
 def add_event(request):
-    try:
+    if request.session.has_key('userid'):
         userId = request.session["userid"]
         wechatUser = wechat_user.objects.get(pk=userId)
-    except:
-        logout(request)
-        return HttpResponseRedirect('/welcome/')
+    else:
+        openid = request.COOKIES['openid']
+        wechatUser = wechat_user.objects.get(openid=openid)
+        request.session['userid'] = wechatUser.id
 
     if request.method == 'GET':
         # 基于活动重新发布功能
@@ -177,12 +178,8 @@ def add_event(request):
                                       context_instance=RequestContext(request))
             form = forms.EventForm(instance=thisEvent)
         else:
-            try:
-                eventType = request.GET.get('eventtype')
-            except:
-                eventType = '1'
+            eventType = request.GET.get('eventtype','1')
             form = forms.EventForm({'eventtype':eventType, 'event_hostname':wechatUser.wechat_inputname})
-            print("==========", eventType)
         if eventType == '2':
             return render_to_response('addDinnerParty.html', {'title': '新建活动', 'form': form},
                               context_instance=RequestContext(request))

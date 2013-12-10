@@ -8,10 +8,12 @@ EVENT_STATUS = [(0, u'可报名'), (1, u'报名人满'), (2, u'已取消'), (3, 
 
 class wechat_user(models.Model):
     # null=True只适合于非String类型
-    wechat_fakeID = models.CharField(max_length=200, blank=True)
-    wechat_username = models.CharField(max_length=200, blank=True)
     wechat_inputname = models.CharField(max_length=20, blank=True)
-    wechat_usertype = models.CharField(max_length=20, blank=True, default='0') # 0:默认/已关注用户 1:未关注用户
+    last_login = models.DateTimeField(auto_now=True)
+    email = models.EmailField(blank=True)
+    email_valid = models.BooleanField(default=False)
+    # 本字段表明用户保存了Cookie，设置了用户名，从而可以完成系统内的主要工作。
+    initialized = models.BooleanField(default=False, blank=True)
 
     subscribe = models.BooleanField(default=False)
     openid = models.CharField(max_length=30, unique=True)
@@ -23,10 +25,7 @@ class wechat_user(models.Model):
     country = models.CharField(max_length=20, default='中国', blank=True)
     headimageurl = models.URLField(max_length=200, blank=True)
 
-    # 本字段表明用户保存了Cookie，设置了用户名，从而可以完成系统内的主要工作。
-    initialized = models.BooleanField(default=False, blank=True)
-
-    objects = models.Manager()
+    #objects = models.Manager()
 
     class Meta:
         verbose_name = 'WechatUser'
