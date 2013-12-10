@@ -34,9 +34,7 @@
 {% endblock %}
 
 {% block page_id %}list_event{% endblock %}
-{% block main_content %}
-
-    <body>
+{% block content %}
     {% if type == 'mine' %}
          <h3 style="text-align:center">您发布的活动：</h3>
     {% elif type == 'other' %}
@@ -44,14 +42,13 @@
     {% endif %}
     <p></p>
 
-
-         {% for event in events %}
-              <a href="/showevent/?eventid={{ event.id }}" data-role="button"  data-transition="fade" data-theme="c" data-icon="arrow-r">
-                    <font size="4" color="#0064A0">{{ event.event_title }}</font>
-                    <br>
-                    <font size="2" color="#626262">{{ event.event_date|date:"Y-m-d, H:i" }}</font>
-              </a>
-         {% endfor %}
+     {% for event in events %}
+          <a href="/showevent/?eventid={{ event.id }}" data-role="button"  data-transition="fade" data-theme="c" data-icon="arrow-r">
+                <font size="4" color="#0064A0">{{ event.event_title }}</font>
+                <br>
+                <font size="2" color="#626262">{{ event.event_date|date:"Y-m-d, H:i" }}</font>
+          </a>
+     {% endfor %}
 
 
     <div style="text-align:center">
