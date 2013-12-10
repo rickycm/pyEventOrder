@@ -38,24 +38,21 @@
 
     <body>
     {% if type == 'mine' %}
-         <h3 style="text-align:center">以下是您发布的活动，点击标题可查看或编辑：</h3>
+         <h3 style="text-align:center">以下是您发布的活动，点击查看或编辑：</h3>
     {% elif type == 'other' %}
-         <h3 style="text-align:center">以下是您参与的活动，点击标题可查看或修改：</h3>
+         <h3 style="text-align:center">以下是您参与的活动，点击查看或修改：</h3>
     {% endif %}
     <p></p>
 
-    <table border="1px" cellspacing="0px" style="border-collapse:collapse">
-         <tr>
-              <td>活动名称</td>
-              <td>活动时间</td>
-         </tr>
+
          {% for event in events %}
-              <tr>
-                   <td><a href="/showevent/?eventid={{ event.id }}" >{{ event.event_title }} </a></td>
-                   <td>{{ event.event_date|date:"Y-m-d, H:i" }}</td>
-              </tr>
+              <a href="/showevent/?eventid={{ event.id }}" data-role="button"  data-transition="fade" data-theme="c" data-icon="arrow-r">
+                    <font size="4" color="#0064A0">{{ event.event_title }}</font>
+                    <br>
+                    <font size="2" color="#626262">{{ event.event_date|date:"Y-m-d, H:i" }}</font>
+              </a>
          {% endfor %}
-    </table>
+
 
     <div style="text-align:center">
         <!-- 如果当前是第一页，就不显示【上一页】链接 -->
