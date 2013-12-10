@@ -39,8 +39,6 @@ urlpatterns = patterns('',
     (r'^test/$', views.test),
     (r'^tinymce/', include('tinymce.urls')),
     (r'', include('jqmFlatPages.urls')),
-    (r'^setcookie/$', views.cookie_openid),
-    (r'^moveuser/$', views.move_user),
     (r'^comments/', include('django.contrib.comments.urls')),
 )
 
