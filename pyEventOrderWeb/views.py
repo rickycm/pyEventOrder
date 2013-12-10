@@ -571,6 +571,7 @@ def setting(request):
                     if cancelopenid.startswith('fake'):
                         participant.objects.filter(partici_user=del_user).update(partici_user=real_user)
                         event.objects.filter(updated_by=del_user).update(updated_by=real_user)
+                        del_user.delete()
             else:
                 user = authenticate(userinfo={'openid':openid,'subscribe':True})
                 if user is not None:
