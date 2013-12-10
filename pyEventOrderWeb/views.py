@@ -488,12 +488,12 @@ def joinEvent(request):
             thisparticipant.save()
             reMsg = u'报名成功。'
 
-        rqdata = request.GET.copy()
-        rqdata['eventid'] = eventId
-        rqdata['remsg'] = reMsg
-        request.GET = rqdata
+        rqdata = {
+            'eventid':eventId,
+            'remsg':reMsg.encode('utf-8'),
+        }
 
-        response = showEvent(request)
+        response = HttpResponseRedirect('/showevent/?' + urllib.urlencode(rqdata))
         max_age = 365 * 24 * 60 * 60
         response.set_cookie("wxopenid", fakeOpenID, max_age=max_age)
         return response
