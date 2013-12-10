@@ -269,7 +269,7 @@ def updateEvent(request):
 def showEvent(request):
 
     # 首先检查COOKIES里面是否已经存在用户信息
-    if request.COOKIES.has_key('wxopenid'):
+    if 'wxopenid' in request.COOKIES:
         # 进到这个分支的人，应该是关注了公众号的人。
         # 它们的记录在events中已经建立
         openid = request.COOKIES['wxopenid']
@@ -546,7 +546,7 @@ from django.db import IntegrityError
 @csrf_protect
 def setting(request):
     if request.method=='GET':
-        if request.GET.has_key('openid'):
+        if 'openid' in request.GET:
             openid = request.GET['openid']
             logger.debug('Request has openid ' + openid)
 
@@ -641,7 +641,7 @@ def oauth(request):
             user = authenticate(userinfof = userinfo)
             login(request, user)
             request.session['userid'] = user.real_user.id
-            if request.session.has_key('url'):
+            if 'url' in request.session:
                 url = request.session['url']
                 del request.session['url']
             else:
@@ -668,7 +668,7 @@ def check_auth(request):
         return HttpResponseRedirect(next)
 
     # 首先检查COOKIES里面是否已经存在用户信息
-    if request.COOKIES.has_key('wxopenid'):
+    if 'wxopenid' in request.COOKIES:
         # 进到这个分支的人，应该是关注了公众号的人。
         # 它们的记录在events中已经建立
         openid = request.COOKIES['wxopenid']
@@ -733,7 +733,7 @@ def get_qq_info(code, session):
     f.close()
     logger.debug('Thread return: ' + text)
     q = parse_qs(text)
-    if q.has_key('access_token'):
+    if 'access_token' in q:
         token = q['access_token'][0]
         logger.debug('Get token: ' + token)
         session['token'] = token
@@ -745,7 +745,7 @@ def get_qq_info(code, session):
         jobj = None
         if text.strtwith('callback('):
             jobj = json.loads(text[9:-1])
-            if jobj.has_key('openid'):
+            if 'openid' in jobj:
                 session['openid'] = jobj['openid']
         return jobj
 
@@ -762,7 +762,7 @@ def get_wx_info(code, session):
     jobj = json.load(f)
     f.close()
     logger.debug('Thread return: ' + str(jobj))
-    if jobj.has_key('errmsg'):
+    if 'errmsg' in jobj:
         logger.error('WX get error: ' + jobj['errmsg'])
         return None
     session['access_token'] = jobj['access_token']
