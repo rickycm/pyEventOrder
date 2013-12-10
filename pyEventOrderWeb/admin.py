@@ -4,7 +4,7 @@ from pyEventOrderWeb.models import event, participant, wechat_user
 
 class Wechat_userAdmin(admin.ModelAdmin):
     list_display = ('openid', 'inputname', 'last_login', 'email', 'email_valid')
-    fields = ('openid', 'inputname', 'last_login', 'email', 'email_valid')
+    fields = ('openid', 'inputname', 'email', 'email_valid')
 
 class EventAdmin(admin.ModelAdmin):
     list_display = ('event_title', 'related_updated_by', 'updated_date', 'event_date')
