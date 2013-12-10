@@ -43,7 +43,7 @@
     <p></p>
 
     {% for event in events %}
-        <a href="/showevent/?eventid={{ event.id }}" data-role="button" data-theme="c" data-icon="arrow-r">
+        <a href="/showevent/?eventid={{ event.id }}" data-role="button" data-theme="c" data-icon="arrow-r" data-iconpos="right">
             <font size="4" color="#0064A0">{{ event.event_title }}</font>
             <br>
             <font size="2" color="#626262">{{ event.event_date|date:"Y-m-d, H:i" }}</font>
