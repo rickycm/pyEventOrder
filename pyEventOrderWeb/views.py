@@ -155,10 +155,10 @@ def list_events(rq):
 @login_required
 @csrf_protect
 def add_event(request):
-    if request.session.has_key('userid'):
+    try:
         userId = request.session["userid"]
         wechatUser = wechat_user.objects.get(pk=userId)
-    else:
+    except:
         openid = request.COOKIES['openid']
         wechatUser = wechat_user.objects.get(openid=openid)
         request.session['userid'] = wechatUser.id
@@ -274,10 +274,10 @@ def showEvent(request):
         # 它们的记录在events中已经建立
         openid = request.COOKIES['wxopenid']
         if request.user.is_authenticated():
-            if request.session.has_key('userid'):
+            try:
                 userId = request.session["userid"]
                 wechatUser = wechat_user.objects.get(pk=userId)
-            else:
+            except:
                 wechatUser = wechat_user.objects.get(openid=openid)
                 request.session['userid'] = wechat_user.id
         else:
@@ -552,10 +552,10 @@ def setting(request):
 
             if request.user.is_authenticated():
                 cookie_openid = request.COOKIES['wxopenid']
-                if request.session.has_key('userid'):
+                try:
                     userid = request.session['userid']
                     real_user = wechat_user.objects.get(pk=userid)
-                else:
+                except:
                     real_user = wechat_user.objects.get(openid=cookie_openid)
                     request.session['userid'] = real_user.id
 
