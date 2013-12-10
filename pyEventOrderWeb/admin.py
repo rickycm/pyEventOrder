@@ -12,13 +12,13 @@ class EventAdmin(admin.ModelAdmin):
     list_filter = ('updated_date',)
     date_hierarchy = 'updated_date'
     def related_updated_by(self, obj):
-        return obj.updated_by.openid
+        return obj.updated_by.wechat_inputname
     related_updated_by.short_description = 'updated_by'
 
 class ParticipantAdmin(admin.ModelAdmin):
-    list_display = ('event_ID', 'partici_name', 'partici_type', 'related_partici_user', 'partici_openid', 'register_time')
+    list_display = ('event_ID', 'partici_name', 'partici_type', 'related_partici_user', 'register_time')
     def related_partici_user(self, obj):
-        return obj.partici_user.openid
+        return obj.partici_user.wechat_inputname
     related_partici_user.short_description = 'partici_user'
 
 admin.site.register(event, EventAdmin)
