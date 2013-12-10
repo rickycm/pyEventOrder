@@ -71,7 +71,7 @@
         </table>
 
 
-        <!-- userStatus: 0-不参加，1-参加，2-可能参加，5-未报名，10-活动发起人，100-未关注账号用户 -->
+        <!-- userStatus: 0-不参加，1-参加，2-可能参加，5-未报名，10-活动发起人，100-未关注账号用户   -->
         {% if userStatus == 10 %}
             <div data-role="controlgroup">
                 <a href="/updateevent/?eventid={{thisEvent.id}}" data-role="button" data-theme="b" data-icon="gear" data-ajax="false">修改活动</a>
