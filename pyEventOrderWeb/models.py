@@ -43,7 +43,7 @@ class event(models.Model):
     updated_by = models.ForeignKey(wechat_user) # wechat_user.id
     event_type = models.IntegerField(blank=True, choices=EVENT_TYPE, default=1)
     event_registdeadline = models.DateTimeField(blank=True, null=True)
-    event_hostfakeID = models.CharField(max_length=200)
+    #event_hostfakeID = models.CharField(max_length=200)
     event_hostname = models.CharField(max_length=20, blank=True)
     event_limit = models.IntegerField(default=0, blank=True)
     event_sn = models.CharField(max_length=20, blank=True)  # 保存推广活动邀请码等
