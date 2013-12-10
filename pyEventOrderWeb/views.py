@@ -773,7 +773,7 @@ def get_wx_info(code, session):
     return jobj
 
 def welcome(request):
-    url = 'http://mp.weixin.qq.com/mp/appmsg/show?__biz=MjM5NTk2OTU4NA==&appmsgid=10012087&itemidx=1&sign=3f9befba95ade73c3c5f83b594881e4c&uin=MTQ5MzI4&key=234b3ec6051a4a544a258b21c00bfcd3c2c6b166e0ca668beded8bbb6dafb7b1700f10cb387dbb1bc3f681e461d14abf&devicetype=iPhone+OS7.0.4&version=15000311&lang=zh_CN'
+    url = 'http://mp.weixin.qq.com/mp/appmsg/show?__biz=MjM5NTk2OTU4NA==&appmsgid=10012087&itemidx=1&sign=3f9befba95ade73c3c5f83b594881e4c&uin=MzEzMzUwNQ==&key=234b3ec6051a4a54d07a3167f45600cad49a153e052bf2d9ff5ae77c290ec95ac3ea9a9e783ee83087a27f118cfc0c64&devicetype=iPhone+OS7.0.4&version=15000311&lang=zh_CN'
     return HttpResponseRedirect(url)
 
 def welcome_old(request):
