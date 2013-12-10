@@ -33,7 +33,7 @@ class wechat_user(models.Model):
         verbose_name_plural = 'WechatUsers'
 
     def __unicode__(self):
-        return u'%s' % (self.wechat_username)
+        return u'%s' % (self.inputname)
 
 class event(models.Model):
     event_title = models.CharField(max_length=200)
