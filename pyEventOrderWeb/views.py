@@ -491,9 +491,9 @@ def joinEvent(request):
         rqdata = request.GET.copy()
         rqdata['eventid'] = eventId
         rqdata['remsg'] = reMsg
-        #request.GET = rqdata
+        request.GET = rqdata
 
-        response = HttpResponseRedirect('/showevent/?' + urllib.urlencode(rqdata))
+        response = showEvent(request)
         max_age = 365 * 24 * 60 * 60
         response.set_cookie("wxopenid", fakeOpenID, max_age=max_age)
         return response
