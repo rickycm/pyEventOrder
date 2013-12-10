@@ -178,8 +178,8 @@ def add_event(request):
                                       context_instance=RequestContext(request))
             form = forms.EventForm(instance=thisEvent)
         else:
-            eventType = request.GET.get('eventtype','1')
-            form = forms.EventForm({'eventtype':eventType, 'event_hostname':wechatUser.inputname})
+            eventType = request.GET.get('eventtype', '1')
+            form = forms.EventForm({'eventtype':eventType, 'event_hostname': wechatUser.inputname})
         if eventType == '2':
             return render_to_response('addDinnerParty.html', {'title': '新建活动', 'form': form},
                               context_instance=RequestContext(request))
@@ -663,6 +663,7 @@ APP_ID='100561618'
 APP_KEY='dbbea5729ffd5182deff63f90131bc3b'
 WX_APP_ID='wx8763ead7d4408241'
 WX_APP_KEY='4042d9f53dfa2abfdd542af803116787'
+from urllib2 import unquote
 
 # 现有版本用户一定能够通过验证并建立新用户记录
 def check_auth(request):
