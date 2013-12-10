@@ -40,7 +40,7 @@
     {% elif type == 'other' %}
          <h3 style="text-align:center">您参与的活动：</h3>
     {% endif %}
-    <p></p>
+    <br>
 
     {% for event in events %}
         <a href="/showevent/?eventid={{ event.id }}" data-role="button" data-theme="c" data-icon="bars">
