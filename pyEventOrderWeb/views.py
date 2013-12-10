@@ -554,15 +554,14 @@ def setting(request):
             logger.debug('Request has openid ' + openid)
 
             if request.user.is_authenticated():
+                cookie_openid = request.COOKIES['wxopenid']
                 if request.session.has_key('userid'):
                     userid = request.session['userid']
                     real_user = wechat_user.objects.get(pk=userid)
                 else:
-                    openid = request.COOKIES['wxopenid']
-                    real_user = wechat_user.objects.get(openid=openid)
+                    real_user = wechat_user.objects.get(openid=cookie_openid)
                     request.session['userid'] = real_user.id
 
-                cancelopenid = real_user.openid
                 real_user.openid = openid
                 real_user.subscribe = True
                 try:
@@ -575,7 +574,7 @@ def setting(request):
                     real_user.subscribe = True
                     real_user.save()
 
-                    if cancelopenid.startswith('fake'):
+                    if cookie_openid.startswith('fake'):
                         participant.objects.filter(partici_user=del_user).update(partici_user=real_user)
                         event.objects.filter(updated_by=del_user).update(updated_by=real_user)
                         del_user.delete()
