@@ -26,8 +26,8 @@
         <div class="control-group">
             <!--<label class="control-label" for="event_title">活动名称</label> -->
             <div class="controls">
-                <input id="wechat_inputname" name="wechat_inputname" type="text" placeholder="请设置姓名"
-                    value="{{form.wechat_inputname.value|default_if_none:''}}" required>
+                <input id="inputname" name="inputname" type="text" placeholder="请设置姓名"
+                    value="{{form.inputname.value|default_if_none:''}}" required>
             </div>
         </div>
 
@@ -57,16 +57,16 @@
     $(document).on("pageinit", function () {
         $('#setupinfoForm').validate({ // initialize the plugin
             rules: {
-                wechat_inputname: {
+                inputname: {
                     maxlength: 20,
                     required: true
                 }
             },
             messages: {
-                wechat_inputname: "请设置您的姓名",
+                inputname: "请设置您的姓名",
             },
             errorPlacement: function(error, element) {
-                if (element.attr("name") == "wechat_inputname") {
+                if (element.attr("name") == "inputname") {
                     error.insertAfter($(element).parent());
                 } else {
                     error.insertAfter(element);
