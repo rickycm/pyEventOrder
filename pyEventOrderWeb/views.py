@@ -683,6 +683,8 @@ def check_auth(request):
             request.session['userid'] = real_user.id
             return HttpResponseRedirect(next)
         else:
+            response = HttpResponse(status=500)
+            response.delete_cookie('wxopenid')
             return HttpResponse(status=500)
     else:
         fakeOpenID = 'fake' + time.strftime('%y%m%d%H%M%S') + ''.join([random.choice(string.lowercase + string.digits) for _ in range(1)])
