@@ -7,7 +7,7 @@ class Wechat_userAdmin(admin.ModelAdmin):
     fields = ('openid', 'inputname', 'email', 'email_valid')
 
 class EventAdmin(admin.ModelAdmin):
-    list_display = ('event_title', 'related_updated_by', 'updated_date', 'event_date')
+    list_display = ('id', 'event_title', 'related_updated_by', 'updated_date', 'event_date')
     search_fields = ('event_title', 'updated_by', 'event_type', 'event_detail')
     list_filter = ('updated_date',)
     date_hierarchy = 'updated_date'
