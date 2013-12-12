@@ -12,9 +12,9 @@
 
     {% for event in events %}
         <a href="/showevent/?eventid={{ event.id }}" data-role="button" data-theme="c" data-icon="bars">
-            <div style="font-size:1.2em;color:#0064A0;">{{ event.event_title }}</div>
+            <span style="font-size:1.2em;color:#0064A0;">{{ event.event_title }}</span>
             <br>
-            <div style="font-size:0.6em;color:#626262;">{{ event.event_date|date:"Y-m-d, H:i" }}</div>
+            <span style="font-size:0.6em;color:#626262;">{{ event.event_date|date:"Y-m-d, H:i" }}</span>
         </a>
     {% endfor %}
 
