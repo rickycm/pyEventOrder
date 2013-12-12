@@ -3,13 +3,7 @@
 
 {% block user_css %}
     <link rel="stylesheet" type="text/css" href='{% static "datetimepicker/css/jqm-datebox.css" %}' />
-    <style>
-        label.error {
-            color: red;
-            width: 100%;
-            float: none;
-        }
-    </style>
+    {{block.super}}
 {% endblock %}
 
 {% block page_id %}update_event{% endblock %}

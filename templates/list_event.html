@@ -1,10 +1,6 @@
 {% extends 'jqmpage.html' %}
 {% load staticfiles %}
 
-{% block user_css %}
-
-{% endblock %}
-
 {% block page_id %}list_event{% endblock %}
 {% block content %}
     {% if type == 'mine' %}
@@ -16,9 +12,9 @@
 
     {% for event in events %}
         <a href="/showevent/?eventid={{ event.id }}" data-role="button" data-theme="c" data-icon="bars">
-            <font size="4" color="#0064A0">{{ event.event_title }}</font>
+            <div style="font-size:1.2em;font-color:#0064A0;">{{ event.event_title }}</div>
             <br>
-            <font size="2" color="#626262">{{ event.event_date|date:"Y-m-d, H:i" }}</font>
+            <div style="font-size:0.6em;font-color:#626262;">{{ event.event_date|date:"Y-m-d, H:i" }}</div>
         </a>
     {% endfor %}
 
