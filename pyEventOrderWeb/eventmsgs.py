@@ -2,13 +2,14 @@
 __author__ = 'Aston'
 import time
 import logging
+import os
 
 from django.http import Http404
 from django.shortcuts import render_to_response
 from models import wechat_user, event as activity
 
 logger = logging.getLogger('django.dev')
-URLBASE = 'http://www.eztogether.net'
+URLBASE = 'http://'+ os.environ['DJANGO_SITE']
 
 def processEventMessage(msg, event_msg):
     event_type = event_msg.text

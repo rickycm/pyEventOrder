@@ -4,6 +4,7 @@ from datetime import datetime
 import time
 import random
 import string
+import os
 
 from django.utils import timezone
 from django.contrib.auth.forms import *
@@ -17,7 +18,7 @@ from django.views.decorators.csrf import csrf_protect
 from pyEventOrderWeb import forms
 from pyEventOrderWeb.models import *
 
-URLBASE='http://www.eztogether.net'
+URLBASE='http://' + os.environ['DJANGO_SITE']
 logger = logging.getLogger('django.dev')
 
 @csrf_protect
@@ -55,8 +56,8 @@ def register(request):
 
 def index(request):
     #if request.user.is_authenticated():
-        user = request.user
-        return render_to_response("index.html", {'user': user}, context_instance=RequestContext(request))
+    user = request.user
+    return render_to_response("index.html", {'user': user}, context_instance=RequestContext(request))
     #return HttpResponseRedirect("/accounts/login/")
 
 def logout_view(request):

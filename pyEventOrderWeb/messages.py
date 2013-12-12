@@ -2,13 +2,14 @@
 __author__ = 'Aston'
 import time
 import logging
+import os
 
 #from django.template.loader import get_template
 #from django.template import Context
 from django.shortcuts import render_to_response
 
 logger = logging.getLogger('django.dev')
-URLBASE = 'http://www.eztogether.net'
+URLBASE = 'http://' + os.environ['DJANGO_SITE']
 
 def processMessage(msg):
     logger.debug('It is a message.')
