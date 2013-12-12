@@ -29,7 +29,12 @@
                 <input id="inputname" name="inputname" type="text" placeholder="请设置姓名"
                     value="{{form.inputname.value|default_if_none:''}}" required>
             </div>
+            <div class="controls">
+                <input id="email" name="email" type="email" placeholder="请留下您的电子邮件(可选)"
+                    value="{{form.email.value|default_if_none:''}}">
+            </div>
         </div>
+        <div>留下电子邮件能够帮助您以后在必要的时候寻回账号及信息。</div>
 
         <!-- Button (Double) -->
         <div class="control-group">
@@ -60,10 +65,14 @@
                 inputname: {
                     maxlength: 20,
                     required: true
-                }
+                },
+                email: {
+                    email: true,
+                },
             },
             messages: {
                 inputname: "请设置您的姓名",
+                email: "请输入合法的E-mail地址",
             },
             errorPlacement: function(error, element) {
                 if (element.attr("name") == "inputname") {

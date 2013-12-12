@@ -4,8 +4,6 @@ import time
 import logging
 import os
 
-#from django.template.loader import get_template
-#from django.template import Context
 from django.shortcuts import render_to_response
 
 logger = logging.getLogger('django.dev')
@@ -22,9 +20,6 @@ def processMessage(msg):
     msg_out['toUser'] =  msg.find('FromUserName').text
     msg_out['fromUser'] = msg.find('ToUserName').text
     msg_out['time'] = int(time.time())
-
-    #msg_out['content'] = 'Hello, Ricky!'
-    #return render_to_response('textmsg.xml', msg_out, content_type='text/xml')
 
     article={'title':'发布活动', 'description':'点此链接发布一个活动'}
     article['picurl'] = URLBASE + '/media/test.png'

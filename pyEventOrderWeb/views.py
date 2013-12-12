@@ -573,7 +573,13 @@ def setting(request):
 
                     real_user = wechat_user.objects.get(openid=openid)
                     request.session['userid'] = real_user.id
-                    real_user.subscribe = True
+
+                    if not real_user.inputname:
+                        real_user.inputname = del_user.inputname
+                    if not real_user.email:
+                        real_user.email = del_user.email
+                        real_user.email_valid = del_user.email_valid
+                    real_user.initialized = True
                     real_user.save()
 
                     if cookie_openid.startswith('fake'):
@@ -581,7 +587,7 @@ def setting(request):
                         event.objects.filter(updated_by=del_user).update(updated_by=real_user)
                         del_user.delete()
             else:
-                user = authenticate(userinfo={'openid':openid,'subscribe':True})
+                user = authenticate(userinfo={'openid':openid,'initialized':True})
                 if user is not None:
                     real_user = user.real_user
                     logger.debug(real_user.id)

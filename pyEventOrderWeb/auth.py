@@ -39,7 +39,6 @@ class OAuthBackend(object):
 
         return None
 
-
     def get_user(self, user_id):
         UserModel = get_user_model()
         #logger.debug('OAuthBackend get user: ' + str(user_id))
