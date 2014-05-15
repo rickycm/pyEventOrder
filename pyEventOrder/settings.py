@@ -18,7 +18,7 @@ DATABASES = {
         'NAME': 'pyeventorder',
         'USER': 'whitemay',
         'PASSWORD': '1qazxsw2',
-        'HOST': 'django.ceppmmtlt9o6.us-west-2.rds.amazonaws.com',
+        'HOST': 'ec2-54-186-235-129.us-west-2.compute.amazonaws.com',
         'PORT': '',
     },
 }
