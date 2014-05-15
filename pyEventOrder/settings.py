@@ -193,6 +193,11 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'simple',
         },
+        'file': {
+          'level': 'DEBUG',
+          'class': 'logging.FileHandler',
+          'filename': '/tmp/pyeventorder.log',
+        },
         'mail_admins': {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
@@ -201,7 +206,7 @@ LOGGING = {
     },
     'loggers': {
         'django.dev': {
-            'handlers': ['console'],
+            'handlers': ['console', 'file'],
             'propagate': False,
             'level': 'DEBUG',
         },
