@@ -16,13 +16,18 @@
     <style>
         .ui-page {
             max-width: 600px !important;
-            margin: 0 auto !important;
+            margin: 5px auto !important;
             position: relative !important;
         }
         label.error {
             color: red;
             width: 100%;
             float: none;
+        }
+        .pagebody {
+            border: #fff 5px outset;
+            padding-left: 10px;
+            padding-right: 10px;
         }
     </style>
     {% endblock %}
@@ -35,7 +40,7 @@
 </head>
 <body >
   {% block page_block %}
-    <div data-role="page" id="{% block page_id %}{{ page_id }}{% endblock %}">
+    <div data-role="page" id="{% block page_id %}{{ page_id }}{% endblock %}" class="pagebody">
       {% block page_content %}{{ content }}{% endblock %}
     </div>
   {% endblock %}

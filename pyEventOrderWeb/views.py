@@ -5,6 +5,7 @@ import time
 import random
 import string
 import os
+import json
 
 from django.utils import timezone
 from django.contrib.auth.forms import *
@@ -17,6 +18,7 @@ from django.views.decorators.csrf import csrf_protect
 
 from pyEventOrderWeb import forms
 from pyEventOrderWeb.models import *
+from django.contrib.auth.models import User
 
 URLBASE='http://' + os.environ['DJANGO_SITE']
 logger = logging.getLogger('django.dev')
@@ -497,6 +499,83 @@ def joinEvent(request):
         response.set_cookie("wxopenid", fakeOpenID, max_age=max_age)
         return response
         #return showEvent(request)
+
+
+# 查询用询名(Email)是否存在
+from django.core import serializers
+def checkEmail(request):
+    mail = request.GET.get('userId')
+    responseText = ''
+    try:
+        thisUser = User.objects.get(username=mail)
+        responseText = 'exist'
+    except User.DoesNotExist:
+        responseText = 'noexist'
+    except User.MultipleObjectsReturned:
+        responseText = 'exist'
+    response = HttpResponse()
+    response['Content-Type'] = "text/javascript"
+    response.write(responseText)
+    return response
+
+# js登录和注册
+
+def jslogin(request):
+    response = HttpResponse()
+    response['Content-Type'] = "text/javascript"
+    try:
+        username = request.POST['userId']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            request.session["userid"] = user.id
+            login(request, user)
+            feedback = {'result': True, 'link': '/index/', 'msg': u'登录成功'}
+            feedback_edcoded = json.dumps(feedback)
+            response.write(feedback_edcoded)
+            return response
+        else:
+            feedback = {'result': False, 'link': '', 'msg': u'用户无效，请重试'}
+            feedback_edcoded = json.dumps(feedback)
+            response.write(feedback_edcoded)
+            return response
+    except:
+        feedback = {'result': False, 'link': '', 'msg': u'用户无效，请重试'}
+        feedback_edcoded = json.dumps(feedback)
+        response.write(feedback_edcoded)
+        return response
+
+
+def jsregister(request):
+    response = HttpResponse()
+    response['Content-Type'] = "text/javascript"
+    if request.method == 'POST':
+        username = request.POST['userId']
+        password1 = request.POST['password1']
+        password2 = request.POST['password2']
+        exist = True
+        try:
+            thisUser = User.objects.get(username=username)
+            feedback = {'result': False, 'link': '', 'msg': u'注册失败，请重试'}
+            feedback_edcoded = json.dumps(feedback)
+            response.write(feedback_edcoded)
+            return response
+        except User.DoesNotExist:
+            new_user = User.objects.create_user(username, password1, password2)
+            new_user.save()
+            new_user = authenticate(username=username, password=password1)
+            request.session["userid"] = new_user.id
+            login(request, new_user)
+            feedback = {'result': True, 'link': '/index/', 'msg': u'注册成功'}
+            feedback_edcoded = json.dumps(feedback)
+            response.write(feedback_edcoded)
+            return response
+        except User.MultipleObjectsReturned:
+            feedback = {'result': False, 'link': '', 'msg': u'注册失败，请重试'}
+            feedback_edcoded = json.dumps(feedback)
+            response.write(feedback_edcoded)
+            return response
+
 
 # 处理消息机制，应该是公众平台中最核心的处理部分
 import hashlib
