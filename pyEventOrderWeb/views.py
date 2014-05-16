@@ -56,6 +56,7 @@ def register(request):
                         new_user = form.save()
                         return HttpResponseRedirect("/")
 
+@login_required
 def index(request):
     #if request.user.is_authenticated():
     user = request.user
