@@ -42,10 +42,21 @@ def processEventMessage(msg, event_msg):
         elif click=='GETEVENT':
             myid = msg.find('ToUserName').text
             openid = msg.find('FromUserName').text
-            user = User.objects.get(last_name=openid)
-            active = activity.objects.filter(updated_by=user.id).latest('updated_date')
-            logger.debug('get activity ' + str(active.id))
-            return sendEvent(fromUser=myid, toUser=openid, active=active)
+            try:
+                user = User.objects.get(last_name=openid)
+                active = activity.objects.filter(updated_by=user.id).latest('updated_date')
+                logger.debug('get activity ' + str(active.id))
+                return sendEvent(fromUser=myid, toUser=openid, active=active)
+            except User.DoesNotExist:
+                user = None
+                logger.debug('get activity -- user noexist:' + openid)
+                msg_out={
+                    'toUser':msg.find('FromUserName').text,
+                    'fromUser':msg.find('ToUserName').text,
+                    'time':int(time.time()),
+                    'content':'您还未发布过活动，请先登录。',
+                }
+                return render_to_response('textmsg.xml', msg_out, content_type='text/xml')
 
     raise Http404
 
