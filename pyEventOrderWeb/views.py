@@ -607,6 +607,8 @@ def message(request):
         tmpArr = sorted([token, timestamp, nonce])
         tmpStr = ''.join(tmpArr)
         tmpStr = hashlib.sha1(tmpStr).hexdigest()
+        print(tmpStr)
+        print(signature)
 
         # 当两者相等时，消息合法。
         if tmpStr == signature:
