@@ -621,7 +621,6 @@ def message(request):
                 #logger.debug(request.body)
                 msg_in = etree.parse(request)
                 event_msg = msg_in.find('Event')
-                print("******" + msg_in)
                 print("******" + event_msg)
                 if event_msg==None : #这是一个消息
                     return processMessage(msg_in)
