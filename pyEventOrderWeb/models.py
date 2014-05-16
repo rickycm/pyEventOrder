@@ -1,5 +1,6 @@
 #coding=utf-8
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 EVENT_TYPE = [(1, u'体育活动'), (2, u'聚餐聚会'), (0, u'推广活动')]
@@ -40,7 +41,7 @@ class event(models.Model):
     event_date = models.DateTimeField(blank=True, null=True)
     updated_date = models.DateTimeField(auto_now=True)
     event_detail = models.TextField(max_length=100000)
-    updated_by = models.ForeignKey(wechat_user) # wechat_user.id
+    updated_by = models.ForeignKey(User)
     event_type = models.IntegerField(blank=True, choices=EVENT_TYPE, default=1)
     event_registdeadline = models.DateTimeField(blank=True, null=True)
     #event_hostfakeID = models.CharField(max_length=200)
@@ -64,7 +65,7 @@ class participant(models.Model):
     partici_type = models.IntegerField(choices=PARTICI_TYPE, default=5)
     register_time = models.DateTimeField(auto_now=True)
 
-    partici_user = models.ForeignKey(wechat_user)
+    partici_user = models.ForeignKey(User)
     partici_openid = models.CharField(max_length=30, blank=True)
     class Meta:
         verbose_name = 'Participant'

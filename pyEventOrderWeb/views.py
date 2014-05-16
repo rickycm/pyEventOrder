@@ -73,9 +73,10 @@ def logout_view(request):
 def list_events(rq):
     try:
         userId = rq.session["userid"]
-        wechatUser = wechat_user.objects.get(pk=userId)
+        #wechatUser = wechat_user.objects.get(pk=userId)
+        #user = rq.user
     except:
-        return HttpResponseRedirect('/welcome/')
+        return HttpResponseRedirect('/login/')
     events =[]
     ONE_PAGE_OF_DATA = 10
     if rq.user.is_authenticated():
@@ -130,15 +131,15 @@ def list_events(rq):
             startPos = (curPage - 1) * ONE_PAGE_OF_DATA
             endPos = startPos + ONE_PAGE_OF_DATA
             if type == 'mine':
-                events = event.objects.filter(updated_by=wechatUser)[startPos:endPos]
+                events = event.objects.filter(updated_by=user)[startPos:endPos]
                 if curPage == 1 and allPage == 1:  #标记1
-                    allPostCounts = event.objects.filter(updated_by=wechatUser).count()
+                    allPostCounts = event.objects.filter(updated_by=user).count()
                     allPage = allPostCounts / ONE_PAGE_OF_DATA
                     remainPost = allPostCounts % ONE_PAGE_OF_DATA
                     if remainPost > 0:
                         allPage += 1
             elif type == 'other':
-                evenidtList = participant.objects.filter(partici_user=wechatUser).values_list('event_ID', flat=True).distinct()
+                evenidtList = participant.objects.filter(partici_user=user).values_list('event_ID', flat=True).distinct()
                 eventsall = []
                 for i in evenidtList:
                     eventsall.append(event.objects.get(pk=i))
@@ -152,7 +153,7 @@ def list_events(rq):
                         allPage += 1
 
             return render_to_response("list_event.html", {'title': '活动列表', 'user': user, 'events':events, 'allPage':allPage, 'curPage':curPage, 'type': type}, context_instance=RequestContext(rq))
-    return HttpResponseRedirect('/welcome/')
+    return HttpResponseRedirect('/login/')
 
 # 添加活动
 @login_required
@@ -160,11 +161,13 @@ def list_events(rq):
 def add_event(request):
     try:
         userId = request.session["userid"]
-        wechatUser = wechat_user.objects.get(pk=userId)
+        user = request.user
+        #wechatUser = wechat_user.objects.get(pk=userId)
     except:
-        openid = request.COOKIES['wxopenid']
-        wechatUser = wechat_user.objects.get(openid=openid)
-        request.session['userid'] = wechatUser.id
+        return HttpResponseRedirect('/login/')
+        #openid = request.COOKIES['wxopenid']
+        #wechatUser = wechat_user.objects.get(openid=openid)
+        #request.session['userid'] = wechatUser.id
 
     if request.method == 'GET':
         # 基于活动重新发布功能
@@ -182,7 +185,7 @@ def add_event(request):
             form = forms.EventForm(instance=thisEvent)
         else:
             eventType = request.GET.get('eventtype', '1')
-            form = forms.EventForm({'eventtype':eventType, 'event_hostname': wechatUser.inputname})
+            form = forms.EventForm({'eventtype':eventType, 'event_hostname': user.first_name})
         if eventType == '2':
             return render_to_response('addDinnerParty.html', {'title': '新建活动', 'form': form},
                               context_instance=RequestContext(request))
@@ -194,16 +197,16 @@ def add_event(request):
         s = datetime.strptime(form.data['eventdate'] + ' ' + form.data['eventtime'], "%Y-%m-%d %H:%M")
         if form.is_valid():
             hostname = form.data['event_hostname']
-            if hostname!=wechatUser.inputname:
-                wechatUser.inputname = hostname
-                wechatUser.save()
+            if hostname!=user.first_name:
+                user.first_name = hostname
+                user.save()
 
             e = event.objects.create(
                 event_title = form.data['event_title'],
                 event_detail = form.data['event_detail'],
                 event_date = s,
                 event_limit = form.data['event_limit'],
-                updated_by = wechatUser,
+                updated_by = user,
                 event_type = form.data['event_type'],
                 #event_hostfakeID = wechatUser.openid,
                 event_hostname = hostname,
@@ -272,26 +275,30 @@ def updateEvent(request):
 def showEvent(request):
 
     # 首先检查COOKIES里面是否已经存在用户信息
-    if 'wxopenid' in request.COOKIES:
+    #if 'wxopenid' in request.COOKIES:
+    if request.user.is_authenticated():
         # 进到这个分支的人，应该是关注了公众号的人。
         # 它们的记录在events中已经建立
-        openid = request.COOKIES['wxopenid']
+        #userId = request.COOKIES['userid']
+        userId = request.session["userid"]
         if request.user.is_authenticated():
             try:
                 userId = request.session["userid"]
-                wechatUser = wechat_user.objects.get(pk=userId)
+                user = request.user
+                #wechatUser = wechat_user.objects.get(pk=userId)
             except:
-                wechatUser = wechat_user.objects.get(openid=openid)
-                request.session['userid'] = wechat_user.id
+                #wechatUser = wechat_user.objects.get(openid=openid)
+                #request.session['userid'] = wechat_user.id
+                return HttpResponseRedirect('/login/')
         else:
             # 客户端会话不会因为退回微信界面而丢失，但服务端重启会造成会话失效。
             #logger.info('Cookie has openid ' + openid)
-            user = authenticate(openid=openid)
+            user = authenticate(pk=userId)
             if user is None:
-                return HttpResponseRedirect('/welcome/')
-            wechatUser = user.real_user
+                return HttpResponseRedirect('/login/')
+            #wechatUser = user.real_user
             #logger.debug(wechatUser.id)
-            request.session["userid"] = wechatUser.id
+            request.session["userid"] = user.id
             login(request, user)
 
         if request.GET.get('remsg'):
@@ -315,19 +322,19 @@ def showEvent(request):
         numbers = {'eventin': eventin, 'eventout': eventout, 'eventmaybe': eventmaybe}
         userStatus = 5 # 0-不参加，1-参加，2-可能参加，5-未报名，10-活动发起人，100-未关注账号用户
         try:
-            thisparticipant = participant.objects.get(event_ID=thisEvent, partici_user=wechatUser)
+            thisparticipant = participant.objects.get(event_ID=thisEvent, partici_user=user)
             userStatus = int(thisparticipant.partici_type)
         except participant.DoesNotExist:
             userStatus = 5
 
-        if wechatUser == thisEvent.updated_by:
+        if user == thisEvent.updated_by:
             userStatus = 10
 
         if thisEvent.event_date < timezone.now():
             thisEvent.event_status = 4
         return render_to_response("showEvent.html", {'title':thisEvent.event_title, 'thisEvent':thisEvent, 'userStatus':userStatus,
                                                     'participantlist': participantlist, "numbers": numbers, 'remsg': remsg,
-                                                    'showcomment': 'true', 'useropenid': wechatUser.openid, 'username': wechatUser.inputname},
+                                                    'showcomment': 'true', 'useropenid': user.id, 'username': user.first_name},
                                 context_instance=RequestContext(request))
 
     else:
@@ -364,15 +371,16 @@ def joinEvent(request):
         reMsg = ''
         try:
             userId = request.session["userid"]
-            wechatUser = wechat_user.objects.get(pk=userId)
+            user = request.user
+            #wechatUser = wechat_user.objects.get(pk=userId)
         except:
-            return HttpResponseRedirect('welcome.html')
+            return HttpResponseRedirect('/login/')
 
         inputname = request.GET.get('inputname')
-        if wechatUser.inputname!=inputname:
-            logger.debug(wechatUser.inputname +':'+inputname)
-            wechatUser.inputname = inputname
-            wechatUser.save()
+        if user.first_name!=inputname:
+            logger.debug(user.first_name +':'+inputname)
+            user.first_name = inputname
+            user.save()
 
         try:
             eventId = request.GET.get('eventid')
@@ -390,7 +398,7 @@ def joinEvent(request):
         eventout = sum(p.partici_type == 0 for p in participantlist)
         eventmaybe = sum(p.partici_type == 2 for p in participantlist)
         try:
-            thisparticipant = participant.objects.get(event_ID=thisEvent, partici_user=wechatUser)
+            thisparticipant = participant.objects.get(event_ID=thisEvent, partici_user=user)
         except:
             thisparticipant = participant()
 
@@ -403,7 +411,7 @@ def joinEvent(request):
         elif jointype == 'join':
             if thisEvent.event_limit > eventin:
                 thisparticipant = participant(pk=thisparticipant.id, partici_fakeID='', event_ID=thisEvent, event_sn=thisEvent.event_sn,
-                                              partici_name=inputname, partici_type=1, partici_user=wechatUser, partici_openid=wechatUser.openid)
+                                              partici_name=inputname, partici_type=1, partici_user=user, partici_openid=user.last_name)
                 thisparticipant.save()
                 if thisEvent.event_limit <= ++eventin:
                     thisEvent.event_status = 1
@@ -413,12 +421,12 @@ def joinEvent(request):
                 reMsg = u'此活动已报名人满。'
         elif jointype == 'maybe':
             thisparticipant = participant(pk=thisparticipant.id, partici_fakeID='', event_ID=thisEvent, event_sn=thisEvent.event_sn,
-                                          partici_name=inputname, partici_type=2, partici_user=wechatUser, partici_openid=wechatUser.openid)
+                                          partici_name=inputname, partici_type=2, partici_user=user, partici_openid=user.last_name)
             thisparticipant.save()
             reMsg = u'报名成功。'
         elif jointype == 'notjoin':
             thisparticipant = participant(pk=thisparticipant.id, partici_fakeID='', event_ID=thisEvent, event_sn=thisEvent.event_sn,
-                                          partici_name=inputname, partici_type=0, partici_user=wechatUser, partici_openid=wechatUser.openid)
+                                          partici_name=inputname, partici_type=0, partici_user=user, partici_openid=user.last_name)
             thisparticipant.save()
             reMsg = u'报名成功。'
 
@@ -429,6 +437,8 @@ def joinEvent(request):
         return showEvent(request)
 
     else:
+        return HttpResponseRedirect('/login/')
+        '''
         reMsg = ''
         try:
             inputname = request.GET.get('inputname')
@@ -499,7 +509,7 @@ def joinEvent(request):
         response.set_cookie("wxopenid", fakeOpenID, max_age=max_age)
         return response
         #return showEvent(request)
-
+'''
 
 # 查询用询名(Email)是否存在
 from django.core import serializers
