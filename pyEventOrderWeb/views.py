@@ -607,8 +607,6 @@ def message(request):
         tmpArr = sorted([token, timestamp, nonce])
         tmpStr = ''.join(tmpArr)
         tmpStr = hashlib.sha1(tmpStr).hexdigest()
-        print(tmpStr)
-        print(signature)
 
         # 当两者相等时，消息合法。
         if tmpStr == signature:
@@ -623,6 +621,8 @@ def message(request):
                 #logger.debug(request.body)
                 msg_in = etree.parse(request)
                 event_msg = msg_in.find('Event')
+                print("******" + msg_in)
+                print("******" + event_msg)
                 if event_msg==None : #这是一个消息
                     return processMessage(msg_in)
                 else: #这是一个事件消息
