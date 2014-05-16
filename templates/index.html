@@ -25,10 +25,9 @@
     </div>
 
 {% else %}
-    <p>Welcome, new user. Please log in.</p>
+    <p>请登录：</p>
     <ul>
-    <li><a href ="/accounts/login/?next=/"> 登录 </a></li>
-    <li><a href ="/accounts/register/?next=/"> 注册 </a></li>
+    <li><a href ="/accounts/login/?next=/" data-role="button"  data-theme="b" data-icon="arrow-r" data-iconpos="top"> 登录/注册 </a></li>
     </ul>
 {% endif %}
 </div>
