@@ -12,17 +12,18 @@
 {% block page_content %}
 <div id="adminlinks">
 {% if user.is_authenticated and user != "" %}
-    ========={{ user }}
-    +++++++++{{ user.is_authenticated }}
-    <p>Welcome, {{ user.username }}. Thanks for logging in.</p>
-    <ul>
-    <li><a href = "/list_events/?type=mine"> 我发布的活动 </a></li>
-    <li><a href = "/list_events/?type=other"> 我参与的活动 </a></li>
-    <li><a href = "/add_event/?eventtype=1"> 发布体育活动 </a></li>
-    <li><a href = "/add_event/?eventtype=2"> 发布聚会活动 </a></li>
-    <li><a href = "/accounts/logout/"> 退出 </a></li>
-    <li><a href = "/admin/"> 管理界面 </a></li>
-    </ul>
+    <div style="text-align: center; color: SteelBlue;">
+        <h3>{{ user }}</h3>
+        <h3>欢迎使用 易聚通</h3>
+    </div>
+    <div data-role="content">
+        <ul>
+            <li><a href = "/add_event/?eventtype=1" data-role="button"  data-theme="b" data-icon="arrow-r" data-iconpos="top"> 发布新活动 </a></li>
+            <li><a href = "/list_events/?type=mine" data-role="button" data-theme="e" data-icon="info" data-iconpos="top"> 我发布的活动 </a></li>
+            <li><a href = "/list_events/?type=other" data-role="button" data-theme="c" data-icon="check" data-iconpos="top"> 我参与的活动 </a></li>
+        </ul>
+    </div>
+
 {% else %}
     <p>Welcome, new user. Please log in.</p>
     <ul>

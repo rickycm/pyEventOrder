@@ -90,7 +90,7 @@
             </div>
             <div id="inputname_error"></div>
             {% if thisEvent.event_status == 0 %}
-                <div data-role="controlgroup">
+                <div data-role="controlgroup" data-type="horizontal">
                     {% if userStatus == 0 %}
                         <div data-highlight="true">您当前的状态为：<span style="color: #FF3300"> 不参加此活动 </span></div>
                         <a class='joinevent' data-jointype="join" data-role="button" data-theme="b" data-icon="check">我参加！</a>
