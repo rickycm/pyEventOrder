@@ -3,10 +3,7 @@
 openid: gh_982e9c43c16c
 Appid: wxceec3a78555b9cdd
 Secret: 4bf88d2f56512313c03f0ce01a514974
-{
-    "access_token": "sfXfgya36Jr25Y7EZHRzhZilfrC5MgIB84blyCmNZtswVr18X_fqcTYtU3ipWTuXSrJLIFbrVsU2_8K_ZOXpOwhUtxaJvLqlmDRiEzIATDu3IDcLg4UxX5BbEEddMiSgqakYLlFFHDNflbtqMU1hSw",
-    "expires_in": 7200
-}
+{"access_token":"WbIxVO0r54IvIwIuAbBbdczUKoD7uGkSH6X79yMkFC7MlcYPEvH3F4CgxlbcGeCP","expires_in":7200}
 {
   "button":[{
     "name":"发布活动",

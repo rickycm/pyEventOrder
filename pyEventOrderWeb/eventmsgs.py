@@ -7,6 +7,7 @@ import os
 from django.http import Http404
 from django.shortcuts import render_to_response
 from models import wechat_user, event as activity
+from django.contrib.auth.models import User
 
 logger = logging.getLogger('django.dev')
 URLBASE = 'http://'+ os.environ['DJANGO_SITE']
@@ -20,10 +21,10 @@ def processEventMessage(msg, event_msg):
             # 考虑在此申请用户信息。
         userid = msg.find('FromUserName').text
         try:
-            user = wechat_user.objects.get(openid=userid)
+            user = User.objects.get(last_name=userid)
             #user.subscribe = True
             #user.save()
-        except wechat_user.DoesNotExist:
+        except User.DoesNotExist:
             user = None
         return sendSetting(user, msg)
 
@@ -34,15 +35,15 @@ def processEventMessage(msg, event_msg):
             userid = msg.find('FromUserName').text
             logger.debug(userid + ' clicked!')
             try:
-                user = wechat_user.objects.get(openid=userid)
-            except wechat_user.DoesNotExist:
+                user = User.objects.get(last_name=userid)
+            except User.DoesNotExist:
                 user = None
             return sendSetting(user, msg)
         elif click=='GETEVENT':
             myid = msg.find('ToUserName').text
             openid = msg.find('FromUserName').text
-            wechatUser = wechat_user.objects.get(openid=openid)
-            active = activity.objects.filter(updated_by=wechatUser.id).latest('updated_date')
+            user = User.objects.get(last_name=openid)
+            active = activity.objects.filter(updated_by=user.id).latest('updated_date')
             logger.debug('get activity ' + str(active.id))
             return sendEvent(fromUser=myid, toUser=openid, active=active)
 
@@ -58,13 +59,13 @@ def sendSetting(user, msg):
     logger.debug('My id is ' + msg_out['fromUser'])
     msg_out['time'] = int(time.time())
 
-    if (user is None) or (not user.inputname):
+    if (user is None) or (not user.first_name):
         title = u'您好，陌生人'
     else:
-        title = u'您好，'+user.inputname
+        title = u'您好，'+user.first_name
     article={'title':title, 'description':'亲，为了更好地使用活动功能，请点这里设置您的信息！'}
     article['picurl'] = URLBASE + '/media/info.png'
-    article['url'] = URLBASE + '/setting/?openid=' + user.openid
+    article['url'] = URLBASE + '/setting/?openid=' + user.last_name
 
     msg_out['articles'] = [article]
     #logger.debug(msg_out)
