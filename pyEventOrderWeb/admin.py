@@ -1,6 +1,8 @@
 __author__ = 'ricky'
 from django.contrib import admin
+
 from pyEventOrderWeb.models import event, participant, wechat_user
+
 
 class Wechat_userAdmin(admin.ModelAdmin):
     list_display = ('openid', 'inputname', 'last_login', 'email', 'email_valid')
@@ -12,7 +14,7 @@ class EventAdmin(admin.ModelAdmin):
     list_filter = ('updated_date',)
     date_hierarchy = 'updated_date'
     def related_updated_by(self, obj):
-        return obj.updated_by.inputname
+        return obj.updated_by.first_name
     related_updated_by.short_description = 'updated_by'
     def participant_count(self, obj):
         return participant.objects.filter(event_ID=obj).count()
@@ -21,7 +23,7 @@ class EventAdmin(admin.ModelAdmin):
 class ParticipantAdmin(admin.ModelAdmin):
     list_display = ('event_ID', 'partici_name', 'partici_type', 'related_partici_user', 'register_time')
     def related_partici_user(self, obj):
-        return obj.partici_user.inputname
+        return obj.partici_user.first_name
     related_partici_user.short_description = 'partici_user'
 
 admin.site.register(event, EventAdmin)
