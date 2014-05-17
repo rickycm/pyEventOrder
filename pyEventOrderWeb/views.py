@@ -4,9 +4,8 @@ from datetime import datetime
 import time
 import random
 import string
-import os
-import json
 
+import os
 from django.utils import timezone
 from django.contrib.auth.forms import *
 from django.shortcuts import render_to_response
@@ -18,7 +17,7 @@ from django.views.decorators.csrf import csrf_protect
 
 from pyEventOrderWeb import forms
 from pyEventOrderWeb.models import *
-from django.contrib.auth.models import User
+
 
 URLBASE='http://' + os.environ['DJANGO_SITE']
 logger = logging.getLogger('django.dev')
@@ -513,7 +512,6 @@ def joinEvent(request):
 '''
 
 # 查询用询名(Email)是否存在
-from django.core import serializers
 def checkEmail(request):
     mail = request.GET.get('userId')
     responseText = ''
@@ -530,13 +528,13 @@ def checkEmail(request):
     return response
 
 # js登录和注册
-
 def jslogin(request):
     response = HttpResponse()
     response['Content-Type'] = "text/javascript"
     try:
         username = request.POST['userId']
         password = request.POST['password']
+        openid = request.POST['openid']
         user = authenticate(username=username, password=password)
         if user is not None:
             request.session["userid"] = user.id
@@ -544,6 +542,11 @@ def jslogin(request):
             feedback = {'result': True, 'link': '/index/', 'msg': u'登录成功'}
             feedback_edcoded = json.dumps(feedback)
             response.write(feedback_edcoded)
+            #绑定openid
+            if openid != '':
+                logger.debug(user.last_name +':'+openid)
+                user.last_name = openid
+                user.save()
             return response
         else:
             feedback = {'result': False, 'link': '', 'msg': u'用户无效，请重试'}
@@ -587,6 +590,17 @@ def jsregister(request):
             response.write(feedback_edcoded)
             return response
 
+def checklogin(request):
+    user = request.user
+    openid = request.GET('openid')
+    if user == "" and user == None:
+        return HttpResponseRedirect('/login/?openid=' + openid)
+    else:
+        if user.last_name != openid:
+            logger.debug(user.last_name +':'+openid)
+            user.last_name = openid
+            user.save()
+        return HttpResponseRedirect('/index/')
 
 # 处理消息机制，应该是公众平台中最核心的处理部分
 import hashlib

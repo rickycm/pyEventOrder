@@ -2,12 +2,14 @@
 __author__ = 'Aston'
 import time
 import logging
-import os
 
+import os
 from django.http import Http404
 from django.shortcuts import render_to_response
-from models import wechat_user, event as activity
 from django.contrib.auth.models import User
+
+from models import event as activity
+
 
 logger = logging.getLogger('django.dev')
 URLBASE = 'http://'+ os.environ['DJANGO_SITE']
@@ -44,19 +46,35 @@ def processEventMessage(msg, event_msg):
             openid = msg.find('FromUserName').text
             try:
                 user = User.objects.get(last_name=openid)
-                active = activity.objects.filter(updated_by=user.id).latest('updated_date')
-                logger.debug('get activity ' + str(active.id))
-                return sendEvent(fromUser=myid, toUser=openid, active=active)
+                try:
+                    active = activity.objects.filter(updated_by=user.id).latest('updated_date')
+                    logger.debug('get activity ' + str(active.id))
+                    return sendEvent(fromUser=myid, toUser=openid, active=active)
+                except activity.DoesNotExist:
+                    logger.debug('get activity -- activity noexist:')
+                    msg_out={
+                        'toUser':msg.find('FromUserName').text,
+                        'fromUser':msg.find('ToUserName').text,
+                        'time':int(time.time()),
+                        'content':'您还未发布过活动，请先发布。',
+                    }
+                    return render_to_response('textmsg.xml', msg_out, content_type='text/xml')
             except User.DoesNotExist:
-                user = None
-                logger.debug('get activity -- user noexist:' + openid)
-                msg_out={
-                    'toUser':msg.find('FromUserName').text,
-                    'fromUser':msg.find('ToUserName').text,
-                    'time':int(time.time()),
-                    'content':'您还未发布过活动，请先登录。',
-                }
-                return render_to_response('textmsg.xml', msg_out, content_type='text/xml')
+                # 否则向用户主动发送一条消息，用来绑定用户
+                # 设置页面的URL中间包括用户的userid
+                msg_out={}
+                msg_out['toUser'] = openid
+                msg_out['fromUser'] = myid
+                msg_out['time'] = int(time.time())
+
+                title = u'您尚未绑定微信'
+                article={'title':title, 'description':u'亲，请点击此消息绑定微信。'}
+                article['picurl'] = URLBASE + '/media/info.png'
+                article['url'] = URLBASE + '/checklogin/?openid=' + openid
+
+                msg_out['articles'] = [article]
+                #logger.debug(msg_out)
+                return render_to_response('multimsg.xml', msg_out, content_type='text/xml')
 
     raise Http404
 
@@ -74,7 +92,7 @@ def sendSetting(user, msg):
         title = u'您好，陌生人'
     else:
         title = u'您好，'+user.first_name
-    article={'title':title, 'description':'亲，为了更好地使用活动功能，请点这里设置您的信息！'}
+    article={'title':title, 'description':'亲，要使用此功能请点击绑定微信！'}
     article['picurl'] = URLBASE + '/media/info.png'
     article['url'] = URLBASE + '/setting/?openid=' + user.last_name
 

@@ -38,6 +38,11 @@
         <div id="registerbutton" style="display:none">
             <button onclick="jsregister()" data-theme="e">注  册</button>
         </div>
+        {% if openid != None and openid != '' %}
+            <input type="hidden" value="{%= openid %}" id="openid" name="openid"/>
+        {% else %}
+            <input type="hidden" value="" id="openid" name="openid"/>
+        {% endif %}
     </div>
 
 
@@ -126,12 +131,12 @@ var register = false;  //全局变量，登录/注册
     function jslogin(){
         userId = $('#userId').val();
         password = $('#password').val();
-
+        openid = $('#openid').val();
         $.ajax({
             type: "post",
             url : "/jslogin/",
             dataType:'json',
-            data: 'userId=' + userId + '&password=' + password,
+            data: 'userId=' + userId + '&password=' + password + '&openid=' + openid,
             success: function(feedback){
                 //alert(feedback.result);
                 //alert(json.username+'n'+json.password);
