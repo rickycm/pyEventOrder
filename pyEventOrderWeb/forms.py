@@ -22,14 +22,3 @@ class EventForm(forms.ModelForm):
         return cleaned_data
 
 
-class SetupuserForm(forms.ModelForm):
-    class Meta:
-        model = wechat_user
-        fields = ['inputname','email']
-
-    def clean(self):
-        if not self.is_valid():
-            raise forms.ValidationError(u"请完善信息")
-        else:
-            cleaned_data = super(SetupuserForm, self).clean()
-        return cleaned_data

@@ -7,34 +7,6 @@ EVENT_TYPE = [(1, u'体育活动'), (2, u'聚餐聚会'), (0, u'推广活动')]
 PARTICI_TYPE = [(0, u'不参加'), (1, u'参加'), (2, u'可能参加'), (5, u'未报名'), (10, u'活动发起人')]
 EVENT_STATUS = [(0, u'可报名'), (1, u'报名人满'), (2, u'已取消'), (3, u'已停止报名'), (4, u'已过期')]
 
-class wechat_user(models.Model):
-    # null=True只适合于非String类型
-    inputname = models.CharField(max_length=20, blank=True)
-    wechat_inputname = models.CharField(max_length=20, blank=True) # 暂时保留，随时准备删掉
-    last_login = models.DateTimeField(auto_now=True)
-    email = models.EmailField(blank=True)
-    email_valid = models.BooleanField(default=False)
-    # 本字段表明用户保存了Cookie，设置了用户名，从而可以完成系统内的主要工作。
-    initialized = models.BooleanField(default=False, blank=True)
-
-    subscribe = models.BooleanField(default=False)
-    openid = models.CharField(max_length=30, unique=True)
-    nickname = models.CharField(max_length=50, blank=True)
-    sex = models.NullBooleanField(default=None, blank=True)
-    language = models.CharField(max_length=10, default='zh-CN', blank=True)
-    city = models.CharField(max_length=20, blank=True)
-    province = models.CharField(max_length=20, blank=True)
-    country = models.CharField(max_length=20, default='中国', blank=True)
-    headimageurl = models.URLField(max_length=200, blank=True)
-
-    #objects = models.Manager()
-
-    class Meta:
-        verbose_name = 'WechatUser'
-        verbose_name_plural = 'WechatUsers'
-
-    def __unicode__(self):
-        return u'%s' % (self.inputname)
 
 class event(models.Model):
     event_title = models.CharField(max_length=200)
