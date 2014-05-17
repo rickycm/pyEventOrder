@@ -155,7 +155,7 @@ INSTALLED_APPS = (
     # 引入对bootstrap3的支持，由于admin界面所采用的是2.x版本，因此需要加以区别
     'pyEventOrderWeb',
     'tinymce',
-    'jqmFlatPages',
+    #'jqmFlatPages',
     #'rest_framework',
     #'restComments',
 )
