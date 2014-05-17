@@ -592,6 +592,7 @@ def jsregister(request):
             response.write(feedback_edcoded)
             return response
 
+# 用于微信用户绑定
 def checklogin(request):
     user = request.user
     openid = request.GET.get('openid')
