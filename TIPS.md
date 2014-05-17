@@ -84,3 +84,37 @@ Install celery by download or pip install -U Celery
 改用：django_cron（原因：更轻量级）
 pip install django_cron
 doc: https://github.com/Tivix/django-cron
+
+
+{
+  "button":[{
+    "name":"发布活动",
+    "sub_button":[{
+      "type":"view",
+      "name":"发布活动",
+      "url":"http://www.eztogether.net/add_event/?event_type=1"
+    },{
+      "type":"click",
+      "name":"生成活动消息",
+      "key":"GETEVENT"
+    }]
+  },{
+    "name":"活动管理",
+    "sub_button":[{
+       "type":"view",
+       "name":"我发布的活动",
+       "url":"http://www.eztogether.net/list_events/?type=mine"
+    },{
+      "type":"view",
+      "name":"我报名的活动",
+      "url":"http://www.eztogether.net/list_events/?type=other"
+    }]
+  },{
+    "name":"配置",
+    "sub_button":[{
+      "type":"view",
+      "name":"关于",
+      "url":"http://www.eztogether.net/welcome/"
+    }]
+  }]
+}
