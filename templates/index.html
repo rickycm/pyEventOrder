@@ -10,7 +10,6 @@
 
 {% block page_id %}index{% endblock %}
 {% block page_content %}
-<div id="adminlinks">
 {% if user.is_authenticated and user != "" %}
     <div style="text-align: center; color: SteelBlue;">
         <h3>{{ user }}</h3>
@@ -25,7 +24,7 @@
     </div>
 
 {% endif %}
-</div>
+
 {% endblock %}
 
 {% block user_foot_js %}
