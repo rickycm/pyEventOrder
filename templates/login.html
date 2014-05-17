@@ -175,7 +175,10 @@ var register = false;  //全局变量，登录/注册
                     }else{
                         $('#password').val("");
                         $('#password2').val("");
-                        $('#passwordSpan2').html("<font color='red'>" + feedback.msg + "</font>");
+                        $("#passworddiv2").hide();
+                        $("#loginbutton").show();
+                        $("#registerbutton").hide();
+                        $('#passwordSpan').html("<font color='red'>" + feedback.msg + "</font>");
                     }
                 }
             });
