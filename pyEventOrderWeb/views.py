@@ -513,7 +513,7 @@ def joinEvent(request):
 
 # 查询用询名(Email)是否存在
 def checkEmail(request):
-    mail = request.GET.get('userId')
+    mail = request.GET.get('userId').lower()
     responseText = ''
     try:
         thisUser = User.objects.get(username=mail)
@@ -533,6 +533,7 @@ def jslogin(request):
     response['Content-Type'] = "text/javascript"
     try:
         username = request.POST['userId']
+        username = username.lower()
         password = request.POST['password']
         openid = request.POST['openid']
         user = authenticate(username=username, password=password)
@@ -565,6 +566,7 @@ def jsregister(request):
     response['Content-Type'] = "text/javascript"
     if request.method == 'POST':
         username = request.POST['userId']
+        username = username.lower()
         password1 = request.POST['password1']
         password2 = request.POST['password2']
         exist = True
