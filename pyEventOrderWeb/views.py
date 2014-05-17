@@ -187,10 +187,10 @@ def add_event(request):
             eventType = request.GET.get('eventtype', '1')
             form = forms.EventForm({'eventtype':eventType, 'event_hostname': user.first_name})
         if eventType == '2':
-            return render_to_response('addDinnerParty.html', {'title': '新建活动', 'form': form},
+            return render_to_response('addDinnerParty.html', {'title': u'新建活动', 'form': form},
                               context_instance=RequestContext(request))
         else:
-            return render_to_response('addEvent.html', {'title': '新建活动', 'form': form},
+            return render_to_response('addEvent.html', {'title': u'新建活动', 'form': form},
                               context_instance=RequestContext(request))
     else:
         form = forms.EventForm(request.POST)
