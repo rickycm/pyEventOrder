@@ -219,9 +219,9 @@ def add_event(request):
             logger.debug('Setting form is invalid.')
             event_type = form.data['event_type']
             if event_type == '2':
-                return render_to_response('addDinnerParty.html', {'title': '新建活动', 'form': form}, context_instance=RequestContext(request))
+                return render_to_response('addDinnerParty.html', {'title': u'新建活动', 'form': form}, context_instance=RequestContext(request))
             else:
-                return render_to_response('addEvent.html', {'title': '新建活动', 'form': form}, context_instance=RequestContext(request))
+                return render_to_response('addEvent.html', {'title': u'新建活动', 'form': form}, context_instance=RequestContext(request))
 
 # 修改活动
 @login_required
