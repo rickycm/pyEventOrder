@@ -10,11 +10,12 @@
             -webkit-border-radius:  0;
             border-radius:          0;
         }
+
     </style>
 {% endblock %}
 
 {% block page_id %}add_event{% endblock %}
-{% block main_content %}
+{% block content %}
 <form action="/add_event/" id="addeventForm" method="post" class="form-horizontal">
     {% csrf_token %}
 
