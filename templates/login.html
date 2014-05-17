@@ -39,7 +39,7 @@
             <button onclick="jsregister()" data-theme="e">注  册</button>
         </div>
         {% if openid != None and openid != '' %}
-            <input type="hidden" value="{%= openid %}" id="openid" name="openid"/>
+            <input type="hidden" value="{{ openid }}" id="openid" name="openid"/>
         {% else %}
             <input type="hidden" value="" id="openid" name="openid"/>
         {% endif %}
