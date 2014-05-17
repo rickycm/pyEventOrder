@@ -592,7 +592,7 @@ def jsregister(request):
 
 def checklogin(request):
     user = request.user
-    openid = request.GET('openid')
+    openid = request.GET.get('openid')
     if user == "" and user == None:
         return HttpResponseRedirect('/login/?openid=' + openid)
     else:
