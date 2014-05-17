@@ -23,27 +23,21 @@ def processEventMessage(msg, event_msg):
             # 考虑在此申请用户信息。
         myid = msg.find('ToUserName').text
         openid = msg.find('FromUserName').text
-        try:
-            user = User.objects.get(last_name=openid)
-            #user.subscribe = True
-            #user.save()
-        except User.DoesNotExist:
-            # 否则向用户主动发送一条消息，用来绑定用户
-            # 设置页面的URL中间包括用户的userid
-            msg_out={}
-            msg_out['toUser'] = openid
-            msg_out['fromUser'] = myid
-            msg_out['time'] = int(time.time())
+        # 否则向用户主动发送一条消息，用来绑定用户
+        # 设置页面的URL中间包括用户的userid
+        msg_out={}
+        msg_out['toUser'] = openid
+        msg_out['fromUser'] = myid
+        msg_out['time'] = int(time.time())
 
-            title = u'您尚未绑定微信'
-            article={'title':title, 'description':u'亲，请点击此消息绑定微信。'}
-            article['picurl'] = URLBASE + '/media/info.png'
-            article['url'] = URLBASE + '/checklogin/?openid=' + openid
+        title = u'您尚未绑定微信'
+        article={'title':title, 'description':u'亲，请点击此消息绑定微信。'}
+        article['picurl'] = URLBASE + '/media/info.png'
+        article['url'] = URLBASE + '/checklogin/?openid=' + openid
 
-            msg_out['articles'] = [article]
-            #logger.debug(msg_out)
-            return render_to_response('multimsg.xml', msg_out, content_type='text/xml')
-        return sendSetting(user, msg)
+        msg_out['articles'] = [article]
+        #logger.debug(msg_out)
+        return render_to_response('multimsg.xml', msg_out, content_type='text/xml')
 
     elif event_type=='CLICK':
         # 目前为止，应该只有SETTING这一个点击项
