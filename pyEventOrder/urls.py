@@ -3,7 +3,9 @@ from django.conf.urls import patterns, include
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.conf import settings
 from django.conf.urls.static import static
+
 from pyEventOrderWeb import views
+
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -34,6 +36,7 @@ urlpatterns = patterns('',
     (r'^showevent/$', views.showEvent),
     (r'^joinevent/$', views.joinEvent),
     (r'^checkmail/$', views.checkEmail),
+    (r'^checklogin/$', views.checklogin),
     (r'^jslogin/$', views.jslogin),
     (r'^jsregister/$', views.jsregister),
     (r'^index/$', views.index),
