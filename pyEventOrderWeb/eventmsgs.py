@@ -32,7 +32,7 @@ def processEventMessage(msg, event_msg):
 
         title = u'您尚未绑定微信'
         article={'title':title, 'description':u'亲，请点击此消息绑定微信。'}
-        article['picurl'] = URLBASE + '/media/info.png'
+        article['picurl'] = URLBASE + '/media/info.jpg'
         article['url'] = URLBASE + '/checklogin/?openid=' + openid
 
         msg_out['articles'] = [article]
@@ -78,7 +78,7 @@ def processEventMessage(msg, event_msg):
 
                 title = u'您尚未绑定微信'
                 article={'title':title, 'description':u'亲，请点击此消息绑定微信。'}
-                article['picurl'] = URLBASE + '/media/info.png'
+                article['picurl'] = URLBASE + '/media/info.jpg'
                 article['url'] = URLBASE + '/checklogin/?openid=' + openid
 
                 msg_out['articles'] = [article]
@@ -102,7 +102,7 @@ def sendSetting(user, msg):
     else:
         title = u'您好，'+user.first_name
     article={'title':title, 'description':'亲，要使用此功能请点击绑定微信！'}
-    article['picurl'] = URLBASE + '/media/info.png'
+    article['picurl'] = URLBASE + '/media/info.jpg'
     article['url'] = URLBASE + '/setting/?openid=' + user.last_name
 
     msg_out['articles'] = [article]
