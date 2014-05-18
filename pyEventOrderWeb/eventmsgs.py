@@ -116,7 +116,7 @@ def sendEvent(fromUser, toUser, active):
         'time':int(time.time()),
     }
     #description = u'\<span style=\"color: steelBlue\"\>' + active.event_title + u'\<\/span\> \n' + active.event_date.strftime("%Y-%m-%d %H:%M") + u'\n长按可转发'
-    description = active.event_title + u'\n' + active.event_date.strftime("%Y-%m-%d %H:%M") + u'\n长按可转发'
+    description = active.event_title.encode("utf8") + u'\n' + active.event_date.strftime("%Y-%m-%d %H:%M").encode("utf8") + u'\n长按可转发'
     print description
     article = {
         'title':u'您发布的最新活动',
