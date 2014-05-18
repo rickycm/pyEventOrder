@@ -14,6 +14,7 @@ from pyEventOrderWeb import forms
 from pyEventOrderWeb.models import *
 
 
+
 #URLBASE='http://' + os.environ['DJANGO_SITE']
 logger = logging.getLogger('django.dev')
 
@@ -434,9 +435,9 @@ def joinEvent(request):
 import json
 # 查询用询名(Email)是否存在
 def checkEmail(request):
-    mail = request.GET.get('userId').lower()
+    email = request.GET.get('userId').lower()
     try:
-        thisUser = User.objects.get(username=mail)
+        this_user = User.objects.get(username=email)
         responseText = 'exist'
     except User.DoesNotExist:
         responseText = 'noexist'
