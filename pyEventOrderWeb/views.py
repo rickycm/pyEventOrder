@@ -14,7 +14,6 @@ from pyEventOrderWeb import forms
 from pyEventOrderWeb.models import *
 
 
-
 #URLBASE='http://' + os.environ['DJANGO_SITE']
 logger = logging.getLogger('django.dev')
 
@@ -53,10 +52,10 @@ def list_events(rq):
 
         startPos = (curPage - 1) * ONE_PAGE_OF_DATA
         endPos = startPos + ONE_PAGE_OF_DATA
-        events = event.objects.all()[startPos:endPos]
+        events = Event.objects.all()[startPos:endPos]
 
         if curPage == 1 and allPage == 1:  #标记1
-            allPostCounts = event.objects.count()
+            allPostCounts = Event.objects.count()
             allPage = allPostCounts / ONE_PAGE_OF_DATA
             remainPost = allPostCounts % ONE_PAGE_OF_DATA
             if remainPost > 0:
@@ -87,18 +86,18 @@ def list_events(rq):
         startPos = (curPage - 1) * ONE_PAGE_OF_DATA
         endPos = startPos + ONE_PAGE_OF_DATA
         if type == 'mine':
-            events = event.objects.filter(updated_by=user)[startPos:endPos]
+            events = Event.objects.filter(updated_by=user)[startPos:endPos]
             if curPage == 1 and allPage == 1:  #标记1
-                allPostCounts = event.objects.filter(updated_by=user).count()
+                allPostCounts = Event.objects.filter(updated_by=user).count()
                 allPage = allPostCounts / ONE_PAGE_OF_DATA
                 remainPost = allPostCounts % ONE_PAGE_OF_DATA
                 if remainPost > 0:
                     allPage += 1
         elif type == 'other':
-            evenidtList = participant.objects.filter(partici_user=user).values_list('event_ID', flat=True).distinct()
+            evenidtList = Participant.objects.filter(partici_user=user).values_list('event_ID', flat=True).distinct()
             eventsall = []
             for i in evenidtList:
-                eventsall.append(event.objects.get(pk=i))
+                eventsall.append(Event.objects.get(pk=i))
             events = eventsall[startPos:endPos]
 
             if curPage == 1 and allPage == 1:  #标记1
@@ -125,9 +124,9 @@ def add_event(request):
         if renew == 'true':
             try:
                 eventId = request.GET.get('eventid')
-                thisEvent = event.objects.get(pk=eventId)
+                thisEvent = Event.objects.get(pk=eventId)
                 eventType = thisEvent.event_type
-            except event.DoesNotExist:
+            except Event.DoesNotExist:
                 title = u'出错了'
                 errorMessage = u'您查询的活动不存在。'
                 return render_to_response("errorMessage.html", {'errorMessage': errorMessage, 'title': title},
@@ -151,14 +150,13 @@ def add_event(request):
                 user.first_name = hostname
                 user.save()
 
-            e = event.objects.create(
+            e = Event.objects.create(
                 event_title = form.data['event_title'],
                 event_detail = form.data['event_detail'],
                 event_date = s,
                 event_limit = form.data['event_limit'],
                 updated_by = user,
                 event_type = form.data['event_type'],
-                #event_hostfakeID = wechatUser.openid,
                 event_hostname = hostname,
                 event_status = 0,
             )
@@ -179,31 +177,29 @@ def add_event(request):
 def updateEvent(request):
     try:
         eventId = request.GET.get('eventid')
-        thisEvent = event.objects.get(pk=eventId)
-    except event.DoesNotExist:
+        this_event = Event.objects.get(pk=eventId)
+    except Event.DoesNotExist:
         title = u'出错了'
         errorMessage = u'您查询的活动不存在。'
         return render_to_response("errorMessage.html", {'errorMessage': errorMessage, 'title': title},
                               context_instance=RequestContext(request))
 
     if request.method == 'POST':
-        form = forms.EventForm(request.POST, instance=thisEvent)
+        form = forms.EventForm(request.POST, instance=this_event)
         if form.is_valid():
             userId = request.session["userid"]
             s = datetime.strptime(form.data['eventdate'] + ' ' + form.data['eventtime'], "%Y-%m-%d %H:%M")
-            thisEvent.event_title = form.data['event_title']
-            thisEvent.event_detail = form.data['event_detail']
-            thisEvent.event_date = s
-            thisEvent.event_limit = form.data['event_limit']
-            thisEvent.updated_by_id = userId
-            thisEvent.event_status = 0
-            thisEvent.event_type = 1
-            #thisEvent.updated_date = datetime.now()
-            #thisEvent.event_hostfakeID = form.data['event_hostfakeID']
-            thisEvent.event_hostname = form.data['event_hostname']
+            this_event.event_title = form.data['event_title']
+            this_event.event_detail = form.data['event_detail']
+            this_event.event_date = s
+            this_event.event_limit = form.data['event_limit']
+            this_event.updated_by_id = userId
+            this_event.event_status = 0
+            this_event.event_type = 1
+            this_event.event_hostname = form.data['event_hostname']
 
             try:
-                thisEvent.save()
+                this_event.save()
             except:
                 title = u'出错了'
                 errorMessage = u'Sorry，出错了。'
@@ -217,7 +213,7 @@ def updateEvent(request):
             request.GET = rqdata
             return HttpResponseRedirect('/showevent/?eventid='+eventId)
 
-    return render_to_response('updateEvent.html', {'title': '修改活动', 'form': forms.EventForm(instance=thisEvent), 'eventid': eventId},
+    return render_to_response('updateEvent.html', {'title': '修改活动', 'form': forms.EventForm(instance=this_event), 'eventid': eventId},
                               context_instance=RequestContext(request))
 
 # 活动页面，并展现用户参与情况
@@ -236,32 +232,32 @@ def showEvent(request):
 
         try:
             eventId = request.GET.get('eventid')
-            thisEvent = event.objects.get(pk=eventId)
-        except event.DoesNotExist:
+            this_event = Event.objects.get(pk=eventId)
+        except Event.DoesNotExist:
             title = u'出错了'
             errorMessage = u'您查询的活动不存在。'
             return render_to_response("errorMessage.html", {'errorMessage': errorMessage, 'title': title},
                                       context_instance=RequestContext(request))
 
-        participantlist = participant.objects.filter(event_ID=eventId)
-        eventin = sum(p.partici_type == 1 for p in participantlist)
-        eventout = sum(p.partici_type == 0 for p in participantlist)
-        eventmaybe = sum(p.partici_type == 2 for p in participantlist)
+        participants_list = Participant.objects.filter(event_ID=eventId)
+        eventin = sum(p.partici_type == 1 for p in participants_list)
+        eventout = sum(p.partici_type == 0 for p in participants_list)
+        eventmaybe = sum(p.partici_type == 2 for p in participants_list)
         numbers = {'eventin': eventin, 'eventout': eventout, 'eventmaybe': eventmaybe}
         userStatus = 5 # 0-不参加，1-参加，2-可能参加，5-未报名，10-活动发起人，100-未关注账号用户
         try:
-            thisparticipant = participant.objects.get(event_ID=thisEvent, partici_user=user)
-            userStatus = int(thisparticipant.partici_type)
-        except participant.DoesNotExist:
+            this_participant = Participant.objects.get(event_ID=this_event, partici_user=user)
+            userStatus = int(this_participant.partici_type)
+        except Participant.DoesNotExist:
             userStatus = 5
 
-        if user == thisEvent.updated_by:
+        if user == this_event.updated_by:
             userStatus = 10
 
-        if thisEvent.event_date < timezone.now():
-            thisEvent.event_status = 4
-        return render_to_response("showEvent.html", {'title':thisEvent.event_title, 'thisEvent':thisEvent, 'userStatus':userStatus,
-                                                    'participantlist': participantlist, "numbers": numbers, 'remsg': remsg,
+        if this_event.event_date < timezone.now():
+            this_event.event_status = 4
+        return render_to_response("showEvent.html", {'title':this_event.event_title, 'this_event':this_event, 'userStatus':userStatus,
+                                                    'participants_list': participants_list, "numbers": numbers, 'remsg': remsg,
                                                     'showcomment': 'true', 'useropenid': user.id, 'username': user.first_name},
                                 context_instance=RequestContext(request))
 
@@ -273,22 +269,22 @@ def showEvent(request):
 
         try:
             eventId = request.GET.get('eventid')
-            thisEvent = event.objects.get(pk=eventId)
-        except event.DoesNotExist:
+            this_event = Event.objects.get(pk=eventId)
+        except Event.DoesNotExist:
             title = u'出错了'
             errorMessage = u'您查询的活动不存在。'
             return render_to_response("errorMessage.html", {'errorMessage': errorMessage, 'title': title},
                                   context_instance=RequestContext(request))
 
-        participantlist = participant.objects.filter(event_ID=eventId)
-        eventin = sum(p.partici_type == 1 for p in participantlist)
-        eventout = sum(p.partici_type == 0 for p in participantlist)
-        eventmaybe = sum(p.partici_type == 2 for p in participantlist)
+        participants_list = Participant.objects.filter(event_ID=eventId)
+        eventin = sum(p.partici_type == 1 for p in participants_list)
+        eventout = sum(p.partici_type == 0 for p in participants_list)
+        eventmaybe = sum(p.partici_type == 2 for p in participants_list)
         numbers = {'eventin': eventin, 'eventout': eventout, 'eventmaybe': eventmaybe}
         userStatus = 5  # 0-不参加，1-参加，2-可能参加，5-未报名，10-活动发起人，100-未关注账号用户
 
-        return render_to_response("showEvent.html", {'title': thisEvent.event_title, 'thisEvent': thisEvent, 'userStatus': userStatus,
-                                                     'participantlist': participantlist, "numbers": numbers, 'remsg': remsg,
+        return render_to_response("showEvent.html", {'title': this_event.event_title, 'this_event': this_event, 'userStatus': userStatus,
+                                                     'participants_list': participants_list, "numbers": numbers, 'remsg': remsg,
                                                     'showcomment': 'false', 'useropenid': '', 'username': ''},
                                   context_instance=RequestContext(request))
 
@@ -308,49 +304,49 @@ def joinEvent(request):
         try:
             eventId = request.GET.get('eventid')
             jointype = request.GET.get('jointype')
-            thisEvent = event.objects.get(pk=eventId)
-        except event.DoesNotExist:
+            this_event = Event.objects.get(pk=eventId)
+        except Event.DoesNotExist:
             title = u'出错了'
             errorMessage = u'您查询的活动不存在。'
             return render_to_response("errorMessage.html", {'errorMessage': errorMessage, 'title': title},
                                   context_instance=RequestContext(request))
 
         #partici_type: 0-不参加，1-参加，2-可能参加，5-未报名，10-活动发起人
-        participantlist = participant.objects.filter(event_ID=eventId)
-        eventin = sum(p.partici_type == 1 for p in participantlist)
-        eventout = sum(p.partici_type == 0 for p in participantlist)
-        eventmaybe = sum(p.partici_type == 2 for p in participantlist)
+        participants_list = Participant.objects.filter(event_ID=eventId)
+        eventin = sum(p.partici_type == 1 for p in participants_list)
+        #eventout = sum(p.partici_type == 0 for p in participants_list)
+        #eventmaybe = sum(p.partici_type == 2 for p in participants_list)
         try:
-            thisparticipant = participant.objects.get(event_ID=thisEvent, partici_user=user)
+            this_participant = Participant.objects.get(event_ID=this_event, partici_user=user)
         except:
-            thisparticipant = participant()
+            this_participant = Participant()
 
         if jointype == 'stop':
-            thisEvent.event_status = 3
-            thisEvent.save()
+            this_event.event_status = 3
+            this_event.save()
         elif jointype == 'cancel':
-            thisEvent.event_status = 2
-            thisEvent.save()
+            this_event.event_status = 2
+            this_event.save()
         elif jointype == 'join':
-            if thisEvent.event_limit > eventin:
-                thisparticipant = participant(pk=thisparticipant.id, partici_fakeID='', event_ID=thisEvent, event_sn=thisEvent.event_sn,
+            if this_event.event_limit > eventin:
+                this_participant = Participant(pk=this_participant.id, event_ID=this_event, event_sn=this_event.event_sn,
                                               partici_name=inputname, partici_type=1, partici_user=user, partici_openid=user.last_name)
-                thisparticipant.save()
-                if thisEvent.event_limit <= ++eventin:
-                    thisEvent.event_status = 1
-                    thisEvent.save()
+                this_participant.save()
+                if this_event.event_limit <= ++eventin:
+                    this_event.event_status = 1
+                    this_event.save()
                 reMsg = u'报名成功。'
             else:
                 reMsg = u'此活动已报名人满。'
         elif jointype == 'maybe':
-            thisparticipant = participant(pk=thisparticipant.id, partici_fakeID='', event_ID=thisEvent, event_sn=thisEvent.event_sn,
+            this_participant = Participant(pk=this_participant.id, event_ID=this_event, event_sn=this_event.event_sn,
                                           partici_name=inputname, partici_type=2, partici_user=user, partici_openid=user.last_name)
-            thisparticipant.save()
+            this_participant.save()
             reMsg = u'报名成功。'
         elif jointype == 'notjoin':
-            thisparticipant = participant(pk=thisparticipant.id, partici_fakeID='', event_ID=thisEvent, event_sn=thisEvent.event_sn,
+            this_participant = Participant(pk=this_participant.id, event_ID=this_event, event_sn=this_event.event_sn,
                                           partici_name=inputname, partici_type=0, partici_user=user, partici_openid=user.last_name)
-            thisparticipant.save()
+            this_participant.save()
             reMsg = u'报名成功。'
 
         rqdata = request.GET.copy()
@@ -383,7 +379,7 @@ def joinEvent(request):
         try:
             eventId = request.GET.get('eventid')
             jointype = request.GET.get('jointype')
-            thisEvent = event.objects.get(pk=eventId)
+            this_event = event.objects.get(pk=eventId)
         except event.DoesNotExist:
             title = u'出错了'
             errorMessage = u'您查询的活动不存在。'
@@ -391,35 +387,35 @@ def joinEvent(request):
                                   context_instance=RequestContext(request))
 
         #partici_type: 0-不参加，1-参加，2-可能参加，5-未报名，10-活动发起人
-        participantlist = participant.objects.filter(event_ID=eventId)
-        eventin = sum(p.partici_type == 1 for p in participantlist)
-        eventout = sum(p.partici_type == 0 for p in participantlist)
-        eventmaybe = sum(p.partici_type == 2 for p in participantlist)
+        participants_list = participant.objects.filter(event_ID=eventId)
+        eventin = sum(p.partici_type == 1 for p in participants_list)
+        eventout = sum(p.partici_type == 0 for p in participants_list)
+        eventmaybe = sum(p.partici_type == 2 for p in participants_list)
         try:
-            thisparticipant = participant.objects.get(event_ID=thisEvent, partici_user=wechatUser)
+            this_participant = participant.objects.get(event_ID=this_event, partici_user=wechatUser)
         except:
-            thisparticipant = participant()
+            this_participant = participant()
 
         if jointype == 'join':
-            if thisEvent.event_limit > eventin:
-                thisparticipant = participant(pk=thisparticipant.id, partici_fakeID='', event_ID=thisEvent, event_sn=thisEvent.event_sn,
+            if this_event.event_limit > eventin:
+                this_participant = participant(pk=this_participant.id, partici_fakeID='', event_ID=this_event, event_sn=this_event.event_sn,
                                               partici_name=inputname, partici_type=1, partici_user=wechatUser, partici_openid=wechatUser.openid)
-                thisparticipant.save()
-                if thisEvent.event_limit <= ++eventin:
-                    thisEvent.event_status = 1
-                    thisEvent.save()
+                this_participant.save()
+                if this_event.event_limit <= ++eventin:
+                    this_event.event_status = 1
+                    this_event.save()
                 reMsg = u'报名成功。'
             else:
                 reMsg = u'此活动已报名人满。'
         elif jointype == 'maybe':
-            thisparticipant = participant(pk=thisparticipant.id, partici_fakeID='', event_ID=thisEvent, event_sn=thisEvent.event_sn,
+            this_participant = participant(pk=this_participant.id, partici_fakeID='', event_ID=this_event, event_sn=this_event.event_sn,
                                           partici_name=inputname, partici_type=2, partici_user=wechatUser, partici_openid=wechatUser.openid)
-            thisparticipant.save()
+            this_participant.save()
             reMsg = u'报名成功。'
         elif jointype == 'notjoin':
-            thisparticipant = participant(pk=thisparticipant.id, partici_fakeID='', event_ID=thisEvent, event_sn=thisEvent.event_sn,
+            this_participant = participant(pk=this_participant.id, partici_fakeID='', event_ID=this_event, event_sn=this_event.event_sn,
                                           partici_name=inputname, partici_type=0, partici_user=wechatUser, partici_openid=wechatUser.openid)
-            thisparticipant.save()
+            this_participant.save()
             reMsg = u'报名成功。'
 
         rqdata = {

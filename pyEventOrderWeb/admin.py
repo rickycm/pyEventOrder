@@ -1,7 +1,7 @@
 __author__ = 'ricky'
 from django.contrib import admin
 
-from pyEventOrderWeb.models import event, participant
+from pyEventOrderWeb.models import Event, Participant
 
 
 class EventAdmin(admin.ModelAdmin):
@@ -13,7 +13,7 @@ class EventAdmin(admin.ModelAdmin):
         return obj.updated_by.first_name
     related_updated_by.short_description = 'updated_by'
     def participant_count(self, obj):
-        return participant.objects.filter(event_ID=obj).count()
+        return Participant.objects.filter(event_ID=obj).count()
     participant_count.short_description = 'participant'
 
 class ParticipantAdmin(admin.ModelAdmin):
@@ -22,5 +22,5 @@ class ParticipantAdmin(admin.ModelAdmin):
         return obj.partici_user.first_name
     related_partici_user.short_description = 'partici_user'
 
-admin.site.register(event, EventAdmin)
-admin.site.register(participant, ParticipantAdmin)
+admin.site.register(Event, EventAdmin)
+admin.site.register(Participant, ParticipantAdmin)

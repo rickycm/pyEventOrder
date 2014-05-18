@@ -28,16 +28,9 @@ Secret: 4bf88d2f56512313c03f0ce01a514974
       "url":"http://www.eztogether.net/list_events/?type=other"
     }]
   },{
-    "name":"配置",
-    "sub_button":[{
-      "type":"click",
-      "name":"个人信息",
-      "key":"SETTING"
-    },{
-      "type":"view",
-      "name":"关于",
-      "url":"http://www.eztogether.net/welcome/"
-    }]
+    "type":"view",
+    "name":"关于",
+    "url":"http://www.eztogether.net/welcome/"
   }]
 }
 
@@ -76,8 +69,6 @@ def api_response(request):
 参数：type = mine 我发布的活动
      type = other 我报名的活动
 
-http://www.eztogether.net/setcookie/?openid=oMJjPjt71JPhAv3w8l2NI4rbaAHQ&next=/add_event/
-
 TODO: 定时提醒功能
 不使用Celery:
 Install celery by download or pip install -U Celery
@@ -85,36 +76,3 @@ Install celery by download or pip install -U Celery
 pip install django_cron
 doc: https://github.com/Tivix/django-cron
 
-
-{
-  "button":[{
-    "name":"发布活动",
-    "sub_button":[{
-      "type":"view",
-      "name":"发布活动",
-      "url":"http://www.eztogether.net/add_event/?event_type=1"
-    },{
-      "type":"click",
-      "name":"生成活动消息",
-      "key":"GETEVENT"
-    }]
-  },{
-    "name":"活动管理",
-    "sub_button":[{
-       "type":"view",
-       "name":"我发布的活动",
-       "url":"http://www.eztogether.net/list_events/?type=mine"
-    },{
-      "type":"view",
-      "name":"我报名的活动",
-      "url":"http://www.eztogether.net/list_events/?type=other"
-    }]
-  },{
-    "name":"配置",
-    "sub_button":[{
-      "type":"view",
-      "name":"关于",
-      "url":"http://www.eztogether.net/welcome/"
-    }]
-  }]
-}
