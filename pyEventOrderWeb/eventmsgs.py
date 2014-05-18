@@ -115,7 +115,7 @@ def sendEvent(fromUser, toUser, active):
         'toUser':toUser,
         'time':int(time.time()),
     }
-    description = '\<span style=\"color: steelBlue\"\>活动：' + active.event_title.encode("utf8") + '\<br\>时间：' + active.event_date.strftime("%Y-%m-%d %H:%M").encode("utf8")\
+    description = '''\<span style=\"color: steelBlue\"\>活动：''' + active.event_title.encode("utf8") + '\<br\>时间：' + active.event_date.strftime("%Y-%m-%d %H:%M").encode("utf8")\
                   + '\<\/span\> ' + '\<br\>长按可转发'
     #description = active.event_title.encode("utf8") + '\n' + active.event_date.strftime("%Y-%m-%d %H:%M").encode("utf8") + '\n长按可转发'
     print description
