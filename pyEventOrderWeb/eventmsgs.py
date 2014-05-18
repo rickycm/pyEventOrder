@@ -115,9 +115,11 @@ def sendEvent(fromUser, toUser, active):
         'toUser':toUser,
         'time':int(time.time()),
     }
+    description = active.event_title + '\n' + active.event_date + '\n长按可转发'
+    print description
     article = {
         'title':u'您发布的最新活动',
-        'description':active.event_title + '\n' + active.event_date + '\n长按可转发',
+        'description':description,
         'picurl':URLBASE + '/media/badminton.png',
         'url':URLBASE + '/showevent/?eventid=' + str(active.id),
     }
