@@ -7,6 +7,7 @@ from django.conf.urls.static import static
 from pyEventOrderWeb import views
 
 
+
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
@@ -24,29 +25,26 @@ urlpatterns = patterns('',
 
     (r'^$', 'pyEventOrderWeb.views.index'),
     (r'^accounts/login/$', 'django.contrib.auth.views.login',{'template_name': 'login.html'}),
-    #(r'^login/$', views.check_auth),
-    (r'^login/$', 'django.contrib.auth.views.login',{'template_name': 'login.html'}),
-    (r'^login-form/$', views.login_form),
-    (r'^accounts/register/$', 'pyEventOrderWeb.views.register'),
     (r'^accounts/logout/$', views.logout_view),
     (r'^accounts/$', 'django.contrib.auth.views.login',{'template_name': 'login.html'}),
+
     (r'^list_events/$', views.list_events),
     (r'^add_event/$', views.add_event),
     (r'^updateevent/$', views.updateEvent),
     (r'^showevent/$', views.showEvent),
     (r'^joinevent/$', views.joinEvent),
+
     (r'^checkmail/$', views.checkEmail),
-    (r'^checklogin/$', views.checklogin),
     (r'^jslogin/$', views.jslogin),
     (r'^jsregister/$', views.jsregister),
+    (r'^checklogin/$', views.checklogin),
+
     (r'^index/$', views.index),
-    (r'^setting/$', views.setting),
     (r'^message/$', views.message),
-    (r'^oauth/$', views.oauth),
     (r'^welcome/$', views.welcome),
-    (r'^test/$', views.test),
+    #(r'^test/$', views.test),
     (r'^tinymce/', include('tinymce.urls')),
-    (r'', include('jqmFlatPages.urls')),
+    #(r'', include('jqmFlatPages.urls')),
     (r'^comments/', include('django.contrib.comments.urls')),
 )
 

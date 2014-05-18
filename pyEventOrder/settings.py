@@ -127,9 +127,9 @@ AUTHENTICATION_BACKENDS = (
     'pyEventOrderWeb.auth.OAuthBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
-'''
 
 LOGIN_URL = "/login/"
+'''
 
 ROOT_URLCONF = 'pyEventOrder.urls'
 

@@ -1,13 +1,8 @@
 #coding=utf-8
 import logging
 from datetime import datetime
-import time
-import random
-import string
 
-import os
 from django.utils import timezone
-from django.contrib.auth.forms import *
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.contrib.auth import authenticate, login, logout
@@ -19,155 +14,110 @@ from pyEventOrderWeb import forms
 from pyEventOrderWeb.models import *
 
 
-URLBASE='http://' + os.environ['DJANGO_SITE']
+
+#URLBASE='http://' + os.environ['DJANGO_SITE']
 logger = logging.getLogger('django.dev')
-
-@csrf_protect
-def login_form(request):
-    try:
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(username=username, password=password)
-        if user is not None:
-            form = forms.LoginForm(request.POST)
-            request.session["userid"] = user.id
-            login(request, user)
-            # Redirect to a success page.
-            return render_to_response("index.html", {'user': user})
-            #return HttpResponseRedirect("/")
-        else:
-            form = forms.LoginForm()
-            # Return an error message.
-            return render_to_response("login.html", {'msg': "请重新输入账户", 'form': form}, context_instance=RequestContext(request))
-    except:
-        form = forms.LoginForm()
-        return render_to_response("login.html", {'msg': "请重新登录", 'form': form}, context_instance=RequestContext(request))
-
-
-@csrf_protect
-def register(request):
-        form = UserCreationForm()
-        if request.method == 'GET':
-                return render_to_response('register.html', {'form': form}, context_instance=RequestContext(request))
-        if request.method == 'POST':
-                form = UserCreationForm(request.POST)
-                if form.is_valid():
-                        new_user = form.save()
-                        return HttpResponseRedirect("/")
 
 @login_required
 def index(request):
-    #if request.user.is_authenticated():
     user = request.user
     return render_to_response("index.html", {'user': user}, context_instance=RequestContext(request))
-    #return HttpResponseRedirect("/accounts/login/")
 
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect("/")
 
-
 #活动列表
 @login_required
 @csrf_protect
 def list_events(rq):
-    try:
-        userId = rq.session["userid"]
-        #wechatUser = wechat_user.objects.get(pk=userId)
-        #user = rq.user
-    except:
-        return HttpResponseRedirect('/login/')
     events =[]
     ONE_PAGE_OF_DATA = 10
-    if rq.user.is_authenticated():
+
+    user = rq.user
+    if user.is_superuser == 1:
+        try:
+            curPage = int(rq.GET.get('curPage', '1'))
+            allPage = int(rq.GET.get('allPage', '1'))
+            pageType = str(rq.GET.get('pageType', ''))
+        except ValueError:
+            curPage = 1
+            allPage = 1
+            pageType = ''
+
+        #判断点击了【下一页】还是【上一页】
+        if pageType == 'pageDown':
+            curPage += 1
+        elif pageType == 'pageUp':
+            curPage -= 1
+
+        startPos = (curPage - 1) * ONE_PAGE_OF_DATA
+        endPos = startPos + ONE_PAGE_OF_DATA
+        events = event.objects.all()[startPos:endPos]
+
+        if curPage == 1 and allPage == 1:  #标记1
+            allPostCounts = event.objects.count()
+            allPage = allPostCounts / ONE_PAGE_OF_DATA
+            remainPost = allPostCounts % ONE_PAGE_OF_DATA
+            if remainPost > 0:
+                allPage += 1
+
+        return render_to_response("list_event.html",
+                                  {'title': '活动列表', 'user': user, 'events': events, 'allPage': allPage,
+                                   'curPage': curPage}, context_instance=RequestContext(rq))
+    else:
         user = rq.user
-        if user.is_superuser == 1:
-            try:
-                curPage = int(rq.GET.get('curPage', '1'))
-                allPage = int(rq.GET.get('allPage','1'))
-                pageType = str(rq.GET.get('pageType', ''))
-            except ValueError:
-                curPage = 1
-                allPage = 1
-                pageType = ''
+        try:
+            curPage = int(rq.GET.get('curPage', '1'))
+            allPage = int(rq.GET.get('allPage', '1'))
+            pageType = str(rq.GET.get('pageType', ''))
+            type = str(rq.GET.get('type', 'mine'))
+        except ValueError:
+            curPage = 1
+            allPage = 1
+            pageType = ''
+            type = 'mine'
 
-            #判断点击了【下一页】还是【上一页】
-            if pageType == 'pageDown':
-                curPage += 1
-            elif pageType == 'pageUp':
-                curPage -= 1
+        #判断点击了【下一页】还是【上一页】
+        if pageType == 'pageDown':
+            curPage += 1
+        elif pageType == 'pageUp':
+            curPage -= 1
 
-            startPos = (curPage - 1) * ONE_PAGE_OF_DATA
-            endPos = startPos + ONE_PAGE_OF_DATA
-            events = event.objects.all()[startPos:endPos]
+        startPos = (curPage - 1) * ONE_PAGE_OF_DATA
+        endPos = startPos + ONE_PAGE_OF_DATA
+        if type == 'mine':
+            events = event.objects.filter(updated_by=user)[startPos:endPos]
+            if curPage == 1 and allPage == 1:  #标记1
+                allPostCounts = event.objects.filter(updated_by=user).count()
+                allPage = allPostCounts / ONE_PAGE_OF_DATA
+                remainPost = allPostCounts % ONE_PAGE_OF_DATA
+                if remainPost > 0:
+                    allPage += 1
+        elif type == 'other':
+            evenidtList = participant.objects.filter(partici_user=user).values_list('event_ID', flat=True).distinct()
+            eventsall = []
+            for i in evenidtList:
+                eventsall.append(event.objects.get(pk=i))
+            events = eventsall[startPos:endPos]
 
-            if curPage == 1 and allPage == 1: #标记1
-                allPostCounts = event.objects.count()
+            if curPage == 1 and allPage == 1:  #标记1
+                allPostCounts = len(eventsall)
                 allPage = allPostCounts / ONE_PAGE_OF_DATA
                 remainPost = allPostCounts % ONE_PAGE_OF_DATA
                 if remainPost > 0:
                     allPage += 1
 
-            return render_to_response("list_event.html", {'title': '活动列表', 'user': user, 'events':events, 'allPage':allPage, 'curPage':curPage}, context_instance=RequestContext(rq))
-        else:
-            user = rq.user
-            try:
-                curPage = int(rq.GET.get('curPage', '1'))
-                allPage = int(rq.GET.get('allPage','1'))
-                pageType = str(rq.GET.get('pageType', ''))
-                type = str(rq.GET.get('type', 'mine'))
-            except ValueError:
-                curPage = 1
-                allPage = 1
-                pageType = ''
-                type = 'mine'
+        return render_to_response("list_event.html",
+                                  {'title': '活动列表', 'user': user, 'events': events, 'allPage': allPage,
+                                   'curPage': curPage, 'type': type}, context_instance=RequestContext(rq))
 
-            #判断点击了【下一页】还是【上一页】
-            if pageType == 'pageDown':
-                curPage += 1
-            elif pageType == 'pageUp':
-                curPage -= 1
-
-            startPos = (curPage - 1) * ONE_PAGE_OF_DATA
-            endPos = startPos + ONE_PAGE_OF_DATA
-            if type == 'mine':
-                events = event.objects.filter(updated_by=user)[startPos:endPos]
-                if curPage == 1 and allPage == 1:  #标记1
-                    allPostCounts = event.objects.filter(updated_by=user).count()
-                    allPage = allPostCounts / ONE_PAGE_OF_DATA
-                    remainPost = allPostCounts % ONE_PAGE_OF_DATA
-                    if remainPost > 0:
-                        allPage += 1
-            elif type == 'other':
-                evenidtList = participant.objects.filter(partici_user=user).values_list('event_ID', flat=True).distinct()
-                eventsall = []
-                for i in evenidtList:
-                    eventsall.append(event.objects.get(pk=i))
-                events = eventsall[startPos:endPos]
-
-                if curPage == 1 and allPage == 1:  #标记1
-                    allPostCounts = len(eventsall)
-                    allPage = allPostCounts / ONE_PAGE_OF_DATA
-                    remainPost = allPostCounts % ONE_PAGE_OF_DATA
-                    if remainPost > 0:
-                        allPage += 1
-
-            return render_to_response("list_event.html", {'title': '活动列表', 'user': user, 'events':events, 'allPage':allPage, 'curPage':curPage, 'type': type}, context_instance=RequestContext(rq))
-    return HttpResponseRedirect('/login/')
 
 # 添加活动
 @login_required
 @csrf_protect
 def add_event(request):
-    try:
-        userId = request.session["userid"]
-        user = request.user
-        #wechatUser = wechat_user.objects.get(pk=userId)
-    except:
-        return HttpResponseRedirect('/login/')
-        #openid = request.COOKIES['wxopenid']
-        #wechatUser = wechat_user.objects.get(openid=openid)
-        #request.session['userid'] = wechatUser.id
+    user = request.user
 
     if request.method == 'GET':
         # 基于活动重新发布功能
@@ -271,35 +221,13 @@ def updateEvent(request):
                               context_instance=RequestContext(request))
 
 # 活动页面，并展现用户参与情况
+# 未登录用户也可以看一个活动
 @csrf_protect
 def showEvent(request):
 
-    # 首先检查COOKIES里面是否已经存在用户信息
-    #if 'wxopenid' in request.COOKIES:
+    # 首先检查用户是否已经登录
     if request.user.is_authenticated():
-        # 进到这个分支的人，应该是关注了公众号的人。
-        # 它们的记录在events中已经建立
-        #userId = request.COOKIES['userid']
-        userId = request.session["userid"]
-        if request.user.is_authenticated():
-            try:
-                userId = request.session["userid"]
-                user = request.user
-                #wechatUser = wechat_user.objects.get(pk=userId)
-            except:
-                #wechatUser = wechat_user.objects.get(openid=openid)
-                #request.session['userid'] = wechat_user.id
-                return HttpResponseRedirect('/login/')
-        else:
-            # 客户端会话不会因为退回微信界面而丢失，但服务端重启会造成会话失效。
-            #logger.info('Cookie has openid ' + openid)
-            user = authenticate(pk=userId)
-            if user is None:
-                return HttpResponseRedirect('/login/')
-            #wechatUser = user.real_user
-            #logger.debug(wechatUser.id)
-            request.session["userid"] = user.id
-            login(request, user)
+        user = request.user
 
         if request.GET.get('remsg'):
             remsg = request.GET['remsg']
@@ -369,12 +297,7 @@ def showEvent(request):
 def joinEvent(request):
     if request.user.is_authenticated():
         reMsg = ''
-        try:
-            userId = request.session["userid"]
-            user = request.user
-            #wechatUser = wechat_user.objects.get(pk=userId)
-        except:
-            return HttpResponseRedirect('/login/')
+        user = request.user
 
         inputname = request.GET.get('inputname')
         if user.first_name!=inputname:
@@ -437,7 +360,7 @@ def joinEvent(request):
         return showEvent(request)
 
     else:
-        return HttpResponseRedirect('/login/')
+        return HttpResponseRedirect('/accounts/login/')
         '''
         reMsg = ''
         try:
@@ -511,10 +434,11 @@ def joinEvent(request):
         #return showEvent(request)
 '''
 
+
+import json
 # 查询用询名(Email)是否存在
 def checkEmail(request):
     mail = request.GET.get('userId').lower()
-    responseText = ''
     try:
         thisUser = User.objects.get(username=mail)
         responseText = 'exist'
@@ -522,15 +446,13 @@ def checkEmail(request):
         responseText = 'noexist'
     except User.MultipleObjectsReturned:
         responseText = 'exist'
-    response = HttpResponse()
-    response['Content-Type'] = "text/javascript"
+    response = HttpResponse(content_type="application/json")
     response.write(responseText)
     return response
 
 # js登录和注册
 def jslogin(request):
-    response = HttpResponse()
-    response['Content-Type'] = "text/javascript"
+    response = HttpResponse(content_type="application/json; charset=utf-8")
     try:
         username = request.POST['userId']
         username = username.lower()
@@ -560,10 +482,8 @@ def jslogin(request):
         response.write(feedback_edcoded)
         return response
 
-
 def jsregister(request):
-    response = HttpResponse()
-    response['Content-Type'] = "text/javascript"
+    response = HttpResponse(content_type="application/json; charset=utf-8")
     if request.method == 'POST':
         username = request.POST['userId']
         username = username.lower()
@@ -597,7 +517,7 @@ def checklogin(request):
     user = request.user
     openid = request.GET.get('openid')
     if user == "" and user == None:
-        return HttpResponseRedirect('/login/?openid=' + openid)
+        return HttpResponseRedirect('/accounts/login/?openid=' + openid)
     else:
         if user.last_name != openid:
             logger.debug(user.last_name +':'+openid)
@@ -650,96 +570,8 @@ def message(request):
         logger.info('Exception received: ' + e.message)
         raise e
 
-from django.db import IntegrityError
-@csrf_protect
-def setting(request):
-    if request.method=='GET':
-        if 'openid' in request.GET:
-            openid = request.GET['openid']
-            logger.debug('Request has openid ' + openid)
 
-            if request.user.is_authenticated():
-                cookie_openid = request.COOKIES['wxopenid']
-                try:
-                    userid = request.session['userid']
-                    real_user = wechat_user.objects.get(pk=userid)
-                except:
-                    try:
-                        real_user = wechat_user.objects.get(openid=cookie_openid)
-                    except:
-                        logout(request)
-                        return setting(request)
-                    request.session['userid'] = real_user.id
-
-                real_user.openid = openid
-                real_user.subscribe = True
-                try:
-                    real_user.save()
-                except IntegrityError:
-                    del_user = real_user
-
-                    real_user = wechat_user.objects.get(openid=openid)
-                    request.session['userid'] = real_user.id
-
-                    if not real_user.inputname:
-                        real_user.inputname = del_user.inputname
-                    if not real_user.email:
-                        real_user.email = del_user.email
-                        real_user.email_valid = del_user.email_valid
-                    real_user.initialized = True
-                    real_user.save()
-
-                    if cookie_openid.startswith('fake'):
-                        participant.objects.filter(partici_user=del_user).update(partici_user=real_user)
-                        event.objects.filter(updated_by=del_user).update(updated_by=real_user)
-                        del_user.delete()
-            else:
-                user = authenticate(userinfo={'openid':openid,'initialized':True})
-                if user is not None:
-                    real_user = user.real_user
-                    logger.debug(real_user.id)
-                    login(request, user)
-                    request.session['userid'] = real_user.id
-                else:
-                    logger.error("Can't find user " + openid)
-                    return render_to_response('welcome.html')
-
-            form = forms.SetupuserForm(instance=real_user)
-            response = render_to_response('setupinfo.html', {'title': '个人设置', 'form': form}, context_instance=RequestContext(request))
-            max_age = 365 * 24 * 60 * 60
-            response.set_cookie("wxopenid", openid, max_age=max_age)
-            return response
-
-        else:
-            return render_to_response('welcome.html')
-
-    else: #POST
-        if not request.user.is_authenticated:
-            return render_to_response('welcome.html')
-        else:
-            userid = request.session['userid']
-
-        form = forms.SetupuserForm(request.POST)
-        if form.is_valid():
-            try:
-                wechatUser = wechat_user.objects.get(pk=userid)
-            except wechat_user.DoesNotExist:
-                return HttpResponseRedirect('/welcome/')
-
-            #assert user.openid==userid
-            wechatUser.inputname = form.data['inputname']
-            wechatUser.initialized = True
-            wechatUser.save()
-
-            title = u'设置成功'
-            errorMessage = u'个人信息设置成功，现在您可以返回并发布或参与活动了！'
-            return render_to_response("errorMessage.html", {'errorMessage': errorMessage, 'title': title},
-                              context_instance=RequestContext(request))
-        else:
-            logger.debug('Setting form is invalid.')
-            return render_to_response('setupinfo.html', {'title': '个人设置', 'form': form},
-                context_instance=RequestContext(request))
-
+'''
 import urllib
 def oauth(request):
     state = request.GET.get('state','state')
@@ -889,6 +721,8 @@ def get_wx_info(code, session):
     session['refresh_token'] = jobj['refresh_token']
     session['openid'] = jobj['openid']
     return jobj
+'''
+
 
 def welcome(request):
     url = 'http://mp.weixin.qq.com/s?__biz=MzA4ODY2MzMwMw==&mid=200276028&idx=1&sn=824f3ae0bd4a0ed9aa8f6633a97cccc9&key=bdc0fc08be7dd6d420ccedc3a4e0e545d6b110a26c1b6f879fd6091033bff3fd1655e9bdcb13f75603916d9a42e92420&ascene=1&uin=MTQ5MzI4'
