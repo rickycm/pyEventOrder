@@ -18,9 +18,9 @@
     <div class="loginBox">
         <h3>欢迎使用 易聚通，请登录：</h3>
         <div class="inputBox">
-            <label for="userId">邮箱</label>
-            <input name="userId" type="text" id="userId" value="" onblur="validate(this)">
-            <span id="userIdSpan"></span>
+            <label for="username">邮箱</label>
+            <input name="username" type="text" id="username" value="" onblur="validate(this)">
+            <span id="usernameSpan"></span>
         </div>
         <div class="inputBox">
             <label for="password">密码</label>
@@ -92,15 +92,15 @@ var register = false;  //全局变量，登录/注册
                 type: "get",
                 url : "/checkmail/",
                 dataType:'html',
-                data: 'userId=' + field.value.trim() + '&tamp=' + new Date().getTime(),
+                data: 'username=' + field.value.trim() + '&tamp=' + new Date().getTime(),
                 success: function(responseText){
                     //alert(responseText);
                     //alert(json.username+'n'+json.password);
-                    //$('#userIdSpan').html("<font color='red'>" + responseText + "</font>"); //把返回值显示在预定义的result定位符位置
+                    //$('#usernameSpan').html("<font color='red'>" + responseText + "</font>"); //把返回值显示在预定义的result定位符位置
                     window.register = false;
                     if(responseText == 'noexist'){
                         //注册流程
-                        $('#userIdSpan').html("<font color='red'>邮箱不存在，请输入密码注册：</font>");
+                        $('#usernameSpan').html("<font color='red'>邮箱不存在，请输入密码注册：</font>");
                         $("#passworddiv2").show();
                         $("#loginbutton").hide();
                         $("#registerbutton").show();
@@ -110,7 +110,7 @@ var register = false;  //全局变量，登录/注册
             });
 
         }else {
-            document.getElementById("userIdSpan").innerHTML = "<font color='red'>请输入有效邮箱地址</font>";
+            document.getElementById("userNameSpan").innerHTML = "<font color='red'>请输入有效邮箱地址</font>";
         }
     }
 
@@ -129,14 +129,14 @@ var register = false;  //全局变量，登录/注册
     }
 
     function jslogin(){
-        userId = $('#userId').val();
+        username = $('#username').val();
         password = $('#password').val();
         openid = $('#openid').val();
         $.ajax({
             type: "post",
             url : "/jslogin/",
             dataType:'json',
-            data: 'userId=' + userId + '&password=' + password + '&openid=' + openid,
+            data: 'username=' + username + '&password=' + password + '&openid=' + openid,
             success: function(feedback){
                 //alert(feedback.result);
                 //alert(json.username+'n'+json.password);
@@ -151,12 +151,12 @@ var register = false;  //全局变量，登录/注册
     }
 
     function jsregister(){
-        userId = $('#userId').val();
+        username = $('#username').val();
         password = $('#password').val();
         password2 = $('#password2').val();
-        if (userId.trim().length != 0 && mailValidate(userId)){
+        if (username.trim().length != 0 && mailValidate(username)){
             if(password != password2){
-                $('#userIdSpan').html("");
+                $('#usernameSpan').html("");
                 $('#passwordSpan2').html("<font color='red'>请输入相同的密码</font>");
                 $('#password').val("");
                 $('#password2').val("");
@@ -166,7 +166,7 @@ var register = false;  //全局变量，登录/注册
                 type: "post",
                 url : "/jsregister/",
                 dataType:'json',
-                data: 'userId=' + userId + '&password1=' + password + '&password2=' + password2,
+                data: 'username=' + username + '&password1=' + password + '&password2=' + password2,
                 success: function(feedback){
                     //alert(feedback.result);
                     //alert(json.username+'n'+json.password);
@@ -184,7 +184,7 @@ var register = false;  //全局变量，登录/注册
             });
 
         }else{
-            document.getElementById("userIdSpan").innerHTML = "<font color='red'>请输入有效邮箱地址</font>";
+            document.getElementById("usernameSpan").innerHTML = "<font color='red'>请输入有效邮箱地址</font>";
         }
 
     }

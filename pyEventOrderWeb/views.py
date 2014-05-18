@@ -15,6 +15,8 @@ from pyEventOrderWeb.models import *
 
 
 
+
+
 #URLBASE='http://' + os.environ['DJANGO_SITE']
 logger = logging.getLogger('django.dev')
 
@@ -188,13 +190,14 @@ def updateEvent(request):
     if request.method == 'POST':
         form = forms.EventForm(request.POST, instance=this_event)
         if form.is_valid():
-            userId = request.session["userid"]
+            #userId = request.session["userid"]
+            user = request.user
             s = datetime.strptime(form.data['eventdate'] + ' ' + form.data['eventtime'], "%Y-%m-%d %H:%M")
             this_event.event_title = form.data['event_title']
             this_event.event_detail = form.data['event_detail']
             this_event.event_date = s
             this_event.event_limit = form.data['event_limit']
-            this_event.updated_by_id = userId
+            this_event.updated_by = user
             this_event.event_status = 0
             this_event.event_type = 1
             this_event.event_hostname = form.data['event_hostname']
@@ -435,7 +438,7 @@ def joinEvent(request):
 import json
 # 查询用询名(Email)是否存在
 def checkEmail(request):
-    email = request.GET.get('userId').lower()
+    email = request.GET.get('username').lower()
     try:
         this_user = User.objects.get(username=email)
         responseText = 'exist'
@@ -451,13 +454,13 @@ def checkEmail(request):
 def jslogin(request):
     response = HttpResponse(content_type="application/json; charset=utf-8")
     try:
-        username = request.POST['userId']
+        username = request.POST['username']
         username = username.lower()
         password = request.POST['password']
         openid = request.POST['openid']
         user = authenticate(username=username, password=password)
         if user is not None:
-            request.session["userid"] = user.id
+            #request.session["userid"] = user.id
             login(request, user)
             feedback = {'result': True, 'link': '/index/', 'msg': u'登录成功'}
             feedback_edcoded = json.dumps(feedback)
@@ -482,13 +485,13 @@ def jslogin(request):
 def jsregister(request):
     response = HttpResponse(content_type="application/json; charset=utf-8")
     if request.method == 'POST':
-        username = request.POST['userId']
+        username = request.POST['username']
         username = username.lower()
         password1 = request.POST['password1']
         password2 = request.POST['password2']
-        exist = True
+        #exist = True
         try:
-            thisUser = User.objects.get(username=username)
+            this_user = User.objects.get(username=username)
             feedback = {'result': False, 'link': '', 'msg': u'注册失败，请重试'}
             feedback_edcoded = json.dumps(feedback)
             response.write(feedback_edcoded)
@@ -496,8 +499,8 @@ def jsregister(request):
         except User.DoesNotExist:
             new_user = User.objects.create_user(username, password1, password2)
             new_user.save()
-            new_user = authenticate(username=username, password=password1)
-            request.session["userid"] = new_user.id
+            #new_user = authenticate(username=username, password=password1)
+            #request.session["userid"] = new_user.id
             login(request, new_user)
             feedback = {'result': True, 'link': '/index/', 'msg': u'注册成功'}
             feedback_edcoded = json.dumps(feedback)
