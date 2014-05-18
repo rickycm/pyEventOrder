@@ -117,7 +117,7 @@ def sendEvent(fromUser, toUser, active):
     }
     article = {
         'title':u'您发布的最新活动',
-        'description':u'\<span style=\"color: steelblue\"\>' + active.event_title + u'\<br\> ' + active.event_date + u'\<\/span\> \<br\>长按可转发',
+        'description':active.event_title + '\n' + active.event_date + '\n长按可转发',
         'picurl':URLBASE + '/media/badminton.png',
         'url':URLBASE + '/showevent/?eventid=' + str(active.id),
     }
