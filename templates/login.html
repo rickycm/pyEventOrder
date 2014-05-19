@@ -85,7 +85,7 @@ var register = false;  //全局变量，登录/注册
 
     //input失去焦点事件onblur（），调用这个js方法验证
     function validate(field) {
-        //alert(field.value);
+        alert(field.value);
         if (field.value.trim().length != 0 && mailValidate(field.value)) {
 
             $('#usernameSpan').html("");
