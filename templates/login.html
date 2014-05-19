@@ -33,7 +33,10 @@
             <span id="passwordSpan2"></span>
         </div>
         <div id="loginbutton">
-            <button onclick="jslogin()" id="loginBtn" name="loginBtn" data-theme="b" disabled>登 录 / 注 册</button>
+            <button onclick="jslogin()" id="loginBtn" name="loginBtn" data-theme="b">登 录 / 注 册</button>
+        </div>
+        <div id="loginbuttondisabled">
+            <button data-theme="b" disabled>登 录 / 注 册</button>
         </div>
         <div id="registerbutton" style="display:none">
             <button onclick="jsregister()" data-theme="e">注  册</button>
@@ -69,15 +72,8 @@ var register = false;  //全局变量，登录/注册
 
     // Login ajax
     var xmlHttp; //声明xmlHttp对象
-    //实例化xmlHttpRequest对象
-    function createXMLHttpRequest() {
-        //表示当前浏览器不是ie,如ns,firefox
-        if(window.XMLHttpRequest) {
-            xmlHttp = new XMLHttpRequest();
-        } else if (window.ActiveXObject) {
-            xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-    }
+    $("#loginbutton").hide();
+    $("#loginbuttondisabled").show();
 
     String.prototype.trim = function () {
         return this .replace(/^\s\s*/, '' ).replace(/\s\s*$/, '' );
@@ -85,7 +81,7 @@ var register = false;  //全局变量，登录/注册
 
     //input失去焦点事件onblur（），调用这个js方法验证
     function validate(field) {
-        alert(field.value);
+        //alert(field.value);
         if (field.value.trim().length != 0 && mailValidate(field.value)) {
 
             $('#usernameSpan').html("");
@@ -108,7 +104,8 @@ var register = false;  //全局变量，登录/注册
                         $("#registerbutton").show();
                         window.register = true;
                     }else if(responseText == 'exist'){
-                        $('#loginBtn').removeAttr('disabled');
+                        $("#loginbutton").show();
+                        $("#loginbuttondisabled").hide();
                         $('#usernameSpan').html("");
                         $("#passworddiv2").hide();
                         $("#loginbutton").show();
