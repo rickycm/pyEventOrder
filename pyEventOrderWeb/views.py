@@ -257,8 +257,8 @@ def showEvent(request):
 
         if this_event.event_date < timezone.now():
             this_event.event_status = 4
-        return render_to_response("showEvent.html", {'title':this_event.event_title, 'this_event':this_event, 'userStatus':userStatus,
-                                                    'participants_list': participants_list, "numbers": numbers, 'remsg': remsg,
+        return render_to_response("showEvent.html", {'title':this_event.event_title, 'thisEvent':this_event, 'userStatus':userStatus,
+                                                    'participantlist': participants_list, "numbers": numbers, 'remsg': remsg,
                                                     'showcomment': 'true', 'useropenid': user.id, 'username': user.first_name},
                                 context_instance=RequestContext(request))
 
@@ -284,8 +284,8 @@ def showEvent(request):
         numbers = {'eventin': eventin, 'eventout': eventout, 'eventmaybe': eventmaybe}
         userStatus = 5  # 0-不参加，1-参加，2-可能参加，5-未报名，10-活动发起人，100-未关注账号用户
 
-        return render_to_response("showEvent.html", {'title': this_event.event_title, 'this_event': this_event, 'userStatus': userStatus,
-                                                     'participants_list': participants_list, "numbers": numbers, 'remsg': remsg,
+        return render_to_response("showEvent.html", {'title': this_event.event_title, 'thisEvent': this_event, 'userStatus': userStatus,
+                                                     'participantlist': participants_list, "numbers": numbers, 'remsg': remsg,
                                                     'showcomment': 'false', 'useropenid': '', 'username': ''},
                                   context_instance=RequestContext(request))
 
