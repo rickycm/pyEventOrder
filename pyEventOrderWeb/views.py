@@ -14,9 +14,6 @@ from pyEventOrderWeb import forms
 from pyEventOrderWeb.models import *
 
 
-
-
-
 #URLBASE='http://' + os.environ['DJANGO_SITE']
 logger = logging.getLogger('django.dev')
 
@@ -516,7 +513,7 @@ def jsregister(request):
 def checklogin(request):
     user = request.user
     openid = request.GET.get('openid')
-    if user == "" and user == None:
+    if user == "" and user == None and user is not User:
         return HttpResponseRedirect('/accounts/login/?openid=' + openid)
     else:
         if user.last_name != openid:
