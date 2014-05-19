@@ -423,7 +423,7 @@ def jsregister(request):
         except User.DoesNotExist:
             new_user = User.objects.create_user(username=username, password=password1)
             new_user.save()
-            #new_user = authenticate(username=username, password=password1)
+            new_user = authenticate(username=username, password=password1)
             #request.session["userid"] = new_user.id
             login(request, new_user)
             feedback = {'result': True, 'link': '/index/', 'msg': u'注册成功'}
