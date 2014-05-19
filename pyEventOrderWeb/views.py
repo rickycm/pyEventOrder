@@ -456,7 +456,7 @@ def jslogin(request):
         password = request.POST['password']
         openid = request.POST['openid']
         user = authenticate(username=username, password=password)
-        if user is not None or user is User:
+        if user is not None and user is User:
             #request.session["userid"] = user.id
             login(request, user)
             feedback = {'result': True, 'link': '/index/', 'msg': u'登录成功'}
