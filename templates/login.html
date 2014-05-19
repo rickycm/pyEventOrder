@@ -88,7 +88,9 @@ var register = false;  //全局变量，登录/注册
         //alert(field.value);
         if (field.value.trim().length != 0 && mailValidate(field.value)) {
 
-            $.ajax({ //一个Ajax过程，与下面二选一即可
+            $('#usernameSpan').html("");
+
+            $.ajax({
                 type: "get",
                 url : "/checkmail/",
                 dataType:'html',
@@ -107,6 +109,10 @@ var register = false;  //全局变量，登录/注册
                         window.register = true;
                     }else if(responseText == 'exist'){
                         $('#loginBtn').removeAttr('disabled');
+                        $('#usernameSpan').html("");
+                        $("#passworddiv2").hide();
+                        $("#loginbutton").show();
+                        $("#registerbutton").hide();
                     }
                 }
             });
