@@ -421,7 +421,7 @@ def jsregister(request):
             response.write(feedback_edcoded)
             return response
         except User.DoesNotExist:
-            new_user = User.objects.create_user(username, password1, password2)
+            new_user = User.objects.create_user(username=username, password=password1)
             new_user.save()
             #new_user = authenticate(username=username, password=password1)
             #request.session["userid"] = new_user.id
