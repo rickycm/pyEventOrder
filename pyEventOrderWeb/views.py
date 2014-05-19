@@ -383,7 +383,7 @@ def jslogin(request):
         password = request.POST['password']
         openid = request.POST['openid']
         user = authenticate(username=username, password=password)
-        if user is not None and user is User:
+        if user is not None and isinstance(user, User):
             #request.session["userid"] = user.id
             login(request, user)
             feedback = {'result': True, 'link': '/index/', 'msg': u'登录成功'}
@@ -440,7 +440,8 @@ def jsregister(request):
 def checklogin(request):
     user = request.user
     openid = request.GET.get('openid')
-    if user == "" or user == None or user is not User:
+    isUser = isinstance(user, User)
+    if user == "" or user == None or not isUser:
         return HttpResponseRedirect('/accounts/login/?openid=' + openid)
     else:
         if user.last_name != openid:
