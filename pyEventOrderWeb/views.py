@@ -14,6 +14,7 @@ from pyEventOrderWeb import forms
 from pyEventOrderWeb.models import *
 
 
+
 #URLBASE='http://' + os.environ['DJANGO_SITE']
 logger = logging.getLogger('django.dev')
 
@@ -124,14 +125,14 @@ def add_event(request):
         if renew == 'true':
             try:
                 eventId = request.GET.get('eventid')
-                thisEvent = Event.objects.get(pk=eventId)
-                eventType = thisEvent.event_type
+                this_event = Event.objects.get(pk=eventId)
+                eventType = this_event.event_type
             except Event.DoesNotExist:
                 title = u'出错了'
                 errorMessage = u'您查询的活动不存在。'
                 return render_to_response("errorMessage.html", {'errorMessage': errorMessage, 'title': title},
                                       context_instance=RequestContext(request))
-            form = forms.EventForm(instance=thisEvent)
+            form = forms.EventForm(instance=this_event)
         else:
             eventType = request.GET.get('eventtype', '1')
             form = forms.EventForm({'eventtype':eventType, 'event_hostname': user.first_name})
