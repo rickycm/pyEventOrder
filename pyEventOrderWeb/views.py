@@ -297,6 +297,7 @@ def showEvent(request):
 @csrf_protect
 def joinEvent(request):
     reMsg = ''
+
     user = request.user
 
     inputname = request.GET.get('inputname')
