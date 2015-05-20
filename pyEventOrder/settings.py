@@ -11,7 +11,7 @@ ADMINS = (
 )
 
 MANAGERS = ADMINS
-
+'''
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -26,6 +26,7 @@ DATABASES = {
     },
 }
 '''
+'''
 # local database
 DATABASES = {
     'default': {
@@ -38,6 +39,30 @@ DATABASES = {
     },
 }
 '''
+
+#sae database
+# 线上数据库的配置
+MYSQL_HOST = 'w.rdc.sae.sina.com.cn'
+MYSQL_PORT = '3307'
+MYSQL_USER = 'ACCESSKEY'
+MYSQL_PASS = 'SECRETKEY'
+MYSQL_DB   = 'app_APP_NAME'
+
+from sae._restful_mysql import monkey
+monkey.patch()
+
+DATABASES = {
+    'default': {
+        'ENGINE':   'django.db.backends.mysql',
+        'NAME':     MYSQL_DB,
+        'USER':     MYSQL_USER,
+        'PASSWORD': MYSQL_PASS,
+        'HOST':     MYSQL_HOST,
+        'PORT':     MYSQL_PORT,
+    }
+}
+
+
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = ['www.eztogether.com','whitemay.pythonanywhere.com']
