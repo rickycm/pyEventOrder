@@ -11,21 +11,21 @@ ADMINS = (
 )
 
 MANAGERS = ADMINS
-'''
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'OPTIONS': {
             'init_command': 'SET storage_engine=INNODB,character_set_connection=utf8,collation_connection=utf8_general_ci'
     },
-        'NAME': 'pyeventorder',
-        'USER': 'whitemay',
-        'PASSWORD': '1qazxsw2',
-        'HOST': 'data.eztogether.net',
+        'NAME': 'eztogether',
+        'USER': 'adminKRX5HaI',
+        'PASSWORD': '65_SkDHrEhzF',
+        'HOST': 'mysql://$OPENSHIFT_MYSQL_DB_HOST:$OPENSHIFT_MYSQL_DB_PORT/',
         'PORT': '',
     },
 }
-'''
+
 '''
 # local database
 DATABASES = {
@@ -40,28 +40,6 @@ DATABASES = {
 }
 '''
 
-#sae database
-# 线上数据库的配置
-MYSQL_HOST = 'w.rdc.sae.sina.com.cn'
-MYSQL_PORT = '3307'
-MYSQL_USER = 'ACCESSKEY'
-MYSQL_PASS = 'SECRETKEY'
-MYSQL_DB   = 'app_APP_NAME'
-
-
-from sae._restful_mysql import monkey
-monkey.patch()
-
-DATABASES = {
-    'default': {
-        'ENGINE':   'django.db.backends.mysql',
-        'NAME':     MYSQL_DB,
-        'USER':     MYSQL_USER,
-        'PASSWORD': MYSQL_PASS,
-        'HOST':     MYSQL_HOST,
-        'PORT':     MYSQL_PORT,
-    }
-}
 
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
@@ -186,7 +164,7 @@ INSTALLED_APPS = (
     'tinymce',
     #'jqmFlatPages',
     #'rest_framework',
-    #'restComments',
+    'restComments',
 )
 
 TINYMCE_JS_URL = '/static/tiny_mce/tiny_mce.js'

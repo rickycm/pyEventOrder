@@ -7,7 +7,7 @@ import os
 
 
 ## assuming your django settings file is at '/home/whitemay/mysite/settings.py'
-path = '/home/ec2-user/src/pyeventorder'
+path = '/root/web/pyEventOrder'
 if path not in sys.path:
     sys.path.append(path)
 

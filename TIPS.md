@@ -76,3 +76,17 @@ Install celery by download or pip install -U Celery
 pip install django_cron
 doc: https://github.com/Tivix/django-cron
 
+
+
+********************** OpenShift.redhat.com ********************
+MySQL 5.5 database added.  Please make note of these credentials:
+
+       Root User: adminKRX5HaI
+   Root Password: 65_SkDHrEhzF
+   Database Name: eztogether
+
+Connection URL: mysql://$OPENSHIFT_MYSQL_DB_HOST:$OPENSHIFT_MYSQL_DB_PORT/
+
+You can manage your new MySQL database by also embedding phpmyadmin.
+The phpmyadmin username and password will be the same as the MySQL credentials above.
+****************************************************************
