@@ -163,7 +163,7 @@ INSTALLED_APPS = (
     'pyEventOrderWeb',
     'tinymce',
     #'jqmFlatPages',
-    #'rest_framework',
+    'rest_framework',
     'restComments',
 )
 
