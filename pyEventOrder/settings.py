@@ -19,10 +19,10 @@ DATABASES = {
             'init_command': 'SET storage_engine=INNODB,character_set_connection=utf8,collation_connection=utf8_general_ci'
     },
         'NAME': 'eztogether',
-        'USER': 'adminKRX5HaI',
-        'PASSWORD': '65_SkDHrEhzF',
-        'HOST': 'mysql://$OPENSHIFT_MYSQL_DB_HOST:$OPENSHIFT_MYSQL_DB_PORT/',
-        'PORT': '',
+        'USER': 'root',
+        'PASSWORD': 'ocwesw2r3',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
     },
 }
 
