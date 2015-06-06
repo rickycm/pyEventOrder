@@ -153,7 +153,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.comments',
+    #'django.contrib.comments',
     #'django.contrib.flatpages',
     'bootstrap_admin',
     'django.contrib.admin',
@@ -163,8 +163,8 @@ INSTALLED_APPS = (
     'pyEventOrderWeb',
     'tinymce',
     #'jqmFlatPages',
-    #'rest_framework',
-    #'restComments',
+    'rest_framework',
+    'restComments',
 )
 
 TINYMCE_JS_URL = '/static/tiny_mce/tiny_mce.js'
