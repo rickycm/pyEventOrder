@@ -16,7 +16,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'OPTIONS': {
-            'init_command': 'SET storage_engine=INNODB,character_set_connection=utf8,collation_connection=utf8_general_ci'
+            'init_command': 'SET character_set_connection=utf8,collation_connection=utf8_general_ci'
     },
         'NAME': 'eztogether',
         'USER': 'root',
@@ -164,8 +164,12 @@ INSTALLED_APPS = (
     'tinymce',
     #'jqmFlatPages',
     'rest_framework',
-    'restComments',
+    #'restComments',
+    'django_comments',
 )
+
+DISQUS_API_KEY = 'mMI36y7bT1zct4W4W9q0GRKFCk2TTlkvfwgQ1ilMgX9vLE0eXNthAX8gN2AcfOUh'
+DISQUS_WEBSITE_SHORTNAME = 'eztogether'
 
 TINYMCE_JS_URL = '/static/tiny_mce/tiny_mce.js'
 TINYMCE_DEFAULT_CONFIG = {
