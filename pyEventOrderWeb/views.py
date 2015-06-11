@@ -293,7 +293,7 @@ def showEvent(request):
                                   context_instance=RequestContext(request))
 
 # 响应按钮事件：报名、修改事件状态
-@login_required
+#@login_required
 @csrf_protect
 def joinEvent(request):
     reMsg = ''
