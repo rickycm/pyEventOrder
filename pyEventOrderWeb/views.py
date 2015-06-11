@@ -13,10 +13,6 @@ from django.views.decorators.csrf import csrf_protect
 from pyEventOrderWeb import forms
 from pyEventOrderWeb.models import *
 
-
-
-
-
 #URLBASE='http://' + os.environ['DJANGO_SITE']
 logger = logging.getLogger('django.dev')
 
