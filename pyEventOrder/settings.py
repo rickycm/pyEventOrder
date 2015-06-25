@@ -44,7 +44,7 @@ DATABASES = {
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ['www.eztogether.com','whitemay.pythonanywhere.com']
+ALLOWED_HOSTS = ['www.eztogether.net','whitemay.pythonanywhere.com']
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -169,9 +169,6 @@ INSTALLED_APPS = (
     #'restComments',
     'django_comments',
 )
-
-DISQUS_API_KEY = 'mMI36y7bT1zct4W4W9q0GRKFCk2TTlkvfwgQ1ilMgX9vLE0eXNthAX8gN2AcfOUh'
-DISQUS_WEBSITE_SHORTNAME = 'eztogether'
 
 TINYMCE_JS_URL = '/static/tiny_mce/tiny_mce.js'
 TINYMCE_DEFAULT_CONFIG = {
